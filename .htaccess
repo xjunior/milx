@@ -1,0 +1,4 @@
+Options +ExecCGI
+AddHandler fastcgi-script .fcgi
+AddHandler cgi-script .cgi
+ErrorDocument 500 "<h2>Não deu...</h2>"
