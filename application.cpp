@@ -12,20 +12,22 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
+ * along with CPP On Rails.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
 #include "application.h"
+using namespace Milx;
 
-Application::Application(std::string name)
+Application::Application(std::string name, char *env[])
 {
     this->app_name = name;
+    this->env = env;
 }
 
 void Application::registerController(Controller *c)
 {
     controllers.push_back(c);
-    //c->setApplication(this);
+    c->setApplication(this);
 }
 
 int Application::run()
