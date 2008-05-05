@@ -20,10 +20,9 @@
 #include "application.h"
 using namespace std;
 
-Milx::Application::Application(std::string name, char *env[])
+Milx::Application::Application(std::string name)
 {
     this->app_name = name;
-    this->env = env;
     splitEnvVars();
 }
 
@@ -31,20 +30,9 @@ void Milx::Application::splitEnvVars()
 {
     string cur, script_name, method, remote_addr;
 
-    for (int i = 0; env[i]; i++)
-    {
-        cur = string(env[i]);
-        if (cur.compare(0, 11, "SCRIPT_NAME") == 0)
-            script_name = cur.substr(12);
-        else if (cur.compare(0, 14, "REQUEST_METHOD") == 0)
-            method = cur.substr(15);
-        else if (cur.compare(0, 11, "REMOTE_ADDR") == 0)
-            remote_addr = cur.substr(12);
-    }
-
-    cout << "Script name: " << script_name;
-    cout << "Method: " << method;
-    cout << "Remote addr: " << remote_addr;
+    script_name = getenv("SCRIPT_NAME");
+    method = getenv("REQUEST_METHOD");
+    remote_addr = getenv("REMOTE_ADDR");
 }
 
 void Milx::Application::registerController(Milx::Controller *c)

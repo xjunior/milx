@@ -30,7 +30,7 @@ namespace Milx
         std::string app_name;
         public:
             char **env;
-            Application(std::string name, char *env[]);
+            Application(std::string name);
             void registerController(Controller*);
             int run();
         private:
