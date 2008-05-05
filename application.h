@@ -1,23 +1,22 @@
 /*
- * This file is part of CPP On Rails.
+ * This file is part of Milx.
  *
- * CPP On Rails is free software: you can redistribute it and/or modify
+ * Milx is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CPP On Rails is distributed in the hope that it will be useful,
+ * Milx is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CPP On Rails.
- * If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
+ * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#ifndef CPP_RAILS_APPLICATION_H
-#define CPP_RAILS_APPLICATION_H
+#ifndef MILX_APPLICATION_H
+#define MILX_APPLICATION_H
 
 #include <vector>
 #include <string>
@@ -25,16 +24,18 @@
 
 namespace Milx
 {
-class Application
-{
-    std::vector<Controller*> controllers;
-    std::string app_name;
-public:
-    char **env;
-    Application(std::string name, char *env[]);
-    void registerController(Controller*);
-    int run();
-};
+    class Application
+    {
+        std::vector<Controller*> controllers;
+        std::string app_name;
+        public:
+            char **env;
+            Application(std::string name, char *env[]);
+            void registerController(Controller*);
+            int run();
+        private:
+            void splitEnvVars();
+    };
 }
 
 #endif

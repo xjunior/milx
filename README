@@ -1,8 +1,8 @@
-CPP on Rails (a.k.a. C++ on Rails) aims to be a C++ web development framework,
-based on Rails and Cake PHP structure.
+Milx (a.k.a. C++ on Rails) aims to be a C++ web development framework, based
+on Rails and Cake PHP structure.
 
-CPP on Rails is a pure academic framework (at least now), and doesn't aims to
-be a production framework.
+Milx is a pure academic framework (at least now), and doesn't aims to be a
+production framework.
 
 Project Leader:
 Carlos Júnior <carlos@milk-it.net>
@@ -10,5 +10,5 @@ Carlos Júnior <carlos@milk-it.net>
 Contributors:
 Nilander <moraes2k@gmail.com>
 
-CPP on Rails is licensed under GNU Lesser General Public License v3 (see LICENSE
-file for further information).
+Milx is licensed under GNU Lesser General Public License v3 (see LICENSE file
+for further information).

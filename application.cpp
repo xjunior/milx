@@ -1,36 +1,59 @@
 /*
- * This file is part of CPP On Rails.
+ * This file is part of Milx.
  *
- * CPP On Rails is free software: you can redistribute it and/or modify
+ * Milx is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CPP On Rails is distributed in the hope that it will be useful,
+ * Milx is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CPP On Rails.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
+ * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
+#include <string>
+#include <iostream>
 #include "application.h"
-using namespace Milx;
+using namespace std;
 
-Application::Application(std::string name, char *env[])
+Milx::Application::Application(std::string name, char *env[])
 {
     this->app_name = name;
     this->env = env;
+    splitEnvVars();
 }
 
-void Application::registerController(Controller *c)
+void Milx::Application::splitEnvVars()
+{
+    string cur, script_name, method, remote_addr;
+
+    for (int i = 0; env[i]; i++)
+    {
+        cur = string(env[i]);
+        if (cur.compare(0, 11, "SCRIPT_NAME") == 0)
+            script_name = cur.substr(12);
+        else if (cur.compare(0, 14, "REQUEST_METHOD") == 0)
+            method = cur.substr(15);
+        else if (cur.compare(0, 11, "REMOTE_ADDR") == 0)
+            remote_addr = cur.substr(12);
+    }
+
+    cout << "Script name: " << script_name;
+    cout << "Method: " << method;
+    cout << "Remote addr: " << remote_addr;
+}
+
+void Milx::Application::registerController(Milx::Controller *c)
 {
     controllers.push_back(c);
     c->setApplication(this);
 }
 
-int Application::run()
+int Milx::Application::run()
 {
     controllers[0]->callAction("index");
     return 0;
