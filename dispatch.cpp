@@ -13,7 +13,6 @@ public:
 
 void Blog::index()
 {
-    std::cout << "content-type: text/html\n\n" << endl;
     std::cout << "<html>\n<body>\n" << endl;
     std::cout << "<h1> Hello, World! </h1>\n" << endl;
 
@@ -32,6 +31,7 @@ void Blog::callAction(std::string name)
 
 int main(int argc, char *argv[], char *envp[])
 {
+    std::cout << "content-type: text/html\n\n" << endl;
     Application a("blog", envp);
     a.registerController(new Blog());
     return a.run();
