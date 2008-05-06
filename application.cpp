@@ -18,7 +18,7 @@
 #include <string>
 #include <iostream>
 #include "application.h"
-using namespace std;
+#include "response.h"
 
 Milx::Application::Application(std::string name)
 {
@@ -28,7 +28,7 @@ Milx::Application::Application(std::string name)
 
 void Milx::Application::splitEnvVars()
 {
-    string cur, script_name, method, remote_addr;
+    std::string cur, script_name, method, remote_addr;
 
     script_name = getenv("SCRIPT_NAME");
     method = getenv("REQUEST_METHOD");
@@ -43,6 +43,10 @@ void Milx::Application::registerController(Milx::Controller *c)
 
 int Milx::Application::run()
 {
-    controllers[0]->callAction("index");
+    Milx::Response response = controllers[0]->callAction("index");
+    std::cout << "Content-Type: " << response.getFormat() << "; charset=UTF-8" << std::endl;
+    std::cout << "Status: " << response.translatedResponseCode() << std::endl;
+    std::cout << std::endl;
+    std::cout << response.getContent();
     return 0;
 }

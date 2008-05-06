@@ -23,12 +23,13 @@
 namespace Milx
 {
     class Application;
+    class Response;
     class Controller
     {
         protected:
             Application *application;
         public:
-            virtual void callAction(std::string)=0;
+            virtual Response callAction(std::string)=0;
             void setApplication(Application *a)
             {
                 application = a;

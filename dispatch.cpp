@@ -15,30 +15,29 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include <iostream>
 #include "application.h"
 #include "controller.h"
+#include "response.h"
 
 class Blog : public Milx::Controller
 {
-    void index();
+    Milx::Response index();
 public:
-    void callAction(std::string name);
+    Milx::Response callAction(std::string name);
 };
 
-void Blog::index()
+Milx::Response Blog::index()
 {
-    std::cout << "Content-Type: text/html; charset=UTF-8" << std::endl << std::endl;
-    std::cout << "<html>" << std::endl;
-    std::cout << "<head><title>Milx Blog Example</title></head>" << std::endl;
-    std::cout << "<body>" << std::endl;
-    std::cout << "<h1> Hello, World! </h1>" << std::endl;
-    std::cout << "</body></html>" << std::endl;
+    return Milx::Response( "<html>"
+                "<head><title>Milx Blog Example</title></head>"
+                "<body>"
+                "<h1> Hello, World! </h1>"
+                "</body></html>", 404 );
 }
 
-void Blog::callAction(std::string name)
+Milx::Response Blog::callAction(std::string name)
 {
-    if (name.compare("index") == 0) index();
+    if (name.compare("index") == 0) return index();
 }
 
 int main()
