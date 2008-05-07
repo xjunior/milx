@@ -15,8 +15,8 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#ifndef MILX_RESPONSE_H
-#define MILX_RESPONSE_H
+#ifndef MILX_REQUEST_H
+#define MILX_REQUEST_H
 
 #include <string>
 
@@ -24,24 +24,27 @@ namespace Milx
 {
     namespace CGI
     {
-        class Response
+        class Request
         {
-            int code;
-            std::string content;
-            std::string format;
-    
+            private:
+                static Request* _request;
+                Request();
             public:
-                Response(std::string="", int=200, std::string="text/html");
-                std::string getContent();
-                void setContent(std::string);
-                int getCode();
-                void setCode(int);
-                std::string getFormat();
-                void setFormat(std::string);
-                std::string translatedResponseCode();
+                static Request& instance();
+                std::string accept();
+                std::string acceptCharset();
+                std::string acceptEncoding();
+                std::string acceptLanguage();
+                std::string from();
+                std::string host();
+                std::string pragma();
+                std::string referer();
+                std::string userAgent();
+                std::string queryString();
+                std::string remoteAddress();
+                std::string remoteHost();
+                std::string contentType();
         };
-
-        class BadResponseCode { };
     }
 }
 

@@ -1,43 +1,60 @@
+/*
+ * This file is part of Milx.
+ *
+ * Milx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Milx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
+ */
+
 #include "response.h"
 
-Milx::Response::Response(std::string content, int code, std::string format)
+Milx::CGI::Response::Response(std::string content, int code, std::string format)
 {
     this->code = code;
     this->content = content;
     this->format = format;
 }
 
-std::string Milx::Response::getContent()
+std::string Milx::CGI::Response::getContent()
 {
     return content;
 }
 
-int Milx::Response::getCode()
+int Milx::CGI::Response::getCode()
 {
     return code;
 }
 
-std::string Milx::Response::getFormat()
+std::string Milx::CGI::Response::getFormat()
 {
     return format;
 }
 
-void Milx::Response::setContent(std::string content)
+void Milx::CGI::Response::setContent(std::string content)
 {
     this->content = content;
 }
 
-void Milx::Response::setCode(int code)
+void Milx::CGI::Response::setCode(int code)
 {
     this->code = code;
 }
 
-void Milx::Response::setFormat(std::string format)
+void Milx::CGI::Response::setFormat(std::string format)
 {
     this->format = format;
 }
 
-std::string Milx::Response::translatedResponseCode()
+std::string Milx::CGI::Response::translatedResponseCode()
 {
     switch (code)
     {
@@ -91,3 +108,4 @@ std::string Milx::Response::translatedResponseCode()
 
     throw new BadResponseCode();
 }
+
