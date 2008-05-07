@@ -26,19 +26,23 @@ namespace Milx
     {
         class Response
         {
-            int code;
-            std::string content;
-            std::string format;
+            int _code;
+            std::string _content;
+            std::string _format;
     
             public:
                 Response(std::string="", int=200, std::string="text/html");
-                std::string getContent();
+                std::string content();
                 void setContent(std::string);
-                int getCode();
+                int code();
                 void setCode(int);
-                std::string getFormat();
+                std::string format();
                 void setFormat(std::string);
                 std::string translatedResponseCode();
+
+                std::string header();
+                std::string body();
+                std::string fullResponse();
         };
 
         class BadResponseCode { };

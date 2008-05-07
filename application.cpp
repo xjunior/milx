@@ -34,9 +34,6 @@ void Milx::Application::registerController(Milx::Controller *c)
 int Milx::Application::run()
 {
     Milx::CGI::Response response = controllers[0]->callAction("index");
-    std::cout << "Content-Type: " << response.getFormat() << "; charset=UTF-8" << std::endl;
-    std::cout << "Status: " << response.translatedResponseCode() << std::endl;
-    std::cout << std::endl;
-    std::cout << response.getContent();
+    std::cout << response.fullResponse();
     return 0;
 }

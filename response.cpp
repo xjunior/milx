@@ -19,44 +19,44 @@
 
 Milx::CGI::Response::Response(std::string content, int code, std::string format)
 {
-    this->code = code;
-    this->content = content;
-    this->format = format;
+    _code    = code;
+    _content = content;
+    _format  = format;
 }
 
-std::string Milx::CGI::Response::getContent()
+std::string Milx::CGI::Response::content()
 {
-    return content;
+    return _content;
 }
 
-int Milx::CGI::Response::getCode()
+int Milx::CGI::Response::code()
 {
-    return code;
+    return _code;
 }
 
-std::string Milx::CGI::Response::getFormat()
+std::string Milx::CGI::Response::format()
 {
-    return format;
+    return _format;
 }
 
 void Milx::CGI::Response::setContent(std::string content)
 {
-    this->content = content;
+    _content = content;
 }
 
 void Milx::CGI::Response::setCode(int code)
 {
-    this->code = code;
+    _code = code;
 }
 
 void Milx::CGI::Response::setFormat(std::string format)
 {
-    this->format = format;
+    _format = format;
 }
 
 std::string Milx::CGI::Response::translatedResponseCode()
 {
-    switch (code)
+    switch (_code)
     {
         // Successful 2xx
         case 200: return "200 OK";
@@ -109,3 +109,13 @@ std::string Milx::CGI::Response::translatedResponseCode()
     throw new BadResponseCode();
 }
 
+std::string Milx::CGI::Response::header()
+{
+    return "Content-Type: " + format() + "; charset=UTF-8\n"
+            "Status: " + translatedResponseCode();
+}
+
+std::string Milx::CGI::Response::fullResponse()
+{
+    return header() + "\n\n" + content();
+}
