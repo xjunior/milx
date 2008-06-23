@@ -22,30 +22,30 @@
 
 namespace Milx
 {
-    namespace CGI
+    class Request
     {
-        class Request
-        {
-            private:
-                static Request* _request;
-                Request();
-            public:
-                static Request& instance();
-                std::string accept();
-                std::string acceptCharset();
-                std::string acceptEncoding();
-                std::string acceptLanguage();
-                std::string from();
-                std::string host();
-                std::string pragma();
-                std::string referer();
-                std::string userAgent();
-                std::string queryString();
-                std::string remoteAddress();
-                std::string remoteHost();
-                std::string contentType();
-        };
-    }
+        std::string _action;
+        std::string _controller;
+    public:
+        //Request(std::string path);
+        std::string action() { return "index";}//_action; }
+        std::string controller() { return "blog";}//_controller; }
+
+        // abstract methods
+        virtual std::string accept()=0;
+        virtual std::string acceptCharset()=0;
+        virtual std::string acceptEncoding()=0;
+        virtual std::string acceptLanguage()=0;
+        virtual std::string from()=0;
+        virtual std::string host()=0;
+        virtual std::string pragma()=0;
+        virtual std::string referer()=0;
+        virtual std::string userAgent()=0;
+        virtual std::string queryString()=0;
+        virtual std::string remoteAddress()=0;
+        virtual std::string remoteHost()=0;
+        virtual std::string contentType()=0;
+    };
 }
 
 #endif

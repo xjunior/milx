@@ -22,31 +22,28 @@
 
 namespace Milx
 {
-    namespace CGI
+    class Response
     {
-        class Response
-        {
-            int _code;
-            std::string _content;
-            std::string _format;
+        int _code;
+        std::string _content;
+        std::string _format;
     
-            public:
-                Response(std::string="", int=200, std::string="text/html");
-                std::string content();
-                void setContent(std::string);
-                int code();
-                void setCode(int);
-                std::string format();
-                void setFormat(std::string);
-                std::string translatedResponseCode();
+    public:
+        Response(std::string="", int=200, std::string="text/html");
+        std::string content();
+        void setContent(std::string);
+        int code();
+        void setCode(int);
+        std::string format();
+        void setFormat(std::string);
+        std::string translatedResponseCode();
 
-                std::string header();
-                std::string body();
-                std::string fullResponse();
-        };
+        std::string header();
+        std::string body();
+        std::string fullResponse();
+    };
 
-        class BadResponseCode { };
-    }
+    class BadResponseCode { };
 }
 
 #endif

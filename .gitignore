@@ -1,1 +1,10 @@
-*.cgi
+aclocal.m4
+autom4te.cache
+config.log
+config.sub
+depcomp
+configure
+config.guess
+install-sh
+ltmain.sh
+missing

@@ -16,35 +16,19 @@
  */
 
 #include "application.h"
-#include "controller.h"
+#include "cgi_request.h"
+#include "cgi_handler.h"
 #include "response.h"
+#include <iostream>
 
-class Blog : public Milx::Controller
+void Milx::CGI::Handler::run(Milx::Application* app)
 {
-    Milx::CGI::Response index();
-public:
-    Milx::CGI::Response callAction(std::string name);
-};
+    Milx::CGI::Request *req = new Milx::CGI::Request();
+    Milx::Response* response = app->dispatch(req);
 
-Milx::CGI::Response Blog::index()
-{
-    return Milx::CGI::Response( "<html>"
-    "<head><title>Milx Blog System</title></head>"
-    "<body>"
-    "<h1>Milx Blog System</h1>"
-    "<p>You're using: <b>" +request().userAgent() + "</b></p>"
-    "</body></html>" );
-}
+    std::cout << response->fullResponse();
 
-Milx::CGI::Response Blog::callAction(std::string name)
-{
-    if (name.compare("index") == 0) return index();
-}
-
-int main()
-{
-    Milx::Application a("blog");
-    a.registerController(new Blog());
-    return a.run();
+    delete response;
+    delete req;
 }
 

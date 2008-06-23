@@ -18,21 +18,23 @@
 #ifndef MILX_APPLICATION_H
 #define MILX_APPLICATION_H
 
-#include <vector>
+#include <map>
 #include <string>
 #include "controller.h"
 
 namespace Milx
 {
+    class Response;
+    class Request;
+
     class Application
     {
-        std::vector<Controller*> controllers;
-        std::string app_name;
-        public:
-            char **env;
-            Application(std::string name);
-            void registerController(Controller*);
-            int run();
+        static std::map<std::string, Controller*> controllers;
+    public:
+        Application();
+        Milx::Response* dispatch(Milx::Request*);
+
+        static void registerController(Controller*, std::string);
     };
 }
 

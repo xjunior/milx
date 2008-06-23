@@ -15,32 +15,38 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#ifndef MILX_CONTROLLER_H
-#define MILX_CONTROLLER_H
+#ifndef MILX_CALLBACK_H
+#define MILX_CALLBACK_H
 
 #include <string>
-#include <map>
-#include "callback.h"
 
 namespace Milx
 {
-    class Response;
     class Request;
+    class Response;
 
-    class Controller
+    class Callback
     {
-        std::map<std::string, Callback*> actionsCallbacks;
     public:
-        template<class T>
-        void registerAction(Milx::Response* (T::*)(Milx::Request*), std::string, T*);
-        Milx::Response* dispatch(Milx::Request*);
+        virtual Milx::Response* call(Milx::Request*)=0;
+    };
+
+    template<class T>
+    class CallbackHandler : public Callback
+    {
+        Milx::Response* (T::*method)(Milx::Request*);
+        T *obj;
+    public:
+        CallbackHandler(Milx::Response* (T::*)(Milx::Request*), T*);
+        Milx::Response* call(Milx::Request*);
     };
 }
+template<class T>
+Milx::CallbackHandler<T>::CallbackHandler(Milx::Response* (T::*mptr)(Milx::Request*), T* optr) : obj(optr), method(mptr) { }
 
 template<class T>
-void Milx::Controller::registerAction(Milx::Response* (T::*mptr)(Milx::Request*), std::string action, T *ptr)
+Milx::Response* Milx::CallbackHandler<T>::call(Milx::Request *req)
 {
-    actionsCallbacks[action] = new CallbackHandler<T>(mptr, ptr);
+    return (obj->*method)(req);
 }
-
 #endif

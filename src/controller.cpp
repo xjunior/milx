@@ -1,4 +1,4 @@
-/*
+ /*
  * This file is part of Milx.
  *
  * Milx is free software: you can redistribute it and/or modify
@@ -15,32 +15,11 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#ifndef MILX_CONTROLLER_H
-#define MILX_CONTROLLER_H
-
-#include <string>
-#include <map>
+#include "controller.h"
 #include "callback.h"
+#include "request.h"
 
-namespace Milx
+Milx::Response* Milx::Controller::dispatch(Milx::Request *req)
 {
-    class Response;
-    class Request;
-
-    class Controller
-    {
-        std::map<std::string, Callback*> actionsCallbacks;
-    public:
-        template<class T>
-        void registerAction(Milx::Response* (T::*)(Milx::Request*), std::string, T*);
-        Milx::Response* dispatch(Milx::Request*);
-    };
+    return actionsCallbacks[req->action()]->call(req);
 }
-
-template<class T>
-void Milx::Controller::registerAction(Milx::Response* (T::*mptr)(Milx::Request*), std::string action, T *ptr)
-{
-    actionsCallbacks[action] = new CallbackHandler<T>(mptr, ptr);
-}
-
-#endif

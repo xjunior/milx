@@ -16,24 +16,23 @@
  */
 
 #include <string>
-#include <iostream>
 #include "application.h"
 #include "response.h"
+#include "request.h"
 
-Milx::Application::Application(std::string name)
+std::map<std::string, Milx::Controller*> Milx::Application::controllers;
+
+Milx::Application::Application()
 {
-    this->app_name = name;
 }
 
-void Milx::Application::registerController(Milx::Controller *c)
+void Milx::Application::registerController(Milx::Controller *c, std::string name)
 {
-    controllers.push_back(c);
-    c->setApplication(this);
+    controllers[name] = c;
 }
 
-int Milx::Application::run()
+Milx::Response* Milx::Application::dispatch(Milx::Request* req)
 {
-    Milx::CGI::Response response = controllers[0]->callAction("index");
-    std::cout << response.fullResponse();
-    return 0;
+    return controllers[req->controller()]->dispatch(req);
 }
+

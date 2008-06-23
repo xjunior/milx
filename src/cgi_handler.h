@@ -15,32 +15,21 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#ifndef MILX_CONTROLLER_H
-#define MILX_CONTROLLER_H
-
-#include <string>
-#include <map>
-#include "callback.h"
+#ifndef MILX_CGI_HANDLER_H
+#define MILX_CGI_HANDLER_H
 
 namespace Milx
 {
-    class Response;
-    class Request;
+    class Application;
 
-    class Controller
+    namespace CGI
     {
-        std::map<std::string, Callback*> actionsCallbacks;
-    public:
-        template<class T>
-        void registerAction(Milx::Response* (T::*)(Milx::Request*), std::string, T*);
-        Milx::Response* dispatch(Milx::Request*);
-    };
-}
-
-template<class T>
-void Milx::Controller::registerAction(Milx::Response* (T::*mptr)(Milx::Request*), std::string action, T *ptr)
-{
-    actionsCallbacks[action] = new CallbackHandler<T>(mptr, ptr);
+        class Handler
+        {
+        public:
+            static void run(Milx::Application *app);
+        };
+    }
 }
 
 #endif
