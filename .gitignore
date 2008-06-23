@@ -1,10 +1,7 @@
-aclocal.m4
-autom4te.cache
-config.log
-config.sub
-depcomp
-configure
-config.guess
-install-sh
-ltmain.sh
-missing
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+src/CMakeFiles
+src/Makefile
+src/cmake_install.cmake
