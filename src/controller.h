@@ -27,12 +27,25 @@ namespace Milx
     class Response;
     class Request;
 
+    /**
+     * Milx::Controller is the base class for any Controller in your application.
+     */
     class Controller
     {
+        /**
+         * The actions of your controller
+         */
         std::map<std::string, Callback*> actionsCallbacks;
     public:
+        /**
+         * Register an action in your controller. Mostly of developers use this
+         * in the class constructor.
+         */
         template<class T>
         void registerAction(Milx::Response* (T::*)(Milx::Request*), std::string, T*);
+        /**
+         * Dispatch an action given by Milx::Request#action() method.
+         */
         Milx::Response* dispatch(Milx::Request*);
     };
 }

@@ -1,13 +1,34 @@
-set (lib_sources application.cpp cgi_request.cpp controller.cpp
-cgi_handler.cpp response.cpp)
+add_subdirectory (cgi)
+
+set (LIB_SOURCES application.cpp controller.cpp response.cpp)
+set (LIB_HEADERS application.h callback.h controller.h request.h response.h)
+set (MILX_LIB milx)
 
 # Library
-add_library (milx SHARED ${lib_sources})
-add_library (milx-static STATIC ${lib_sources})
-set_target_properties (milx-static PROPERTIES OUTPUT_NAME "milx")
+add_library (${MILX_LIB} SHARED ${LIB_SOURCES})
+add_library (${MILX_LIB}-static STATIC ${LIB_SOURCES})
+set_target_properties (
+  ${MILX_LIB}-static
+    PROPERTIES
+        CLEAN_DIRECT_OUTPUT
+            1
+        OUTPUT_NAME
+            ${MILX_LIB}
+        VERSION
+            ${APPLICATION_VERSION}
+)
+set_target_properties (
+  ${MILX_LIB}
+    PROPERTIES
+        CLEAN_DIRECT_OUTPUT
+            1
+        VERSION
+            ${APPLICATION_VERSION}
+)
 
-add_executable (milx.cgi milx-cgi.cpp)
-target_link_libraries (milx.cgi milx)
+# Install
+INSTALL ( TARGETS ${MILX_LIB} ${MILX_LIB}-static DESTINATION ${LIB_INSTALL_DIR} )
+INSTALL ( FILES ${LIB_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/milx )
 
 #src/application.cpp  src/callback.h       src/cgi_handler.h
 #src/cgi_request.cpp  src/controller.cpp  src/request.h     src/response.h

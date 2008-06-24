@@ -22,17 +22,40 @@
 
 namespace Milx
 {
+    /**
+     * An abstract class to interface a Request in many ways.
+     * This class is extended in Milx::CGI::Request, for example.
+     * \see Milx::CGI::Request
+     */
     class Request
     {
+        /**
+         * The requested action name
+         */
         std::string _action;
+        /**
+         * The requested controller name
+         */
         std::string _controller;
     public:
         //Request(std::string path);
+        /**
+         * \return the requested action name
+         */
         std::string action() { return "index";}//_action; }
+        /**
+         * \return the requested controller name
+         */
         std::string controller() { return "blog";}//_controller; }
 
         // abstract methods
+        /**
+         * \return the accept HTTP header
+         */
         virtual std::string accept()=0;
+        /**
+         * \return Accept-Charset HTTP header
+         */
         virtual std::string acceptCharset()=0;
         virtual std::string acceptEncoding()=0;
         virtual std::string acceptLanguage()=0;

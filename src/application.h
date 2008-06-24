@@ -27,13 +27,37 @@ namespace Milx
     class Response;
     class Request;
 
+    /**
+     * The Milx::Application class handle the currently running application.
+     *
+     * This class is responsible by loading the controllers from the current
+     * project and handle the application.
+     *
+     * The application rendering and response are made by the handlers (CGI,
+     * FCGI, Apache, etc).
+     */
     class Application
     {
+        /**
+         * The controllers held by the application.
+         */
         static std::map<std::string, Controller*> controllers;
     public:
+        /**
+         * Constructor for application. No argument needed (yet).
+         */
         Application();
+        /**
+         * Dispatch a request to the correct controller/action
+         * \param req is the request to be dispatched
+         * \return a http response
+         */
         Milx::Response* dispatch(Milx::Request*);
 
+        /**
+         * Register a controller. This method is used to inform Milx about
+         * new controllers
+         */
         static void registerController(Controller*, std::string);
     };
 }

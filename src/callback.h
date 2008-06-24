@@ -25,19 +25,49 @@ namespace Milx
     class Request;
     class Response;
 
+    /**
+     * The Callback class is an abstract class to help Milx to handle the
+     * calling of actions.
+     * 
+     * This class was made to help Milx to call an action by it's string name.
+     */
     class Callback
     {
     public:
+        /**
+         * Call an the action passing the Milx::Request, and expect a
+         * Milx::Response as it's return.
+         */
         virtual Milx::Response* call(Milx::Request*)=0;
     };
 
+    /**
+     * CallbackHandler can handle callbacks for any Controller class. It's
+     * a template class
+     */
     template<class T>
     class CallbackHandler : public Callback
     {
+        /**
+         * Pointer to the action method being held.
+         */
         Milx::Response* (T::*method)(Milx::Request*);
+        /**
+         * Pointer to the object being held.
+         */
         T *obj;
     public:
+        /**
+         * CallbackHandler constructor.
+         * \param mptr is the pointer to the action
+         * \param optr is the pointer to the controller
+         */
         CallbackHandler(Milx::Response* (T::*)(Milx::Request*), T*);
+        /**
+         * Call the action, passing a request and expecting a response
+         * \param req is the current request
+         * \return a http response
+         */
         Milx::Response* call(Milx::Request*);
     };
 }
