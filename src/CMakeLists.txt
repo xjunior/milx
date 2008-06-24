@@ -3,6 +3,7 @@ add_subdirectory (cgi)
 set (LIB_SOURCES application.cpp controller.cpp response.cpp)
 set (LIB_HEADERS application.h callback.h controller.h request.h response.h)
 set (MILX_LIB milx)
+# TODO: define a default bin dir for Milx (for cgi and fcgi, for example)
 
 # Library
 add_library (${MILX_LIB} SHARED ${LIB_SOURCES})
