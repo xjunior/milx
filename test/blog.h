@@ -1,9 +1,9 @@
 #ifndef BLOG_H
 #define BLOG_H
 
-#include "response.h"
-#include "request.h"
-#include "controller.h"
+#include <milx/response.h>
+#include <milx/request.h>
+#include <milx/controller.h>
 
 class BlogController : public Milx::Controller
 {
