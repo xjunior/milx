@@ -20,15 +20,25 @@
 #include "controller.h"
 #include "callback.h"
 #include "request.h"
+#include "tools.h"
 
 Milx::Response* Milx::Controller::dispatch(Milx::Request *req)
 {
     /*std::cout << "Temos " << actionsCallbacks.size() << " actions!" << std::endl;
     std::cout << "Chamando " << req->action() << std::endl;
     std::cout << "e é um: " << typeid(actionsCallbacks[req->action()]).name() << std::endl;*/
-    if (actionsCallbacks.count(req->action()) != 0)
-        return actionsCallbacks[req->action()]->call(req);
-    else
-        return 0;
+    if (actionsCallbacks.count(req->action()) != 0) {
+			using namespace std;
+			typeof(req->action()) act = req->action();
+			cout << "act="<<act<<endl;
+			typeof(actionsCallbacks[req->action()]) cb = actionsCallbacks[req->action()];
+			cout << "callbacks[..]=" <<cb<<endl;
+			cout << "executing callback " << endl;
+			cb->call(req);
+			//return actionsCallbacks[req->action()]->call(req);
+		}
+    else {
+			return 0;
+		}
 }
 
