@@ -18,7 +18,6 @@
 #include <iostream>
 #include <typeinfo>
 #include "controller.h"
-#include "callback.h"
 #include "request.h"
 #include "tools.h"
 
@@ -31,10 +30,10 @@ Milx::Response* Milx::Controller::dispatch(Milx::Request *req)
 			using namespace std;
 			typeof(req->action()) act = req->action();
 			cout << "act="<<act<<endl;
-			typeof(actionsCallbacks[req->action()]) cb = actionsCallbacks[req->action()];
-			cout << "callbacks[..]=" <<cb<<endl;
+			typeof(actionsCallbacks[req->action()]) cb = actionsCallbacks[act];
+			cout << "callbacks[..]=" << cb << endl;
 			cout << "executing callback " << endl;
-			cb->call(req);
+			cb(req);
 			//return actionsCallbacks[req->action()]->call(req);
 		}
     else {

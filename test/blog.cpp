@@ -1,3 +1,5 @@
+#include <iostream>
+#include <string>
 #include "blog.h"
 
 BlogController::BlogController()

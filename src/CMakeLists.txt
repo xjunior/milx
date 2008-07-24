@@ -5,7 +5,7 @@ set (MILX_HOME_BIN ${MILX_HOME}/bin)
 add_subdirectory (cgi)
 
 set (LIB_SOURCES application.cpp controller.cpp response.cpp routing.cpp)
-set (LIB_HEADERS application.h callback.h controller.h request.h response.h
+set (LIB_HEADERS application.h controller.h request.h response.h
 routing.h)
 set (MILX_LIB_DEPENDENCIES dl)
 
@@ -35,8 +35,3 @@ set_target_properties (
 # Install
 INSTALL ( TARGETS ${MILX_LIB} ${MILX_LIB}-static DESTINATION ${LIB_INSTALL_DIR} )
 INSTALL ( FILES ${LIB_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/${MILX_LIB} )
-
-#src/application.cpp  src/callback.h       src/cgi_handler.h
-#src/cgi_request.cpp  src/controller.cpp  src/request.h     src/response.h
-#src/application.h    src/cgi_handler.cpp  src/cgi_main.cpp   src/cgi_request.h
-#src/controller.h    src/response.cpp

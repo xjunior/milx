@@ -20,7 +20,8 @@
 
 #include <string>
 #include <map>
-#include "callback.h"
+#include <boost/function.hpp>
+#include <boost/bind.hpp>
 
 namespace Milx
 {
@@ -35,7 +36,7 @@ namespace Milx
         /**
          * The actions of your controller
          */
-        std::map<std::string, Callback*> actionsCallbacks;
+        std::map<std::string, boost::function<Response* (Request*)> > actionsCallbacks;
     public:
         /**
          * Register an action in your controller. Mostly of developers use this
@@ -53,7 +54,7 @@ namespace Milx
 template<class T>
 void Milx::Controller::registerAction(Milx::Response* (T::*mptr)(Milx::Request*), std::string action, T *ptr)
 {
-    actionsCallbacks[action] = new CallbackHandler<T>(mptr, ptr);
+    actionsCallbacks[action] = boost::bind(mptr, ptr);
 }
 
 #endif

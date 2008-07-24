@@ -18,6 +18,8 @@
 #ifndef MILX_CALLBACK_H
 #define MILX_CALLBACK_H
 
+#include <iostream>
+#include "request.h"
 #include <string>
 
 namespace Milx
@@ -77,6 +79,7 @@ Milx::CallbackHandler<T>::CallbackHandler(Milx::Response* (T::*mptr)(Milx::Reque
 template<class T>
 Milx::Response* Milx::CallbackHandler<T>::call(Milx::Request *req)
 {
+    std::cout << "vou chamar a parada!!!!! " << req->controller() << "#" << req->action() << std::endl;
     return (obj->*method)(req);
 }
 #endif
