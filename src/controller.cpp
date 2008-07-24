@@ -15,11 +15,20 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
+#include <iostream>
+#include <typeinfo>
 #include "controller.h"
 #include "callback.h"
 #include "request.h"
 
 Milx::Response* Milx::Controller::dispatch(Milx::Request *req)
 {
-    return actionsCallbacks[req->action()]->call(req);
+    /*std::cout << "Temos " << actionsCallbacks.size() << " actions!" << std::endl;
+    std::cout << "Chamando " << req->action() << std::endl;
+    std::cout << "e é um: " << typeid(actionsCallbacks[req->action()]).name() << std::endl;*/
+    if (actionsCallbacks.count(req->action()) != 0)
+        return actionsCallbacks[req->action()]->call(req);
+    else
+        return 0;
 }
+

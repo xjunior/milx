@@ -15,24 +15,44 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include <string>
+#include <iostream>
+#include <typeinfo>
+#include <dlfcn.h>
 #include "application.h"
 #include "response.h"
 #include "request.h"
-
-std::map<std::string, Milx::Controller*> Milx::Application::controllers;
+#include "controller.h"
 
 Milx::Application::Application()
 {
+    loadRoutes();
 }
 
-void Milx::Application::registerController(Milx::Controller *c, std::string name)
+void Milx::Application::loadRoutes()
 {
-    controllers[name] = c;
+    void* loader = dlopen("./routes.so", RTLD_LAZY);
+    if (!loader) throw RoutesNotFound();
+    
+    typedef void(*routing_f)(Milx::Routing&);
+    routing_f routing = (routing_f) dlsym(loader, "routing");
+
+    if (routing)
+    {
+        routing(routes);
+        dlclose(loader);
+        return;
+    }
+    else
+    {
+        throw RoutesNotFound();
+        dlclose(loader);
+    }
 }
 
 Milx::Response* Milx::Application::dispatch(Milx::Request* req)
 {
-    return controllers[req->controller()]->dispatch(req);
+    Milx::Controller* controller = routes.translateRequest(req);
+    // TODO: throw some kind of error if the controller don't exists
+    return controller->dispatch(req);
 }
 

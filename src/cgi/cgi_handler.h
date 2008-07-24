@@ -34,7 +34,7 @@ namespace Milx
              * Run the application in CGI mode.
              * \param app is the Application to be run.
              */
-            static void run(Milx::Application *app);
+            static void run(Milx::Application&);
         };
     }
 }

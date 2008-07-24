@@ -4,7 +4,7 @@
 int main(int, char**)
 {
     Milx::Application app;
-    Milx::CGI::Handler::run(&app);
+    Milx::CGI::Handler::run(app);
 
     return 0;
 }

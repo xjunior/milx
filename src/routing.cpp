@@ -15,20 +15,23 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "../application.h"
-#include "../response.h"
-#include "cgi_request.h"
-#include "cgi_handler.h"
-#include <iostream>
+#include "routing.h"
+#include "request.h"
 
-void Milx::CGI::Handler::run(Milx::Application& app)
+void Milx::Routing::controller(Milx::Controller* c, std::string name)
 {
-    Milx::CGI::Request *req = new Milx::CGI::Request();
-    Milx::Response* response = app.dispatch(req);
+    controllers[name] = c;
+}
 
-    std::cout << response->fullResponse();
+Milx::Controller* Milx::Routing::controller(std::string name)
+{
+    return controllers[name];
+}
 
-    delete response;
-    delete req;
+Milx::Controller* Milx::Routing::translateRequest(Milx::Request* req)
+{
+    req->controller("blog");
+    req->action("index");
+    return controllers[req->controller()];
 }
 

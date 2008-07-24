@@ -18,9 +18,7 @@
 #ifndef MILX_APPLICATION_H
 #define MILX_APPLICATION_H
 
-#include <map>
-#include <string>
-#include "controller.h"
+#include "routing.h"
 
 namespace Milx
 {
@@ -38,10 +36,7 @@ namespace Milx
      */
     class Application
     {
-        /**
-         * The controllers held by the application.
-         */
-        static std::map<std::string, Controller*> controllers;
+        Milx::Routing routes;
     public:
         /**
          * Constructor for application. No argument needed (yet).
@@ -53,13 +48,15 @@ namespace Milx
          * \return a http response
          */
         Milx::Response* dispatch(Milx::Request*);
-
-        /**
-         * Register a controller. This method is used to inform Milx about
-         * new controllers
-         */
-        static void registerController(Controller*, std::string);
+    private:
+        void loadRoutes();
     };
+
+    /**
+     * Class thrown when the routes file was not found or the
+     * routing function is not defined.
+     */
+    class RoutesNotFound {};
 }
 
 #endif

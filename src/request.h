@@ -42,11 +42,13 @@ namespace Milx
         /**
          * \return the requested action name
          */
-        std::string action() { return "index";}//_action; }
+        std::string action() { return _action; }
+        void action(std::string act_name) { _action = act_name; }
         /**
          * \return the requested controller name
          */
-        std::string controller() { return "blog";}//_controller; }
+        std::string controller() { return _controller; }
+        void controller(std::string ctrl_name) { _controller = ctrl_name; }
 
         // abstract methods
         /**
