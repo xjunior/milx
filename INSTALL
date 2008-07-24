@@ -1,0 +1,28 @@
+Quick & dirty install
+based on what author told us on IRC :P
+
+1) cmake . ; make
+
+2) as root:  make install
+
+3) cd test
+
+4) g++ -o routes.so -shared routes.cpp blog.cpp  -fPIC -g3 ; /usr/local/milx/bin/milx.cgi
+
+Step 4 recompiles and runs the test.
+
+(Probably need restar from step 1 to see changes in the library)
+
+---FAQ---
+
+Q: terminate called after throwing an instance of 'Milx::RoutesNotFound'
+A: enter the directory test and THERE run the milx.cgi - step 4
+
+Q: relocation R_X86_64_32 against builda local symbol' can not be used when making a shared object; recompile with -fPIC
+A: build test with -fPIC - step 4
+
+Q: build.sh
+A: doesnt work currently
+
+--rafal@limcore.com
+
