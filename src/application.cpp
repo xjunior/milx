@@ -15,7 +15,6 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "debug.h"
 #include <dlfcn.h>
 #include "application.h"
 #include "response.h"
@@ -37,9 +36,7 @@ void Milx::Application::loadRoutes()
 
     if (routing)
     {
-        DEBUG("to carregando tudo!!!");
         routing(routes);
-        dlclose(loader);
         return;
     }
     else
@@ -52,7 +49,6 @@ void Milx::Application::loadRoutes()
 Milx::Response* Milx::Application::dispatch(Milx::Request* req)
 {
     Milx::Controller* controller = routes.translateRequest(req);
-    DEBUG("Going to dispatch " << req->controller() << "#" << req->action());
     // TODO: throw some kind of error if the controller don't exists
     return controller->dispatch(req);
 }

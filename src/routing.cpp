@@ -15,13 +15,11 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "debug.h"
 #include "routing.h"
 #include "request.h"
 
 void Milx::Routing::controller(Milx::Controller* c, std::string name)
 {
-    DEBUG("Adding controller " << name);
     controllers[name] = c;
 }
 

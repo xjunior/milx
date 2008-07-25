@@ -15,13 +15,11 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "../debug.h"
 #include "cgi_handler.h"
 #include "../application.h"
 
 int main(int, char**)
 {
-    DEBUG("== Start up ==");
     Milx::Application app;
     Milx::CGI::Handler::run(app);
 
