@@ -15,29 +15,29 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include <iostream>
-#include <typeinfo>
+#include "debug.h"
 #include "controller.h"
 #include "request.h"
-#include "tools.h"
+#include "response.h"
 
 Milx::Response* Milx::Controller::dispatch(Milx::Request *req)
 {
-    /*std::cout << "Temos " << actionsCallbacks.size() << " actions!" << std::endl;
-    std::cout << "Chamando " << req->action() << std::endl;
-    std::cout << "e é um: " << typeid(actionsCallbacks[req->action()]).name() << std::endl;*/
-    if (actionsCallbacks.count(req->action()) != 0) {
-			using namespace std;
-			typeof(req->action()) act = req->action();
-			cout << "act="<<act<<endl;
-			typeof(actionsCallbacks[req->action()]) cb = actionsCallbacks[act];
-			cout << "callbacks[..]=" << cb << endl;
-			cout << "executing callback " << endl;
-			cb(req);
-			//return actionsCallbacks[req->action()]->call(req);
-		}
-    else {
-			return 0;
-		}
+    DEBUG("Dispatching " << req->controller() << "#" << req->action());
+    DEBUG("We have " << actionsCallbacks.size() << " actions");
+    std::map<std::string, Milx::Actiont>::iterator iter = actionsCallbacks.find(req->action());
+    if (iter != actionsCallbacks.end())
+    {
+        DEBUG("Action found: " << iter->first << " => " << typeid(iter->second).name());;
+        //return new Milx::Response("deu erro");
+	return iter->second(req);
+    }
+    else
+        return 0;
+}
+
+void Milx::Controller::registerAction(Milx::Actiont mptr, std::string name)
+{
+    DEBUG("Adding " << name);
+    actionsCallbacks.insert( make_pair(name, mptr) );
 }
 

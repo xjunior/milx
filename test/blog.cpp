@@ -1,10 +1,10 @@
-#include <iostream>
 #include <string>
+#include <boost/bind.hpp>
 #include "blog.h"
 
 BlogController::BlogController()
 {
-    registerAction(&BlogController::index, "index", this);
+    registerAction(boost::bind(&BlogController::index, this, _1), "index");
 }
 
 Milx::Response* BlogController::index(Milx::Request* req)

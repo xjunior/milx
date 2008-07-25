@@ -21,40 +21,33 @@
 #include <string>
 #include <map>
 #include <boost/function.hpp>
-#include <boost/bind.hpp>
 
 namespace Milx
 {
     class Response;
     class Request;
+    typedef boost::function<Milx::Response* (Milx::Request*)> Actiont;
 
     /**
      * Milx::Controller is the base class for any Controller in your application.
      */
     class Controller
     {
+    public:
         /**
          * The actions of your controller
          */
-        std::map<std::string, boost::function<Response* (Request*)> > actionsCallbacks;
-    public:
+        std::map<std::string, Actiont> actionsCallbacks;
         /**
          * Register an action in your controller. Mostly of developers use this
          * in the class constructor.
          */
-        template<class T>
-        void registerAction(Milx::Response* (T::*)(Milx::Request*), std::string, T*);
+        void registerAction(boost::function<Response* (Request*)>, std::string);
         /**
          * Dispatch an action given by Milx::Request#action() method.
          */
         Milx::Response* dispatch(Milx::Request*);
     };
-}
-
-template<class T>
-void Milx::Controller::registerAction(Milx::Response* (T::*mptr)(Milx::Request*), std::string action, T *ptr)
-{
-    actionsCallbacks[action] = boost::bind(mptr, ptr);
 }
 
 #endif
