@@ -1,6 +1,7 @@
 set (MILX_CGI_SOURCES cgi_request.cpp cgi_handler.cpp milx-cgi.cpp)
 set (MILX_CGI_HEADERS cgi_handler.h cgi_request.h)
 set (MILX_CGI_BIN milx.cgi)
+set (MILX_HOME_BIN /usr/local) 
 
 # Executables
 add_executable (${MILX_CGI_BIN} ${MILX_CGI_SOURCES})
