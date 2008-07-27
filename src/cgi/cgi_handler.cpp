@@ -15,6 +15,7 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
+#include <iostream>
 #include "../application.h"
 #include "../response.h"
 #include "cgi_request.h"

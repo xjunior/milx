@@ -37,11 +37,16 @@ namespace Milx
     class Application
     {
         Milx::Routing routes;
+        void* loader;
     public:
         /**
          * Constructor for application. No argument needed (yet).
          */
         Application();
+        /**
+         * Destructor for application.
+         */
+        ~Application();
         /**
          * Dispatch a request to the correct controller/action
          * \param req is the request to be dispatched

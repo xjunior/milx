@@ -28,22 +28,16 @@ Milx::Application::Application()
 
 void Milx::Application::loadRoutes()
 {
-    void* loader = dlopen("./routes.so", RTLD_LAZY);
+    loader = dlopen("./routes.so", RTLD_LAZY);
     if (!loader) throw RoutesNotFound();
     
     typedef void(*routing_f)(Milx::Routing&);
     routing_f routing = (routing_f) dlsym(loader, "routing");
 
     if (routing)
-    {
         routing(routes);
-        return;
-    }
     else
-    {
         throw RoutesNotFound();
-        dlclose(loader);
-    }
 }
 
 Milx::Response* Milx::Application::dispatch(Milx::Request* req)
@@ -51,5 +45,10 @@ Milx::Response* Milx::Application::dispatch(Milx::Request* req)
     Milx::Controller* controller = routes.translateRequest(req);
     // TODO: throw some kind of error if the controller don't exists
     return controller->dispatch(req);
+}
+
+Milx::Application::~Application()
+{
+    if (loader) dlclose(loader);
 }
 
