@@ -83,6 +83,8 @@ namespace Milx
              * \see Milx::Request#contentType()
              */
             std::string contentType();
+
+	    std::string cookie();
         };
     }
 }
