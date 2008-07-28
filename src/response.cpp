@@ -45,6 +45,10 @@ void Milx::Response::setContent(std::string content)
     _content = content;
 }
 
+void Milx::Response::setCookie(Cookie *c) {
+	_cookies.addCookie(c);
+}
+
 void Milx::Response::setCode(int code)
 {
     _code = code;
@@ -118,10 +122,12 @@ std::string Milx::Response::translatedResponseCode()
     return str.str();
 }
 
+// TODO: add Set-Cookie header, if this response have one or more cookies to set.
 std::string Milx::Response::header()
 {
     return "Content-Type: " + format() + "; charset=UTF-8\n"
-            "Status: " + translatedResponseCode();
+           "Status: " + translatedResponseCode() + "\n"
+	   + _cookies.getAllCookies();
 }
 
 std::string Milx::Response::fullResponse()

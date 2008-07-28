@@ -19,6 +19,7 @@
 #define MILX_RESPONSE_H
 
 #include <string>
+#include "cookie.h"
 
 namespace Milx
 {
@@ -27,7 +28,8 @@ namespace Milx
         int _code;
         std::string _content;
         std::string _format;
-    
+	CookieCallback _cookies;  
+  
     public:
         Response(std::string="", int=200, std::string="text/html");
         std::string content();
@@ -37,6 +39,7 @@ namespace Milx
         std::string format();
         void setFormat(std::string);
         std::string translatedResponseCode();
+	void setCookie(Cookie *c);
 
         std::string header();
         std::string body();
