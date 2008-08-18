@@ -19,6 +19,7 @@
 #define MILX_REQUEST_H
 
 #include <string>
+#include "cookie.h"
 
 namespace Milx
 {
@@ -37,8 +38,12 @@ namespace Milx
          * The requested controller name
          */
         std::string _controller;
+        /**
+         * The list of cookies sent by browser
+         */
+        CookieList _cookies;
     public:
-        //Request(std::string path);
+        Request();
         /**
          * \return the requested action name
          */
@@ -49,6 +54,8 @@ namespace Milx
          */
         std::string controller() { return _controller; }
         void controller(std::string ctrl_name) { _controller = ctrl_name; }
+
+        CookieList &cookies() { return _cookies; }
 
         // abstract methods
         /**
@@ -70,6 +77,8 @@ namespace Milx
         virtual std::string remoteAddress()=0;
         virtual std::string remoteHost()=0;
         virtual std::string contentType()=0;
+    protected:
+        virtual std::string cookieHeader() { return ""; }
     };
 }
 

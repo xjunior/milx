@@ -4,7 +4,8 @@ set (MILX_HOME_BIN ${MILX_HOME}/bin)
  
 add_subdirectory (cgi)
  
-set (LIB_SOURCES application.cpp controller.cpp cookie.cpp response.cpp routing.cpp)
+set (LIB_SOURCES application.cpp controller.cpp request.cpp cookie.cpp
+response.cpp routing.cpp)
 set (LIB_HEADERS application.h controller.h request.h cookie.h response.h
 routing.h)
 set (MILX_LIB_DEPENDENCIES dl)

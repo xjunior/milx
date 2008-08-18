@@ -17,86 +17,101 @@
 
 #include "cookie.h"
 
-Milx::Cookie::Cookie() {
-	version = "1";
-	secure = false;
+Milx::Cookie::Cookie(std::string name, std::string value) :
+_name(name), _value(value)
+{
+	_version = "1";
+	_secure = false;
 }
 
-std::string Milx::Cookie::getName() {
-	return name;
+std::string Milx::Cookie::name()
+{
+	return _name;
 }
 
-std::string Milx::Cookie::getValue() {
-	return value;
+std::string Milx::Cookie::value()
+{
+	return _value;
 }
 
-std::string Milx::Cookie::getVersion() {
-	return version;
+std::string Milx::Cookie::version()
+{
+	return _version;
 }
 
-std::string Milx::Cookie::getDomain() {
-	return domain;
+std::string Milx::Cookie::domain()
+{
+	return _domain;
 }
 
-std::string Milx::Cookie::getExpires() {
-	return expires;
+std::string Milx::Cookie::expires()
+{
+	return _expires;
 }
 
-std::string Milx::Cookie::getPath() {
-	return path;
+std::string Milx::Cookie::path()
+{
+	return _path;
 }
 
-bool Milx::Cookie::isSecure() {
-	return secure;
+bool Milx::Cookie::isSecure()
+{
+	return _secure;
 }
 
-void Milx::Cookie::setName(std::string name) {
-	this->name = name;
+void Milx::Cookie::name(std::string name)
+{
+	this->_name = name;
 }
 
-void Milx::Cookie::setValue(std::string value) {
-	this->value = value;
+void Milx::Cookie::value(std::string value)
+{
+	this->_value = value;
 }
 
-void Milx::Cookie::setExpires(std::string expires) {
-	this->expires = expires;
+void Milx::Cookie::expires(std::string expires)
+{
+	this->_expires = expires;
 }
 
-void Milx::Cookie::setVersion(std::string version) {
-	this->version = version;
+void Milx::Cookie::version(std::string version)
+{
+	this->_version = version;
 }
 
-void Milx::Cookie::setDomain(std::string domain) {
-	this->domain = domain;
+void Milx::Cookie::domain(std::string domain)
+{
+	this->_domain = domain;
 }
 
-void Milx::Cookie::setPath(std::string path) {
-	this->path = path;
+void Milx::Cookie::path(std::string path)
+{
+	this->_path = path;
 }
 
-void Milx::Cookie::setSecure(bool secure) {
-	this->secure = secure;
+void Milx::Cookie::isSecure(bool secure)
+{
+	this->_secure = secure;
 }
 
-std::string Milx::Cookie::toString() {
-	std::string result = "Set-Cookie: " + name + " = " + value; 
+std::string Milx::Cookie::toString()
+{
+	std::string result = "Set-Cookie: " + _name + " = " + _value; 
 	
-	if(!domain.empty()) {
-		result += "; Domain = " + domain;
-	}
+	if (!_domain.empty())
+		result += "; Domain = " + _domain;
 
-	if(!path.empty()) {
-		result += "; Path = " + path;
-	}
+	if (!_path.empty())
+		result += "; Path = " + _path;
 	
 	// FIXME
-	if(!expires.empty()) {
-		result += "; Expires = " + expires;
-	}
+	if (!_expires.empty())
+		result += "; Expires = " + _expires;
 
-	result += std::string("; Secure = ").append((secure) ? "true" : "false");
+	result += std::string("; Secure = ").append((_secure) ? "true" : "false");
 	
-	result += "; Version = " + version;
+	result += "; Version = " + _version;
 	
 	return result;
 }
+

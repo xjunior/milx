@@ -83,8 +83,21 @@ namespace Milx
              * \see Milx::Request#contentType()
              */
             std::string contentType();
-
-	    std::string cookie();
+        protected:
+            /**
+             * \see Milx::Request#cookieHeader()
+             */
+	    std::string cookieHeader();
+        private:
+            /**
+             * Ensure that the variable exists in environment, if doesn't
+             * returns "" (nothing, nada, niente)
+             */
+            std::string _getenv(const char* name)
+            {
+                char *env = getenv(name);
+                return std::string((env == NULL) ? "" : env);
+            }
         };
     }
 }

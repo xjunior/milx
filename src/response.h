@@ -28,7 +28,7 @@ namespace Milx
         int _code;
         std::string _content;
         std::string _format;
-	CookieCallback _cookies;  
+	CookieList _cookies;  
   
     public:
         Response(std::string="", int=200, std::string="text/html");

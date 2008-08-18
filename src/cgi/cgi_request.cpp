@@ -19,84 +19,71 @@
 
 std::string Milx::CGI::Request::accept()
 {
-    	char *env = getenv("HTTP_ACCEPT");
-	return ((env == NULL)? "" : env);
+    	return _getenv("HTTP_ACCEPT");
 }
 
 std::string Milx::CGI::Request::acceptCharset()
 {
-    	char *env = getenv("HTTP_ACCEPT_CHARSET");
-	return ((env == NULL)? "" : env);
+    	return _getenv("HTTP_ACCEPT_CHARSET");
 }
 
 std::string Milx::CGI::Request::acceptEncoding()
 {
-    	char *env = getenv("HTTP_ACCEPT_ENCODING");
-	return ((env == NULL)? "" : env);
+    	return _getenv("HTTP_ACCEPT_ENCODING");
 }
 
 std::string Milx::CGI::Request::acceptLanguage()
 {
-    	char *env = getenv("HTTP_ACCEPT_LANGUAGE");
-	return ((env == NULL)? "" : env);
+    	return _getenv("HTTP_ACCEPT_LANGUAGE");
 }
 
 std::string Milx::CGI::Request::from()
 {
-    	char *env = getenv("HTTP_FROM");
-	return ((env == NULL)? "" : env);
+    	return _getenv("HTTP_FROM");
 }
 
 std::string Milx::CGI::Request::host()
 {
-    	char *env = getenv("HTTP_HOST");
-	return ((env == NULL)? "" : env);
+    	return _getenv("HTTP_HOST");
 }
 
 std::string Milx::CGI::Request::pragma()
 {
-    	char *env = getenv("HTTP_PRAGMA");
-	return ((env == NULL)? "" : env);
+    	return _getenv("HTTP_PRAGMA");
 }
 
 std::string Milx::CGI::Request::referer()
 {
-    	char *env = getenv("HTTP_REFERER");
-	return ((env == NULL)? "" : env);
+    	return _getenv("HTTP_REFERER");
 }
 
 std::string Milx::CGI::Request::userAgent()
 {
-	char *env = getenv("HTTP_USER_AGENT");		
-    	return ((env == NULL)? "" : env);
+        return _getenv("HTTP_USER_AGENT");
 }
 
 std::string Milx::CGI::Request::queryString()
 {
-    	char *env = getenv("QUERY_STRING");
-	return ((env == NULL)? "" : env);
+    	return _getenv("QUERY_STRING");
 }
 
 std::string Milx::CGI::Request::remoteAddress()
 {
-    	char *env = getenv("REMOTE_ADDRESS");
-	return ((env == NULL)? "" : env);
+    	return _getenv("REMOTE_ADDRESS");
 }
 
 std::string Milx::CGI::Request::remoteHost()
 {
-    	char *env = getenv("REMOTE_HOST");
-	return ((env == NULL)? "" : env);
+    	return _getenv("REMOTE_HOST");
 }
 
 std::string Milx::CGI::Request::contentType()
 {
-    	char *env = getenv("CONTENT_TYPE");
-	return ((env == NULL)? "" : env);
+    	return _getenv("CONTENT_TYPE");
 }
 
-std::string Milx::CGI::Request::cookie() 
+std::string Milx::CGI::Request::cookieHeader()
 {
-	char *env = getenv("HTTP_COOKIE");
-	return ((env == NULL)? "" : env);	
+        return _getenv("HTTP_COOKIE");
 }
+
