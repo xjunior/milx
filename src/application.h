@@ -19,6 +19,7 @@
 #define MILX_APPLICATION_H
 
 #include "routing.h"
+#define MILX_APPLICATION_LOADABLE "../build/routes.so"
 
 namespace Milx
 {

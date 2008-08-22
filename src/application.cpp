@@ -28,7 +28,7 @@ Milx::Application::Application()
 
 void Milx::Application::loadRoutes()
 {
-    loader = dlopen("./routes.so", RTLD_LAZY);
+    loader = dlopen(MILX_APPLICATION_LOADABLE, RTLD_LAZY);
     if (!loader) throw RoutesNotFound();
     
     typedef void(*routing_f)(Milx::Routing&);
