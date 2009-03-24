@@ -22,33 +22,34 @@
 #include "controller.h"
 
 Milx::Application::Application()
-{
-    loadRoutes();
-}
+{ }
 
-void Milx::Application::loadRoutes()
+void Milx::Application::loadFile(std::string filename)
 {
-    loader = dlopen(MILX_APPLICATION_LOADABLE, RTLD_LAZY);
-    if (!loader) throw RoutesNotFound();
+    register int pos = loaded.size();
+    loaded.push_back(dlopen(filename.c_str(), RTLD_LAZY));
+    if (!loaded[pos]) throw LoaderNotFound();
     
-    typedef void(*routing_f)(Milx::Routing&);
-    routing_f routing = (routing_f) dlsym(loader, "routing");
+    typedef void(*on_load_f)(Milx::Application&);
+    on_load_f on_load = (on_load_f) dlsym(loaded[pos], "on_load");
 
-    if (routing)
-        routing(routes);
+    if (on_load)
+        on_load(*this);
     else
-        throw RoutesNotFound();
+        throw LoaderNotFound();
 }
 
 Milx::Response* Milx::Application::dispatch(Milx::Request* req)
 {
     Milx::Controller* controller = routes.translateRequest(req);
-    // TODO: throw some kind of error if the controller don't exists
+    // TODO: create a Milx::InternalErrorResponse
     return controller->dispatch(req);
 }
 
 Milx::Application::~Application()
 {
-    if (loader) dlclose(loader);
+    if (loaded.size() > 0)
+        for (register int i = 0; i < loaded.size(); i++)
+	    dlclose(loaded[i]);
 }
 

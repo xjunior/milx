@@ -1,10 +1,7 @@
 Milx (a.k.a. C++ on Rails) aims to be a C++ web development framework, based
 on Rails and Cake PHP structure.
 
-Milx is a pure academic framework (at least now), and doesn't aims to be a
-production framework.
-
-Project Leader:
+Created and maintained:
 Carlos Júnior <carlos@milk-it.net>
 
 Contributors:

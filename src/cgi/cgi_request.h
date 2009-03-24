@@ -19,6 +19,7 @@
 #define MILX_CGI_REQUEST_H
 
 #include <string>
+#include <cstdlib>
 #include "../request.h"
 
 namespace Milx

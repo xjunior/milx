@@ -7,14 +7,15 @@ add_subdirectory (cgi)
 
 set (BIN_SOURCES milx.cpp)
 set (LIB_SOURCES application.cpp controller.cpp request.cpp cookie.cpp
-response.cpp routing.cpp)
+response.cpp routing.cpp server.cpp)
 set (LIB_HEADERS application.h controller.h request.h cookie.h response.h
-routing.h)
-set (MILX_LIB_DEPENDENCIES dl)
+routing.h server.h)
+set (MILX_LIB_DEPENDENCIES dl libsoup)
  
 # Library
 add_library (${MILX_LIB} SHARED ${LIB_SOURCES})
 target_link_libraries (${MILX_LIB} ${MILX_LIB_DEPENDENCIES})
+include_directories("/usr/include/libsoup-2.4")
 add_library (${MILX_LIB}-static STATIC ${LIB_SOURCES})
 set_target_properties (
   ${MILX_LIB}-static

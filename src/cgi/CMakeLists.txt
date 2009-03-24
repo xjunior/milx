@@ -4,7 +4,7 @@ set (MILX_CGI_BIN milx.cgi)
 
 # Executables
 add_executable (${MILX_CGI_BIN} ${MILX_CGI_SOURCES})
-target_link_libraries (${MILX_CGI_BIN} ${MILX_LIB})
+target_link_libraries (${MILX_CGI_BIN} ${MILX_LIB} boost_filesystem)
 
 # Install milx.cgi at the milx default bin dir
 INSTALL ( FILES ${MILX_CGI_BIN} DESTINATION ${MILX_HOME_BIN} PERMISSIONS

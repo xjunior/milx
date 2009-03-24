@@ -19,7 +19,8 @@
 #define MILX_APPLICATION_H
 
 #include "routing.h"
-#define MILX_APPLICATION_LOADABLE "../build/routes.so"
+#include <vector>
+#include <string>
 
 namespace Milx
 {
@@ -38,7 +39,7 @@ namespace Milx
     class Application
     {
         Milx::Routing routes;
-        void* loader;
+	std::vector<void*> loaded;
     public:
         /**
          * Constructor for application. No argument needed (yet).
@@ -54,15 +55,20 @@ namespace Milx
          * \return a http response
          */
         Milx::Response* dispatch(Milx::Request*);
-    private:
-        void loadRoutes();
+	/**
+	 * Add routes to the application, good thing.
+	 */
+	void addRoutes(Milx::Routing*);
+        void loadFile(std::string);
     };
 
     /**
-     * Class thrown when the routes file was not found or the
-     * routing function is not defined.
+     * Class thrown when the requested file to load was not found
+     * or the 'on_load' function is not defined.
      */
-    class RoutesNotFound {};
+    class LoaderNotFound {};
 }
+
+extern "C" void on_load(Milx::Application&);
 
 #endif
