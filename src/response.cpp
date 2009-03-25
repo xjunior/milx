@@ -125,12 +125,13 @@ std::string Milx::Response::translatedResponseCode()
 // TODO: add Set-Cookie header, if this response have one or more cookies to set.
 std::string Milx::Response::header()
 {
-    return "Content-Type: " + format() + "; charset=UTF-8\n"
-           "Status: " + translatedResponseCode() + "\n"
-	   + _cookies.getAllCookies();
+    return "HTTP/1.x " + translatedResponseCode() + "\n"
+            "Content-Type: " + format() + "; charset=UTF-8\n"
+	    + _cookies.getAllCookies();
 }
 
 std::string Milx::Response::fullResponse()
 {
     return header() + "\n\n" + content();
 }
+
