@@ -46,12 +46,14 @@ namespace Milx
         /**
          * Loaded extensions (Shared Libraries)
          */
+        // TODO maybe create a new class for loaded SO's, which will also handle the Routes for that SO
 	std::vector<void*> loaded;
         /**
          * The controllers held by the application.
          */
         std::map<std::string, Controller*> controllers;
     public:
+        // TODO it should be an array of routess
         Milx::Routing routes;
         /**
          * Constructor for application. No argument needed (yet).
@@ -81,8 +83,9 @@ namespace Milx
 	/**
 	 * Add routes to the application, good thing.
 	 */
-	void addRoutes(Milx::Routing*);
+        void addRoutes(Milx::Routing*);
         void loadFile(const boost::filesystem::path);
+        // TODO create loadDirecotory(path, recursive=false)
     };
 
     /**
