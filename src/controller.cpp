@@ -19,11 +19,11 @@
 #include "request.h"
 #include "response.h"
 
-Milx::Response* Milx::Controller::dispatch(Milx::Request *req)
+Milx::Response* Milx::Controller::dispatch(Milx::Request &req)
 {
-    std::map<std::string, Milx::Actiont>::iterator iter = actionsCallbacks.find(req->action());
+    std::map<std::string, Milx::Actiont>::iterator iter = actionsCallbacks.find(req.action());
     if (iter != actionsCallbacks.end())
-	return iter->second(req);
+		return iter->second(req);
     else
         return 0;
 }

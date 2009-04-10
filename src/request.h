@@ -19,7 +19,9 @@
 #define MILX_REQUEST_H
 
 #include <string>
-#include "cookie.h"
+#include <map>
+#include <vector>
+//#include "cookie.h"
 
 namespace Milx
 {
@@ -38,12 +40,15 @@ namespace Milx
          * The requested controller name
          */
         std::string _controller;
+        std::string _full_path;
+        std::string _method;
+        std::string _version;
         /**
          * The list of cookies sent by browser
          */
-        CookieList _cookies;
+        // CookieList _cookies;
     public:
-        Request();
+        Request(std::string, std::string, std::string);
         /**
          * \return the requested action name
          */
@@ -55,28 +60,16 @@ namespace Milx
         std::string controller() { return _controller; }
         void controller(std::string ctrl_name) { _controller = ctrl_name; }
 
-        CookieList &cookies() { return _cookies; }
+        // CookieList &cookies() { return _cookies; }
+        std::map<std::string, std::string> headers;
+        std::string fullPath() { return _full_path; }
+        std::string method() { return _method; }
+        std::string HTTPVersion() { return _version; }
 
-        // abstract methods
-        /**
-         * \return the accept HTTP header
-         */
-        virtual std::string accept()=0;
-        /**
-         * \return Accept-Charset HTTP header
-         */
-        virtual std::string acceptCharset()=0;
-        virtual std::string acceptEncoding()=0;
-        virtual std::string acceptLanguage()=0;
-        virtual std::string from()=0;
-        virtual std::string host()=0;
-        virtual std::string pragma()=0;
-        virtual std::string referer()=0;
-        virtual std::string userAgent()=0;
-        virtual std::string queryString()=0;
-        virtual std::string remoteAddress()=0;
-        virtual std::string remoteHost()=0;
-        virtual std::string contentType()=0;
+        std::string uri;
+        std::vector<std::string> path;
+
+        static Milx::Request* parse(const std::string);
     protected:
         virtual std::string cookieHeader() { return ""; }
     };

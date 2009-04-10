@@ -18,39 +18,33 @@
 #ifndef MILX_ROUTING_H
 #define MILX_ROUTING_H
 
-#include <map>
-#include <string>
-#include "controller.h"
+#include <vector>
+#include <boost/regex.hpp>
 
 namespace Milx
 {
     class Request;
 
+    struct RegexRoute
+    {
+        boost::regex regex;
+        std::string controller;
+        std::string action;
+    };
+
     class Routing
     {
-        /**
-         * The controllers held by the application.
-         */
-        std::map<std::string, Controller*> controllers;
+        std::vector<RegexRoute> routes;
     public:
-        /**
-         * Register the route to a controller.
-         * \param the controller Instance
-         * \param the controller name
-         */
-        void controller(Controller*, std::string);
-        /**
-         * Retrieve a registered controller instance.
-         * \param the controller name
-         */
-        Controller* controller(std::string);
+    	// TODO add regex routing
+        void route(std::string, std::string, std::string);
         /**
          * Translate the Request discovering which controller/action it's
          * requesting
          * \param request
          * \return a reference to the controller
          */
-        Controller* translateRequest(Request*);
+        bool translateRequest(Request&);
     };
 }
 

@@ -23,12 +23,11 @@
 
 void Milx::CGI::Handler::run(Milx::Application& app)
 {
-    Milx::CGI::Request *req = new Milx::CGI::Request();
+    /*Milx::CGI::Request req;
     Milx::Response* response = app.dispatch(req);
 
     std::cout << response->fullResponse();
 
-    delete response;
-    delete req;
+    delete response;*/
 }
 

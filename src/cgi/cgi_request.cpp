@@ -16,7 +16,7 @@
  */
 
 #include "cgi_request.h"
-
+/*
 std::string Milx::CGI::Request::accept()
 {
     	return _getenv("HTTP_ACCEPT");
@@ -81,9 +81,8 @@ std::string Milx::CGI::Request::contentType()
 {
     	return _getenv("CONTENT_TYPE");
 }
-
+*/
 std::string Milx::CGI::Request::cookieHeader()
 {
         return _getenv("HTTP_COOKIE");
 }
-

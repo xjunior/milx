@@ -17,21 +17,32 @@
 
 #include "routing.h"
 #include "request.h"
+#include <iostream>
 
-void Milx::Routing::controller(Milx::Controller* c, std::string name)
+void Milx::Routing::route(std::string regex, std::string controller, std::string action)
 {
-    controllers[name] = c;
+    Milx::RegexRoute route;
+    route.regex = boost::regex(regex);
+    route.controller = controller;
+    route.action = action;
+    this->routes.push_back(route);
 }
 
-Milx::Controller* Milx::Routing::controller(std::string name)
+bool Milx::Routing::translateRequest(Milx::Request& req)
 {
-    return controllers[name];
-}
+    std::vector<Milx::RegexRoute>::iterator iroutes;
+    boost::match_results<std::string::const_iterator> what;
+    std::string::const_iterator begin = req.fullPath().begin(), end = req.fullPath().end();
 
-Milx::Controller* Milx::Routing::translateRequest(Milx::Request* req)
-{
-    req->controller("blog");
-    req->action("index");
-    return controllers[req->controller()];
+    for (iroutes = this->routes.begin(); iroutes != routes.end(); ++iroutes)
+        if (regex_search(begin, end, what, iroutes->regex))
+        {
+            req.controller(iroutes->controller);
+            req.action(iroutes->action);
+            
+            return true;
+        }
+
+    return false;
 }
 

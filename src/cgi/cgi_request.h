@@ -31,59 +31,6 @@ namespace Milx
          */
         class Request : public Milx::Request
         {
-        public:
-            /**
-             * \see Milx::Request#accept()
-             */
-            std::string accept();
-            /**
-             * \see Milx::Request#acceptCharset()
-             */
-            std::string acceptCharset();
-            /**
-             * \see Milx::Request#acceptEncoding()
-             */
-            std::string acceptEncoding();
-            /**
-             * \see Milx::Request#acceptLanguage()
-             */
-            std::string acceptLanguage();
-            /**
-             * \see Milx::Request#from()
-             */
-            std::string from();
-            /**
-             * \see Milx::Request#host()
-             */
-            std::string host();
-            /**
-             * \see Milx::Request#pragma()
-             */
-            std::string pragma();
-            /**
-             * \see Milx::Request#referer()
-             */
-            std::string referer();
-            /**
-             * \see Milx::Request#userAgent()
-             */
-            std::string userAgent();
-            /**
-             * \see Milx::Request#queryString()
-             */
-            std::string queryString();
-            /**
-             * \see Milx::Request#remoteAddress()
-             */
-            std::string remoteAddress();
-            /**
-             * \see Milx::Request#remoteHost()
-             */
-            std::string remoteHost();
-            /**
-             * \see Milx::Request#contentType()
-             */
-            std::string contentType();
         protected:
             /**
              * \see Milx::Request#cookieHeader()

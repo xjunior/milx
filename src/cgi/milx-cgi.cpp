@@ -28,7 +28,6 @@ int main(int, char**)
 
     boost::filesystem::path full_path(boost::filesystem::initial_path<boost::filesystem::path>());
     boost::filesystem::directory_iterator end_iter;
-    std::string filename;
 
     for (boost::filesystem::directory_iterator dir_itr(full_path);
 	 dir_itr != end_iter;
@@ -36,15 +35,15 @@ int main(int, char**)
     {
         try
         {
-	    filename = dir_itr->path().filename();
             if (boost::filesystem::is_regular_file(dir_itr->status()) &&
-	        filename.substr(filename.length() - 3).compare(".so") == 0)
-                app.loadFile(filename);
-         }
-	 catch (const std::exception & ex)
-         {
-             std::cout << dir_itr->path().filename() << " " << ex.what() << std::endl;
-	 }
+	        dir_itr->path().extension().compare(".so") == 0)
+                app.loadFile(dir_itr->path());
+        }
+	catch (const std::exception & ex)
+        {
+            // TODO use Application logger
+            std::cout << dir_itr->path().filename() << " " << ex.what() << std::endl;
+	}
     }
     
     Milx::CGI::Handler::run(app);

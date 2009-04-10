@@ -16,6 +16,7 @@
  */
 
 #include <dlfcn.h>
+#include <iostream>
 #include "application.h"
 #include "response.h"
 #include "request.h"
@@ -24,14 +25,26 @@
 Milx::Application::Application()
 { }
 
-void Milx::Application::loadFile(std::string filename)
+void Milx::Application::controller(Milx::Controller* c, std::string name)
 {
-    register int pos = loaded.size();
-    loaded.push_back(dlopen(filename.c_str(), RTLD_LAZY));
-    if (!loaded[pos]) throw LoaderNotFound();
+    this->controllers[name] = c;
+}
+
+Milx::Controller* Milx::Application::controller(std::string name)
+{
+    return this->controllers[name];
+}
+
+void Milx::Application::loadFile(const boost::filesystem::path file)
+{
+    void* opened = dlopen(file.file_string().c_str(), RTLD_LAZY);
+    if (opened)
+        loaded.push_back(opened);
+    else
+        throw LoaderNotFound();
     
     typedef void(*on_load_f)(Milx::Application&);
-    on_load_f on_load = (on_load_f) dlsym(loaded[pos], "on_load");
+    on_load_f on_load = (on_load_f) dlsym(opened, "on_load");
 
     if (on_load)
         on_load(*this);
@@ -39,10 +52,16 @@ void Milx::Application::loadFile(std::string filename)
         throw LoaderNotFound();
 }
 
-Milx::Response* Milx::Application::dispatch(Milx::Request* req)
+Milx::Response* Milx::Application::dispatch(Milx::Request& req)
 {
-    Milx::Controller* controller = routes.translateRequest(req);
-    // TODO: create a Milx::InternalErrorResponse
+    if (!routes.translateRequest(req))
+    	return new Milx::Response("File not found.", 404);
+    
+    Milx::Controller* controller = this->controller(req.controller());
+    
+    if (controller == NULL)
+    	return new Milx::Response("Bad controller name.", 500);
+    
     return controller->dispatch(req);
 }
 
@@ -52,4 +71,3 @@ Milx::Application::~Application()
         for (register int i = 0; i < loaded.size(); i++)
 	    dlclose(loaded[i]);
 }
-
