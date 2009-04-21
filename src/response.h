@@ -19,7 +19,6 @@
 #define MILX_RESPONSE_H
 
 #include <string>
-#include "cookie.h"
 
 namespace Milx
 {
@@ -28,7 +27,6 @@ namespace Milx
         int _code;
         std::string _content;
         std::string _format;
-	CookieList _cookies;  
   
     public:
         Response(std::string="", int=200, std::string="text/html");
