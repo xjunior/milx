@@ -16,7 +16,7 @@
  */
 #include <sstream>
 #include <boost/regex.hpp>
-#include "request.h"
+#include "request.hpp"
 
 const boost::regex method_path_http("^(GET|POST|PUT|DELETE) (/.*) HTTP/([01][.][019]).*$"); // support 0.9, 1.0 and 1.1
 const boost::regex header_value("^([[:alpha:]-]+): (.+?)$");

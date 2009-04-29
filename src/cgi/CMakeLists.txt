@@ -1,5 +1,5 @@
 set (MILX_CGI_SOURCES cgi_request.cpp cgi_handler.cpp milx-cgi.cpp)
-set (MILX_CGI_HEADERS cgi_handler.h cgi_request.h)
+set (MILX_CGI_HEADERS cgi_handler.hpp cgi_request.hpp)
 set (MILX_CGI_BIN milx.cgi)
 
 # Executables

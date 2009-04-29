@@ -15,7 +15,7 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "cgi_request.h"
+#include "cgi_request.hpp"
 /*
 std::string Milx::CGI::Request::accept()
 {

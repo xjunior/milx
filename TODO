@@ -5,6 +5,7 @@
    * Allow bind action on path parameter
  * Create a Log System
  * Create a observer base class for the controllers to beforeFilter, afterFilter and maybe aroundFilter
+ * Create a Module class that will handle the loaded modules
 
 == HTTP
  * HTTP Basic and Digest Authentication (RFC 2617)

@@ -15,9 +15,9 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "controller.h"
-#include "request.h"
-#include "response.h"
+#include "controller.hpp"
+#include "request.hpp"
+#include "response.hpp"
 
 Milx::Response* Milx::Controller::dispatch(Milx::Request &req)
 {

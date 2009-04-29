@@ -15,37 +15,35 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#ifndef MILX_ROUTING_H
-#define MILX_ROUTING_H
+#ifndef MILX_RESPONSE_H
+#define MILX_RESPONSE_H
 
-#include <vector>
-#include <boost/regex.hpp>
+#include <string>
 
 namespace Milx
 {
-    class Request;
-
-    struct RegexRoute
+    class Response
     {
-        boost::regex regex;
-        std::string controller;
-        std::string action;
-    };
-
-    class Routing
-    {
-        std::vector<RegexRoute> routes;
+        int _code;
+        std::string _content;
+        std::string _format;
+  
     public:
-    	// TODO add regex routing
-        void route(std::string, std::string, std::string);
-        /**
-         * Translate the Request discovering which controller/action it's
-         * requesting
-         * \param request
-         * \return a reference to the controller
-         */
-        bool translateRequest(Request&);
+        Response(std::string="", int=200, std::string="text/html");
+        std::string content();
+        void setContent(std::string);
+        int code();
+        void setCode(int);
+        std::string format();
+        void setFormat(std::string);
+        std::string translatedResponseCode();
+
+        std::string header();
+        std::string body();
+        std::string fullResponse();
     };
+
+    class BadResponseCode { };
 }
 
 #endif

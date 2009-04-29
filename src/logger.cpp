@@ -15,19 +15,24 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include <iostream>
-#include "../application.hpp"
-#include "../response.hpp"
-#include "cgi_request.hpp"
-#include "cgi_handler.hpp"
+#include "logger.hpp"
 
-void Milx::CGI::Handler::run(Milx::Application& app)
+Milx::Logger::Logger(std::ostream &stream = std::cout) :
+    _stream(&stream)
+{ }
+
+void Milx::Logger::warn(const std::string& txt)
 {
-    /*Milx::CGI::Request req;
-    Milx::Response* response = app.dispatch(req);
+    (*_stream) << "[WARNNING] " << txt << std::endl;
+}
 
-    std::cout << response->fullResponse();
+void Milx::Logger::info(const std::string& txt)
+{
+    (*_stream) << "[INFO] " << txt << std::endl;
+}
 
-    delete response;*/
+void Milx::Logger::error(const std::string& txt)
+{
+    (*_stream) << "[ERROR] " << txt << std::endl;
 }
 

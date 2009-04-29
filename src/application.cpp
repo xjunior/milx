@@ -17,57 +17,74 @@
 
 #include <dlfcn.h>
 #include <iostream>
-#include "application.h"
-#include "response.h"
-#include "request.h"
-#include "controller.h"
+#include "application.hpp"
+#include "response.hpp"
+#include "request.hpp"
+#include "controller.hpp"
+#include "logger.hpp"
 
 Milx::Application::Application()
-{ }
+{
+    this->logger(new Milx::Logger(std::cout));
+}
 
 void Milx::Application::controller(Milx::Controller* c, std::string name)
 {
-    this->controllers[name] = c;
+    this->_controllers[name] = c;
 }
 
 Milx::Controller* Milx::Application::controller(std::string name)
 {
-    return this->controllers[name];
+    return this->_controllers[name];
 }
 
 void Milx::Application::loadFile(const boost::filesystem::path file)
 {
+    this->logger()->info("Loading " + file.file_string());
+
     void* opened = dlopen(file.file_string().c_str(), RTLD_LAZY);
     if (opened)
-        loaded.push_back(opened);
-    else
-        throw LoaderNotFound();
+    {
+        _loaded.push_back(opened);
     
-    typedef void(*on_load_f)(Milx::Application&);
-    on_load_f on_load = (on_load_f) dlsym(opened, "on_load");
+        typedef void(*on_load_f)(Milx::Application&);
+        on_load_f on_load = (on_load_f) dlsym(opened, "milx_on_load");
 
-    if (on_load)
-        on_load(*this);
+        if (on_load)
+            on_load(*this);
+        else
+            this->logger()->error("milx_on_load method not found in " + file.file_string());
+    }
     else
-        throw LoaderNotFound();
+        this->logger()->error("The module could not be loaded: " + file.file_string());
 }
 
 Milx::Response* Milx::Application::dispatch(Milx::Request& req)
 {
+    this->logger()->info("Attending request to " + req.fullPath());
     if (!routes.translateRequest(req))
+    {
+        this->logger()->warn("No route found, returning 404");
     	return new Milx::Response("File not found.", 404);
+    }
     
     Milx::Controller* controller = this->controller(req.controller());
     
     if (controller == NULL)
+    {
+        this->logger()->warn("Route error: Bad controller name: " + req.controller());
     	return new Milx::Response("Bad controller name.", 500);
+    }
     
-    return controller->dispatch(req);
+    this->logger()->info("Routed to " + req.controller() + "/" + req.action());
+    Milx::Response *response = controller->dispatch(req);
+    //this->logger()->info("Elapsed " + time);
+    return response;
 }
 
 Milx::Application::~Application()
 {
-    if (loaded.size() > 0)
-        for (register int i = 0; i < loaded.size(); i++)
-	    dlclose(loaded[i]);
+    if (_loaded.size() > 0)
+        for (register int i = 0; i < _loaded.size(); i++)
+	    dlclose(_loaded[i]);
 }

@@ -15,19 +15,36 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include <iostream>
-#include "../application.hpp"
-#include "../response.hpp"
-#include "cgi_request.hpp"
-#include "cgi_handler.hpp"
+#ifndef MILX_ROUTING_H
+#define MILX_ROUTING_H
 
-void Milx::CGI::Handler::run(Milx::Application& app)
+#include <vector>
+#include <boost/regex.hpp>
+
+namespace Milx
 {
-    /*Milx::CGI::Request req;
-    Milx::Response* response = app.dispatch(req);
+    class Request;
 
-    std::cout << response->fullResponse();
+    struct RegexRoute
+    {
+        boost::regex regex;
+        std::string controller;
+        std::string action;
+    };
 
-    delete response;*/
+    class Routing
+    {
+        std::vector<RegexRoute> routes;
+    public:
+        void route(std::string, std::string, std::string);
+        /**
+         * Translate the Request discovering which controller/action it's
+         * requesting
+         * \param request
+         * \return a reference to the controller
+         */
+        bool translateRequest(Request&);
+    };
 }
 
+#endif

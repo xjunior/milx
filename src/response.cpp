@@ -15,8 +15,8 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "response.h"
 #include <sstream>
+#include "response.hpp"
 
 Milx::Response::Response(std::string content, int code, std::string format)
 {
@@ -43,10 +43,6 @@ std::string Milx::Response::format()
 void Milx::Response::setContent(std::string content)
 {
     _content = content;
-}
-
-void Milx::Response::setCookie(Cookie *c) {
-	_cookies.addCookie(c);
 }
 
 void Milx::Response::setCode(int code)
@@ -122,12 +118,10 @@ std::string Milx::Response::translatedResponseCode()
     return str.str();
 }
 
-// TODO: add Set-Cookie header, if this response have one or more cookies to set.
 std::string Milx::Response::header()
 {
-    return "HTTP/1.x " + translatedResponseCode() + "\n"
-            "Content-Type: " + format() + "; charset=UTF-8\n"
-	    + _cookies.getAllCookies();
+    return "HTTP/1.1 " + translatedResponseCode() + "\r\n"
+            "Content-Type: " + format() + "; charset=UTF-8\r\n";
 }
 
 std::string Milx::Response::fullResponse()

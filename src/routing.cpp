@@ -15,9 +15,9 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "routing.h"
-#include "request.h"
 #include <iostream>
+#include "routing.hpp"
+#include "request.hpp"
 
 void Milx::Routing::route(std::string regex, std::string controller, std::string action)
 {

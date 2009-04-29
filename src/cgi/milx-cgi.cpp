@@ -15,12 +15,12 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "cgi_handler.h"
-#include "../application.h"
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <iostream>
 #include <string>
+#include "cgi_handler.hpp"
+#include "../application.hpp"
 
 int main(int, char**)
 {

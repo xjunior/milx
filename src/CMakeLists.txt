@@ -7,9 +7,9 @@ add_subdirectory (cgi)
 
 set (BIN_SOURCES milx.cpp)
 set (LIB_SOURCES application.cpp controller.cpp request.cpp cookie.cpp
-response.cpp routing.cpp)
-set (LIB_HEADERS application.h controller.h request.h cookie.h response.h
-routing.h)
+response.cpp routing.cpp logger.cpp)
+set (LIB_HEADERS application.hpp controller.hpp request.hpp cookie.hpp response.hpp
+routing.hpp logger.hpp)
 set (MILX_LIB_DEPENDENCIES dl boost_regex)
  
 # Library

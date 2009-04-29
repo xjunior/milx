@@ -15,7 +15,7 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "cookie.h"
+#include "cookie.hpp"
 
 Milx::Cookie::Cookie(std::string name, std::string value) :
 _name(name), _value(value)

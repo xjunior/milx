@@ -15,36 +15,24 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#ifndef MILX_RESPONSE_H
-#define MILX_RESPONSE_H
+#ifndef MILX_LOGGER_H
+#define MILX_LOGGER_H
 
 #include <string>
+#include <iostream>
 
 namespace Milx
 {
-    class Response
+    class Logger
     {
-        int _code;
-        std::string _content;
-        std::string _format;
-  
+        std::ostream *_stream;
     public:
-        Response(std::string="", int=200, std::string="text/html");
-        std::string content();
-        void setContent(std::string);
-        int code();
-        void setCode(int);
-        std::string format();
-        void setFormat(std::string);
-        std::string translatedResponseCode();
-	void setCookie(Cookie *c);
-
-        std::string header();
-        std::string body();
-        std::string fullResponse();
+        Logger(std::ostream&);
+        virtual void warn(const std::string&);
+        virtual void info(const std::string&);
+        virtual void error(const std::string&);
+        std::ostream& stream() { _stream; }
     };
-
-    class BadResponseCode { };
 }
 
 #endif

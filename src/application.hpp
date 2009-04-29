@@ -18,19 +18,18 @@
 #ifndef MILX_APPLICATION_H
 #define MILX_APPLICATION_H
 
-// TODO add some Logger stuff
-
 #include <vector>
 #include <string>
 #include <map>
 #include <boost/filesystem/path.hpp>
-#include "routing.h"
+#include "routing.hpp"
 
 namespace Milx
 {
     class Response;
     class Request;
     class Controller;
+    class Logger;
 
     /**
      * The Milx::Application class handle the currently running application.
@@ -47,13 +46,15 @@ namespace Milx
          * Loaded extensions (Shared Libraries)
          */
         // TODO maybe create a new class for loaded SO's, which will also handle the Routes for that SO
-	std::vector<void*> loaded;
+	std::vector<void*> _loaded;
         /**
          * The controllers held by the application.
          */
-        std::map<std::string, Controller*> controllers;
+        std::map<std::string, Controller*> _controllers;
+
+        Milx::Logger *_logger;
     public:
-        // TODO it should be an array of routess
+        // TODO it should be an array of routes'
         Milx::Routing routes;
         /**
          * Constructor for application. No argument needed (yet).
@@ -86,15 +87,11 @@ namespace Milx
         void addRoutes(Milx::Routing*);
         void loadFile(const boost::filesystem::path);
         // TODO create loadDirecotory(path, recursive=false)
+        Milx::Logger* logger() { return _logger; }
+        void logger(Milx::Logger* logger) { if (logger != NULL) _logger = logger; }
     };
-
-    /**
-     * Class thrown when the requested file to load was not found
-     * or the 'on_load' function is not defined.
-     */
-    class LoaderNotFound {};
 }
 
-extern "C" void on_load(Milx::Application&);
+extern "C" void milx_on_load(Milx::Application&);
 
 #endif
