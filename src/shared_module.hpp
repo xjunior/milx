@@ -36,6 +36,6 @@ namespace Milx
 }
 
 #define MILX_MODULE_LOAD "milx_module_load"
-extern "C" void milx_module_load(Milx::Module&);
+extern "C" void milx_module_load(Milx::SharedModule&);
 
 #endif
