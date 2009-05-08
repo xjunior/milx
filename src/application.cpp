@@ -32,7 +32,7 @@ Milx::Application::Application()
 void Milx::Application::loadFile(const boost::filesystem::path file)
 {
     this->logger()->info("Loading " + file.file_string());
-    _modules.push_back(new Milx::SharedModule(this, file));
+    _modules.push_back(new Milx::SharedModule(*this, file));
 }
 
 Milx::Response* Milx::Application::dispatch(Milx::Request& req)
@@ -42,12 +42,10 @@ Milx::Response* Milx::Application::dispatch(Milx::Request& req)
     this->routes().translateRequest(req); // try default module as highest priority
     Milx::Controller* controller = this->controller(req.controller());
     
-    for (int i = 0; i < _modules.size(); i++)
+    for (int i = 0; i < _modules.size() && controller == NULL; i++)
         if (_modules[i]->routes().translateRequest(req))
-        {
             controller = _modules[i]->controller(req.controller());
-            break;
-        }
+            // it found a route, but if controller STILL NULL, so we try another one
 
     if (controller == NULL)
     {

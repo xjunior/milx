@@ -17,11 +17,10 @@
 
 #include <dlfcn.h>
 #include "shared_module.hpp"
-#include <iostream>
 
-Milx::SharedModule::SharedModule(Application* app, const boost::filesystem::path file) :
+Milx::SharedModule::SharedModule(Application& app, const boost::filesystem::path file) :
     _app(app),
-    Milx::Module(file.file_string())
+    Milx::Module(file.stem())
 {
     _shared = dlopen(file.file_string().c_str(), RTLD_LAZY);
     if (_shared)
@@ -32,13 +31,13 @@ Milx::SharedModule::SharedModule(Application* app, const boost::filesystem::path
         if (on_load)
             on_load(*this);
         else
-            app->logger()->error(std::string(MILX_MODULE_LOAD) + " method not found in " + file.file_string());
+            app.logger()->error(std::string(MILX_MODULE_LOAD) + " method not found in " + file.file_string());
     }
     else
-        app->logger()->error("The module could not be loaded: " + file.file_string());
+        app.logger()->error("The module could not be loaded: " + file.file_string());
 }
 
-Milx::Application* Milx::SharedModule::application() const
+Milx::Application& Milx::SharedModule::application() const
 {
     return _app;
 }

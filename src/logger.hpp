@@ -25,7 +25,7 @@ namespace Milx
 {
     class Logger
     {
-        std::ostream *_stream;
+        std::ostream &_stream;
     public:
         Logger(std::ostream&);
         virtual void warn(const std::string&);

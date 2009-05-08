@@ -40,15 +40,15 @@ Milx::Request::Request(std::string method, std::string full_path, std::string ve
 
 Milx::Request* Milx::Request::parse(const std::string strreq)
 {
-    Milx::Request* req;
+    Milx::Request* req = NULL;
     std::string::const_iterator begin = strreq.begin(), end = strreq.end();
     boost::match_results<std::string::const_iterator> what;
 
     if (regex_search(begin, end, what, method_path_http))
     {
         req = new Milx::Request(std::string(what[1].first, what[1].second),
-    							std::string(what[2].first, what[2].second),
-    							std::string(what[3].first, what[3].second));
+    				std::string(what[2].first, what[2].second),
+    				std::string(what[3].first, what[3].second));
         begin = what[3].second;
     }
     // TODO else throw an error;

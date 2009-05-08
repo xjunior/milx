@@ -27,10 +27,10 @@ namespace Milx
     class SharedModule : public Module
     {
         void* _shared;
-        Application* _app;
+        Application& _app;
     public:
-        SharedModule(Application*, boost::filesystem::path);
-        Application* application() const;
+        SharedModule(Application&, boost::filesystem::path);
+        Application& application() const;
         ~SharedModule();
     };
 }

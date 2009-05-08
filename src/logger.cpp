@@ -18,21 +18,21 @@
 #include "logger.hpp"
 
 Milx::Logger::Logger(std::ostream &stream = std::cout) :
-    _stream(&stream)
+    _stream(stream)
 { }
 
 void Milx::Logger::warn(const std::string& txt)
 {
-    (*_stream) << "[WARNNING] " << txt << std::endl;
+    _stream << "[WARNNING] " << txt << std::endl;
 }
 
 void Milx::Logger::info(const std::string& txt)
 {
-    (*_stream) << "[INFO] " << txt << std::endl;
+    _stream << "[INFO] " << txt << std::endl;
 }
 
 void Milx::Logger::error(const std::string& txt)
 {
-    (*_stream) << "[ERROR] " << txt << std::endl;
+    _stream << "[ERROR] " << txt << std::endl;
 }
 
