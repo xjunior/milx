@@ -31,7 +31,7 @@ namespace Milx
         virtual void warn(const std::string&);
         virtual void info(const std::string&);
         virtual void error(const std::string&);
-        std::ostream& stream() { _stream; }
+        std::ostream& stream() { return _stream; }
     };
 }
 
