@@ -37,7 +37,7 @@ int main(int, char**)
         {
             if (boost::filesystem::is_regular_file(dir_itr->status()) &&
 	        dir_itr->path().extension().compare(".so") == 0)
-                app.loadFile(dir_itr->path());
+                app.loadModule(dir_itr->path());
         }
 	catch (const std::exception & ex)
         {

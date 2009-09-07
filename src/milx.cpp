@@ -1,87 +1,52 @@
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-#include <string>
 #include <iostream>
-using namespace boost::filesystem;
+#include <sstream>
+#include <string.h>
+#include "manipulators.hpp"
+#include "manipulators/project_manipulator.hpp"
+#include "manipulators/module_manipulator.hpp"
 
-void usage(int=0);
-void create_project(std::string);
-void create_dir(path);
-void create_file(path, std::string);
-bool creation_info(path);
+// TODO: create a separate Shared Object for each Manipulator
 
-const std::string htaccess = "# General Apache options\n"
-"RewriteEngine On\n"
-"RewriteRule    ^$ public/    [L]\n"
-"RewriteRule    (.*) public/$1 [L]";
-
-const std::string public_htaccess = "# General Apache options\n"
-"AddHandler cgi-script .cgi\n"
-"Options +FollowSymLinks +ExecCGI\n"
-"RewriteEngine On\n"
-"RewriteRule ^$ index.html [QSA]\n"
-"RewriteRule ^([^.]+)$ $1.html [QSA]\n"
-"RewriteCond %{REQUEST_FILENAME} !-f\n"
-"RewriteRule ^(.*)$ milx.cgi [QSA,L]\n"
-"ErrorDocument 500 \"<h1>Milx Application Error</h1><p>Milx Application failed to start properly</p>\"";
+void show_usage(std::string="");
 
 int main(int argc, char* argv[])
 {
-    if (argc == 2)
-    {
-        if (std::string(argv[1]).compare("--help") == 0)
-            usage();
-        else
-            create_project(argv[1]);
-    }
-    else
-        usage(1);
+	Milx::Manipulators::instances["project"] = new Milx::Manipulators::ProjectManipulator;
+	Milx::Manipulators::instances["module"] = new Milx::Manipulators::ModuleManipulator;
+
+	if (argc == 1 || (argc == 2 && strcmp(argv[1], "help") == 0))
+		show_usage("Invalid Syntax");
+	else if (argc > 3) {
+		Milx::Manipulators::Base* manipulator = Milx::Manipulators::instances[argv[2]];
+		if (manipulator) {
+			if (strcmp(argv[1], "create") == 0)
+				manipulator->create(argv[3], argc, argv);
+		    else if (strcmp(argv[1], "destroy") == 0)
+				manipulator->destroy(argv[3], argc, argv);
+		    else if (strcmp(argv[1], "help") == 0) {
+				manipulator->display_help(argv[3], argc, argv);
+			} else
+				show_usage("Invalid verb");
+		} else show_usage("Invalid manipulator");
+	} else show_usage("Invalid syntax");
 }
 
-void usage(int code)
+inline std::string manipulators_names()
 {
-    std::cout << "Milx Web Application Framework" << std::endl;
-    std::cout << "milx missing operand" << std::endl;
-    std::cout << "Please, provide the project name. Usage: milx project_name" << std::endl;
-    exit(code);
+	std::stringstream ss;
+	std::map<std::string, Milx::Manipulators::Base*>::iterator it;
+	for (it = Milx::Manipulators::instances.begin(); it != Milx::Manipulators::instances.end(); it++)
+		ss << it->first << " ";
+	return ss.str();
 }
 
-void create_project(std::string name)
+void show_usage(std::string error)
 {
-    path project(name);
-    create_dir(project);
-    create_file(project / ".htaccess", htaccess);
-    create_dir(project / "build");
-    create_dir(project / "public");
-    create_dir(project / "public" / "img");
-    create_dir(project / "public" / "css");
-    create_dir(project / "public" / "js");
-    create_file(project / "public" / ".htaccess", public_htaccess);
-    create_dir(project / "src");
-}
-
-void create_dir(path dir)
-{
-    if (!creation_info(dir))
-        create_directory(dir);
-}
-
-void create_file(path path, std::string content)
-{
-    if (!creation_info(path))
-    {
-        ofstream file(path);
-        file << content;
-        file.close();
-    }
-}
-
-bool creation_info(path path)
-{
-    bool exist = exists(path);
-    std::cout << "\t" << (exist ? "exists" : "create");
-    std::cout << " " << path << std::endl;
-
-    return exist;
+	std::cout << std::endl << "Milx manipulation utility" << std::endl << std::endl;
+	if (error.size() > 0) std::cout << "" << error << std::endl << std::endl;
+	std::cout << "milx <verb> <manipulator> [params]" << std::endl << std::endl;
+	std::cout << "Verbs: create, destroy, help" << std::endl;
+	std::cout << "Manipulators: " << manipulators_names() << std::endl;
+	std::cout << std::endl;
 }
 

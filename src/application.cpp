@@ -20,7 +20,6 @@
 #include "response.hpp"
 #include "request.hpp"
 #include "controller.hpp"
-#include "logger.hpp"
 #include "shared_module.hpp"
 
 Milx::Application::Application()
@@ -29,9 +28,9 @@ Milx::Application::Application()
     this->logger(new Milx::Logger(std::cout));
 }
 
-void Milx::Application::loadFile(const boost::filesystem::path file)
+void Milx::Application::loadModule(const boost::filesystem::path file)
 {
-    this->logger()->info("Loading " + file.file_string());
+    this->logger()->info("Loading module " + file.file_string());
     _modules.push_back(new Milx::SharedModule(*this, file));
 }
 
@@ -47,21 +46,15 @@ Milx::Response* Milx::Application::dispatch(Milx::Request& req)
             controller = _modules[i]->controller(req.controller());
             // it found a route, but if controller STILL NULL, so we try another one
 
-    if (controller == NULL)
-    {
-        if (req.controller() == "")
-        {
+    if (controller == NULL) {
+        if (req.controller() == "") {
             this->logger()->warn("No route found, returning 404");
     	    return new Milx::Response("File not found.", 404);
-        }
-        else
-        {
+        } else {
             this->logger()->warn("Route error: Bad controller name: " + req.controller());
             return new Milx::Response("Bad controller name.", 500);
         }
-    }
-    else
-    {
+    } else {
         this->logger()->info("Routed to " + req.controller() + "/" + req.action());
         return controller->dispatch(req);
     }
@@ -79,4 +72,3 @@ void Milx::Application::logger(Milx::Logger* logger)
     if (logger != NULL)
         _logger = logger;
 }
-

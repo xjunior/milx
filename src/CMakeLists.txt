@@ -3,14 +3,14 @@ set (MILX_BIN milx)
 set (MILX_HOME ${EXEC_INSTALL_PREFIX}/milx)
 set (MILX_HOME_BIN ${MILX_HOME}/bin)
  
-add_subdirectory (cgi)
+#add_subdirectory (cgi)
 
-set (BIN_SOURCES milx.cpp)
+set (BIN_SOURCES milx.cpp manipulators/base.cpp manipulators/project_manipulator.cpp manipulators/module_manipulator.cpp)
 set (LIB_SOURCES application.cpp controller.cpp request.cpp cookie.cpp
-response.cpp routing.cpp logger.cpp module.cpp shared_module.cpp)
+response.cpp routing.cpp logger.cpp module.cpp shared_module.cpp view.cpp view/plain.cpp)
 set (LIB_HEADERS application.hpp controller.hpp request.hpp cookie.hpp response.hpp
-routing.hpp logger.hpp module.hpp shared_module.hpp)
-set (MILX_LIB_DEPENDENCIES dl boost_regex)
+routing.hpp logger.hpp module.hpp shared_module.hpp view.hpp view/base.hpp view/plain.hpp)
+set (MILX_LIB_DEPENDENCIES dl boost_regex-mt)
  
 # Library
 add_library (${MILX_LIB} SHARED ${LIB_SOURCES})
@@ -49,5 +49,5 @@ set_target_properties (
         VERSION
             ${APPLICATION_VERSION}
 )
-TARGET_LINK_LIBRARIES (${MILX_BIN}-exec boost_filesystem)
+TARGET_LINK_LIBRARIES (${MILX_BIN}-exec boost_filesystem-mt)
 INSTALL ( TARGETS ${MILX_BIN}-exec DESTINATION ${BIN_INSTALL_DIR} )

@@ -40,17 +40,17 @@ std::string Milx::Response::format()
     return _format;
 }
 
-void Milx::Response::setContent(std::string content)
+void Milx::Response::content(std::string content)
 {
     _content = content;
 }
 
-void Milx::Response::setCode(int code)
+void Milx::Response::code(int code)
 {
     _code = code;
 }
 
-void Milx::Response::setFormat(std::string format)
+void Milx::Response::format(std::string format)
 {
     _format = format;
 }

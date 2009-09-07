@@ -31,11 +31,11 @@ namespace Milx
     public:
         Response(std::string="", int=200, std::string="text/html");
         std::string content();
-        void setContent(std::string);
+        void content(std::string);
         int code();
-        void setCode(int);
+        void code(int);
         std::string format();
-        void setFormat(std::string);
+        void format(std::string);
         std::string translatedResponseCode();
 
         std::string header();

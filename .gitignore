@@ -8,3 +8,4 @@ src/Makefile
 src/cmake_install.cmake
 build
 doc
+nbproject

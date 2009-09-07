@@ -26,6 +26,7 @@ namespace Milx
 {
     class Response;
     class Request;
+    class Module;
     typedef boost::function<Milx::Response* (Milx::Request&)> Actiont;
 
     /**
@@ -33,6 +34,7 @@ namespace Milx
      */
     class Controller
     {
+        Module* _module;
     public:
         /**
          * The actions of your controller
@@ -47,6 +49,11 @@ namespace Milx
          * Dispatch an action given by Milx::Request#action() method.
          */
         Milx::Response* dispatch(Milx::Request&);
+
+	void module(Milx::Module*);
+	Milx::Module& module();
+
+        Milx::Response* view_response(std::string);
     };
 }
 

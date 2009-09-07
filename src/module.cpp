@@ -16,7 +16,6 @@
  */
 
 #include "module.hpp"
-#include "application.hpp"
 #include "routing.hpp"
 
 Milx::Module::Module(std::string name)
@@ -33,8 +32,19 @@ void Milx::Module::name(std::string name)
     _name = name;
 }
 
+boost::filesystem::path Milx::Module::viewsPath()
+{
+    return _views_path;
+}
+
+void Milx::Module::viewsPath(boost::filesystem::path vp)
+{
+    _views_path = vp;
+}
+
 void Milx::Module::controller(Milx::Controller* c, std::string name)
 {
+	c->module(this);
     this->_controllers[name] = c;
 }
 
@@ -47,4 +57,3 @@ Milx::Routing& Milx::Module::routes()
 {
     return _routes;
 }
-

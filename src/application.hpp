@@ -24,6 +24,7 @@
 #include <boost/filesystem/path.hpp>
 #include "module.hpp"
 #include "logger.hpp"
+#include "view/base.hpp"
 
 namespace Milx
 {
@@ -44,7 +45,7 @@ namespace Milx
         /**
          * Enabled Modules
          */
-	std::vector<Module*> _modules;
+        std::vector<Module*> _modules;
         /**
          * The common application Logger
          */
@@ -65,7 +66,7 @@ namespace Milx
          */
         Milx::Response* dispatch(Milx::Request&);
 
-        void loadFile(const boost::filesystem::path);
+        void loadModule(const boost::filesystem::path);
         // TODO create loadDirecotory(path, recursive=false)
         /**
          * Get the application logger

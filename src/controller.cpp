@@ -18,12 +18,14 @@
 #include "controller.hpp"
 #include "request.hpp"
 #include "response.hpp"
+#include "view.hpp"
+#include "module.hpp"
 
 Milx::Response* Milx::Controller::dispatch(Milx::Request &req)
 {
     std::map<std::string, Milx::Actiont>::iterator iter = actionsCallbacks.find(req.action());
     if (iter != actionsCallbacks.end())
-		return iter->second(req);
+        return iter->second(req);
     else
         return 0;
 }
@@ -33,3 +35,20 @@ void Milx::Controller::registerAction(Milx::Actiont mptr, std::string name)
     actionsCallbacks.insert( make_pair(name, mptr) );
 }
 
+void Milx::Controller::module(Milx::Module* mod)
+{
+    this->_module = mod;
+}
+
+Milx::Module& Milx::Controller::module()
+{
+    return *this->_module;
+}
+
+Milx::Response* Milx::Controller::view_response(std::string view)
+{
+    Milx::Response* resp = new Milx::Response();
+    resp->content(Milx::View::render_file(module().viewsPath() / view));
+    
+    return resp;
+}

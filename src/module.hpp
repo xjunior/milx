@@ -19,6 +19,7 @@
 #define MILX_MODULE_H
 
 #include <string>
+#include <boost/filesystem/path.hpp>
 #include "controller.hpp"
 #include "routing.hpp"
 
@@ -32,12 +33,16 @@ namespace Milx
          * The controllers held by the application.
          */
         std::map<std::string, Controller*> _controllers;
+        boost::filesystem::path _views_path;
 
     public:
         Module(std::string="");
         std::string name();
         void name(std::string);
         Routing& routes();
+        boost::filesystem::path viewsPath();
+        void viewsPath(const boost::filesystem::path);
+
         /**
          * Register the controller on the application.
          * \param the controller Instance
