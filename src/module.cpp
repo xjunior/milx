@@ -57,3 +57,4 @@ Milx::Routing& Milx::Module::routes()
 {
     return _routes;
 }
+

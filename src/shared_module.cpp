@@ -28,7 +28,7 @@ Milx::SharedModule::SharedModule(Application& app, const boost::filesystem::path
         on_load_f on_load = (on_load_f) dlsym(_shared, MILX_MODULE_LOAD);
 
         if (on_load) {
-            viewsPath(file.root_path() / "views");
+            viewsPath(file.parent_path() / "views");
             on_load(*this);
         } else
             app.logger()->error(std::string(MILX_MODULE_LOAD) + " method not found in " + file.file_string());
@@ -45,3 +45,4 @@ Milx::SharedModule::~SharedModule()
 {
     dlclose(_shared);
 }
+

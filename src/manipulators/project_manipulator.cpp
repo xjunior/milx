@@ -10,7 +10,6 @@ void Milx::Manipulators::ProjectManipulator::create(std::string name, int argc, 
     create_dir(project);
 	create_project_cmake(project);
     create_dir(project / "modules");
-    create_dir(project / "modules" / "views");
     create_dir(project / "public");
     create_dir(project / "public" / "img");
     create_dir(project / "public" / "css");
@@ -18,6 +17,7 @@ void Milx::Manipulators::ProjectManipulator::create(std::string name, int argc, 
     //create_file(project / "public" / ".htaccess", public_htaccess);
     create_dir(project / "src");
     create_dir(project / "plugins");
+    create_dir(project / "tmp");
 }
 
 void Milx::Manipulators::ProjectManipulator::destroy(std::string name, int argc, char* argv[])
