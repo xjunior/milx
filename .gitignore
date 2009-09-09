@@ -9,3 +9,10 @@ src/cmake_install.cmake
 build
 doc
 nbproject
+src/libmilx.*
+src/milx
+src/milx-0.1
+*~
+src/*~
+src/manipulators/*~
+src/views/*~
