@@ -28,9 +28,9 @@ namespace Milx
         std::ostream &_stream;
     public:
         Logger(std::ostream&);
-        virtual void warn(const std::string&);
-        virtual void info(const std::string&);
-        virtual void error(const std::string&);
+        virtual std::ostream& warn(const std::string& = "");
+        virtual std::ostream& info(const std::string& = "");
+        virtual std::ostream& error(const std::string& = "");
         std::ostream& stream() { return _stream; }
     };
 }

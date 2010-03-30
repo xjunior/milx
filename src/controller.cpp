@@ -1,4 +1,4 @@
- /*
+/*
  * This file is part of Milx.
  *
  * Milx is free software: you can redistribute it and/or modify
@@ -15,40 +15,49 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
+#include <magic.h>
+#include <iostream>
 #include "controller.hpp"
-#include "request.hpp"
-#include "response.hpp"
-#include "view.hpp"
+#include "view/renderer.hpp"
 #include "module.hpp"
 
-Milx::Response* Milx::Controller::dispatch(Milx::Request &req)
+Milx::Actiont Milx::Controller::action(std::string name)
 {
-    std::map<std::string, Milx::Actiont>::iterator iter = actionsCallbacks.find(req.action());
-    if (iter != actionsCallbacks.end())
-        return iter->second(req);
-    else
-        return 0;
+	std::map<std::string, Milx::Actiont>::iterator iter = actionsCallbacks.find(name);
+	if (iter != actionsCallbacks.end()) return iter->second;
+	else return NULL;
 }
 
 void Milx::Controller::registerAction(Milx::Actiont mptr, std::string name)
 {
-    actionsCallbacks.insert( make_pair(name, mptr) );
+	actionsCallbacks.insert( make_pair(name, mptr) );
 }
 
 void Milx::Controller::module(Milx::Module* mod)
 {
-    this->_module = mod;
+	this->_module = mod;
 }
 
 Milx::Module& Milx::Controller::module()
 {
-    return *this->_module;
+	return *this->_module;
 }
 
-Milx::Response* Milx::Controller::view_response(std::string view)
+/*Milx::Response* Milx::Controller::view_response(std::string view)
 {
-    Milx::Response* resp = new Milx::Response();
-    resp->content(Milx::View::render_file(module().viewsPath() / view));
+	Milx::Response* resp = new Milx::Response;
+	boost::filesystem::path view_path = module().viewsPath() / view;
+	resp->content = Milx::View::Renderer::render_file(view_path);
+
+	// FIXME: The code bellow should not be here
+	magic_t cookie;
+	if (cookie = magic_open(MAGIC_MIME)) {
+		if (magic_load(cookie, NULL) == 0)
+			resp->headers["Content-Type"] = magic_file(cookie, view_path.string().c_str());
+
+		magic_close(cookie);
+	}
     
-    return resp;
-}
+	return resp;
+}*/
+

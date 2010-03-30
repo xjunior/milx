@@ -24,61 +24,56 @@
 #include <boost/filesystem/path.hpp>
 #include "module.hpp"
 #include "logger.hpp"
-#include "view/base.hpp"
 
 namespace Milx
 {
-    class Response;
-    class Request;
+	/**
+	 * The Milx::Application class handle the currently running application.
+	 *
+	 * This class is responsible by loading the controllers from the current
+	 * project and handle the application.
+	 *
+	 * The application rendering and response are made by the handlers (CGI,
+	 * FCGI, Apache, etc).
+	 */
+	class Application : public Module
+	{
+		/**
+		 * Enabled Modules
+		 */
+		std::vector<Module*> _modules;
+		/**
+		 * The common application Logger
+		 */
+		Milx::Logger *_logger;
+	public:
+		/**
+		 * Constructor for application. No argument needed (yet).
+		 */
+		Application();
+		/**
+		 * Destructor for application.
+		 */
+		~Application();
+		/**
+		 * Dispatch a request to the correct controller/action
+		 * \param req is the request to be dispatched
+		 * \return a http response
+		 */
+		void dispatch(Milx::WebCall& call);
 
-    /**
-     * The Milx::Application class handle the currently running application.
-     *
-     * This class is responsible by loading the controllers from the current
-     * project and handle the application.
-     *
-     * The application rendering and response are made by the handlers (CGI,
-     * FCGI, Apache, etc).
-     */
-    class Application : public Module
-    {
-        /**
-         * Enabled Modules
-         */
-        std::vector<Module*> _modules;
-        /**
-         * The common application Logger
-         */
-        Milx::Logger *_logger;
-    public:
-        /**
-         * Constructor for application. No argument needed (yet).
-         */
-        Application();
-        /**
-         * Destructor for application.
-         */
-        ~Application();
-        /**
-         * Dispatch a request to the correct controller/action
-         * \param req is the request to be dispatched
-         * \return a http response
-         */
-        Milx::Response* dispatch(Milx::Request&);
-
-        void loadModule(const boost::filesystem::path);
-        // TODO create loadDirecotory(path, recursive=false)
-        /**
-         * Get the application logger
-         * \return the default logger
-         */
-        Milx::Logger* logger() { return _logger; }
-        /**
-         * Redefine the application logger
-         * \param the new Logger
-         */
-        void logger(Milx::Logger*);
-    };
+		void loadModule(const boost::filesystem::path);
+		/**
+		 * Get the application logger
+		 * \return the default logger
+		 */
+		Milx::Logger* logger() { return _logger; }
+		/**
+		 * Redefine the application logger
+		 * \param the new Logger
+		 */
+		void logger(Milx::Logger*);
+	};
 }
 
 #endif

@@ -24,7 +24,7 @@ int Milx::Server::Daemon::_copy_values(void *cls, enum MHD_ValueKind kind, const
 {
 	switch (kind) {
 		case MHD_HEADER_KIND:
-			// ((Milx::Request*)cls)->headers[key] = value;
+			// TODO
 			break;
 		case MHD_GET_ARGUMENT_KIND:
 		case MHD_POSTDATA_KIND:
@@ -49,11 +49,12 @@ int Milx::Server::Daemon::_connection_dispatcher(void *cls, struct MHD_Connectio
 	else if (strcmp(method, "DELETE") == 0) mtd = METHOD_DELETE;
 
 	Milx::WebCall call(mtd, path);
-	app->dispatch(call);
 
 	MHD_get_connection_values(conn, MHD_HEADER_KIND, &Milx::Server::Daemon::_copy_values, &call);
 	MHD_get_connection_values(conn, MHD_GET_ARGUMENT_KIND, &Milx::Server::Daemon::_copy_values, &call);
 	MHD_get_connection_values(conn, MHD_POSTDATA_KIND, &Milx::Server::Daemon::_copy_values, &call);
+
+	app->dispatch(call);
 
 	return _queue_response(conn, call);
 }

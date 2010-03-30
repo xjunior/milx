@@ -17,32 +17,31 @@
 
 #include <iostream>
 #include "routing.hpp"
-#include "request.hpp"
+#include "web_call.hpp"
 
 void Milx::Routing::route(std::string regex, std::string controller, std::string action)
 {
-    Milx::RegexRoute route;
-    route.regex = boost::regex(regex);
-    route.controller = controller;
-    route.action = action;
-    this->routes.push_back(route);
+	Milx::RegexRoute route;
+	route.regex = boost::regex(regex);
+	route.controller = controller;
+	route.action = action;
+	this->routes.push_back(route);
 }
 
-bool Milx::Routing::translateRequest(Milx::Request& req)
+bool Milx::Routing::translateCall(Milx::WebCall& call)
 {
-    std::vector<Milx::RegexRoute>::iterator iroutes;
-    boost::match_results<std::string::const_iterator> what;
-    std::string::const_iterator begin = req.fullPath().begin(), end = req.fullPath().end();
+	std::vector<Milx::RegexRoute>::iterator iroutes;
+	boost::match_results<std::string::const_iterator> what;
+	std::string::const_iterator begin = call.path().begin(), end = call.path().end();
 
-    for (iroutes = this->routes.begin(); iroutes != routes.end(); ++iroutes)
-        if (regex_search(begin, end, what, iroutes->regex))
-        {
-            req.controller(iroutes->controller);
-            req.action(iroutes->action);
+	for (iroutes = this->routes.begin(); iroutes != routes.end(); ++iroutes)
+		if (regex_search(begin, end, what, iroutes->regex)) {
+			call.controller(iroutes->controller);
+			call.action(iroutes->action);
             
-            return true;
-        }
+			return true;
+		}
 
-    return false;
+	return false;
 }
 

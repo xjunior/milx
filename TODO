@@ -3,9 +3,8 @@
  * Add file response
  * Add path parameters (ex.: /news/([0-9]{4})/([0-9]{2})/ => /news/2005/06/)
    * Allow bind action on path parameter
- * Create a Log System
  * Create a observer base class for the controllers to beforeFilter, afterFilter and maybe aroundFilter
- * Create a Module class that will handle the loaded modules
+ * Prevent app crash from module failure
 
 == HTTP
  * HTTP Basic and Digest Authentication (RFC 2617)

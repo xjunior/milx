@@ -15,23 +15,26 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include <boost/filesystem/fstream.hpp>
-#include <sstream>
-#include "plain.hpp"
+#ifndef MILX_VIEW_RENDERER_BASE_H
+#define MILX_VIEW_RENDERER_BASE_H
 
-std::string Milx::View::Plain::render_file(boost::filesystem::path filepath)
+#include <string>
+#include <boost/filesystem/path.hpp>
+
+namespace Milx
 {
-	std::string plain_content;
-	boost::filesystem::ifstream file;
-	file.open(filepath.file_string().c_str(), std::ios::in); // Keep compatibility with std::ifstream, but why?
-	std::stringstream ss;
-	ss << file.rdbuf();
-
-	return ss.str();
+    namespace View
+    {
+		namespace Renderer
+		{
+	        class Base
+	        {
+	        public:
+	            virtual std::string render_file(boost::filesystem::path)=0;
+	            virtual std::string render_inline(std::string)=0;
+	        };
+		}
+    }
 }
 
-std::string Milx::View::Plain::render_inline(std::string tmpl)
-{
-	return tmpl;
-}
-
+#endif

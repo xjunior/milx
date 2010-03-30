@@ -24,37 +24,35 @@
 
 namespace Milx
 {
-    class Response;
-    class Request;
-    class Module;
-    typedef boost::function<Milx::Response* (Milx::Request&)> Actiont;
+	class WebCall;
+	class Module;
+	typedef boost::function<void (Milx::WebCall&)> Actiont;
 
-    /**
-     * Milx::Controller is the base class for any Controller in your application.
-     */
-    class Controller
-    {
-        Module* _module;
-    public:
-        /**
-         * The actions of your controller
-         */
-        std::map<std::string, Actiont> actionsCallbacks;
-        /**
-         * Register an action in your controller. Mostly of developers use this
-         * in the class constructor.
-         */
-        void registerAction(Milx::Actiont, std::string);
-        /**
-         * Dispatch an action given by Milx::Request#action() method.
-         */
-        Milx::Response* dispatch(Milx::Request&);
+	/**
+	 * Milx::Controller is the base class for any Controller in your application.
+	 */
+	class Controller
+	{
+		Module* _module;
+		/**
+		 * The actions of your controller
+		 */
+		std::map<std::string, Actiont> actionsCallbacks;
+	public:
+		/**
+		 * Register an action in your controller. Mostly of developers use this
+		 * in the class constructor.
+		 */
+		void registerAction(Milx::Actiont, std::string);
+		/**
+		 * Dispatch an action given by Milx::Request#action() method.
+		 */
+		Milx::Actiont action(std::string name);
 
-	void module(Milx::Module*);
-	Milx::Module& module();
-
-        Milx::Response* view_response(std::string);
-    };
+		void module(Milx::Module*);
+		Milx::Module& module();
+		// Milx::Response* view_response(std::string);
+	};
 }
 
 #endif

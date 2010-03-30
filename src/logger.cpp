@@ -21,18 +21,21 @@ Milx::Logger::Logger(std::ostream &stream = std::cout) :
     _stream(stream)
 { }
 
-void Milx::Logger::warn(const std::string& txt)
+std::ostream& Milx::Logger::warn(const std::string& txt)
 {
-    _stream << "[WARNNING] " << txt << std::endl;
+	_stream << std::endl << "[WARNNING] " << txt;
+	return _stream;
 }
 
-void Milx::Logger::info(const std::string& txt)
+std::ostream& Milx::Logger::info(const std::string& txt)
 {
-    _stream << "[INFO] " << txt << std::endl;
+	_stream << std::endl << "[INFO] " << txt;
+	return _stream;
 }
 
-void Milx::Logger::error(const std::string& txt)
+std::ostream& Milx::Logger::error(const std::string& txt)
 {
-    _stream << "[ERROR] " << txt << std::endl;
+	_stream << std::endl << "[ERROR] " << txt;
+	return _stream;
 }
 

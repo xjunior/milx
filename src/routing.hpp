@@ -23,28 +23,28 @@
 
 namespace Milx
 {
-    class Request;
+	class WebCall;
 
-    struct RegexRoute
-    {
-        boost::regex regex;
-        std::string controller;
-        std::string action;
-    };
+	struct RegexRoute
+	{
+		boost::regex regex;
+		std::string controller;
+		std::string action;
+	};
 
-    class Routing
-    {
-        std::vector<RegexRoute> routes;
-    public:
-        void route(std::string, std::string, std::string);
-        /**
-         * Translate the Request discovering which controller/action it's
-         * requesting
-         * \param request
-         * \return a reference to the controller
-         */
-        bool translateRequest(Request&);
-    };
+	class Routing
+	{
+		std::vector<RegexRoute> routes;
+	public:
+		void route(std::string, std::string, std::string);
+		/**
+		 * Translate the Request discovering which controller/action it's
+		 * requesting
+		 * \param request
+		 * \return a reference to the controller
+		 */
+		 bool translateCall(WebCall&);
+	};
 }
 
 #endif

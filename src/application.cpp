@@ -17,58 +17,67 @@
 
 #include <iostream>
 #include "application.hpp"
-#include "response.hpp"
-#include "request.hpp"
+#include "web_call.hpp"
 #include "controller.hpp"
 #include "shared_module.hpp"
 
 Milx::Application::Application()
-    : Milx::Module()
+	: Milx::Module()
 {
-    this->logger(new Milx::Logger(std::cout));
+	this->logger(new Milx::Logger(std::cout));
 }
 
 void Milx::Application::loadModule(const boost::filesystem::path file)
 {
-    this->logger()->info("Loading module " + file.file_string());
-    _modules.push_back(new Milx::SharedModule(*this, file));
+	this->logger()->info("Loading module " + file.file_string());
+	_modules.push_back(new Milx::SharedModule(*this, file));
 }
 
-Milx::Response* Milx::Application::dispatch(Milx::Request& req)
+void Milx::Application::dispatch(Milx::WebCall& call)
 {
-    this->logger()->info("Attending request to " + req.fullPath());
+	this->logger()->info("Request to " + call.path());
 
-    this->routes().translateRequest(req); // try default module as highest priority
-    Milx::Controller* controller = this->controller(req.controller());
-    
-    for (int i = 0; i < _modules.size() && controller == NULL; i++)
-        if (_modules[i]->routes().translateRequest(req))
-            controller = _modules[i]->controller(req.controller());
-            // it found a route, but if controller STILL NULL, so we try another one
+	Milx::Controller* ctrlobj;
+	bool found;
 
-    if (controller == NULL) {
-        if (req.controller() == "") {
-            this->logger()->warn("No route found, returning 404");
-    	    return new Milx::Response("File not found.", 404);
-        } else {
-            this->logger()->warn("Route error: Bad controller name: " + req.controller());
-            return new Milx::Response("Bad controller name.", 500);
-        }
-    } else {
-        this->logger()->info("Routed to " + req.controller() + "/" + req.action());
-        return controller->dispatch(req);
-    }
+	if (found = this->routes().translateCall(call))
+		ctrlobj = this->controller(call.controller());
+	else 
+		// it found a route, but if controller STILL NULL, so we try another one
+		for (int i = 0; i < _modules.size(); i++)
+			if (found = _modules[i]->routes().translateCall(call)) {
+				ctrlobj = _modules[i]->controller(call.controller());
+				break;
+			}
+
+	if (!found) {
+		this->logger()->warn("No route found, returning 404");
+		call.status(404);
+	} else if (ctrlobj == NULL) {
+		this->logger()->warn("Route error: Bad controller name: ") << call.controller();
+		call.status(500);
+	} else {
+		this->logger()->info("Routed to ") << call.controller() << "/" << call.action();
+		Milx::Actiont actobj = ctrlobj->action(call.action());
+		if (actobj == NULL) {
+			this->logger()->warn("Route error: Bad action name: ") << call.action();
+			call.status(500);
+		} else {
+			actobj(call);
+		}
+	}
 }
 
 Milx::Application::~Application()
 {
-    if (_modules.size() > 0)
-        for (register int i = 0; i < _modules.size(); i++)
-            delete _modules[i];
+	if (_modules.size() > 0)
+		for (register int i = 0; i < _modules.size(); i++)
+			delete _modules[i];
 }
 
 void Milx::Application::logger(Milx::Logger* logger)
 {
-    if (logger != NULL)
-        _logger = logger;
+	if (logger != NULL)
+		_logger = logger;
 }
+
