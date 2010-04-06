@@ -15,6 +15,8 @@ namespace Milx
 		std::string _content;
 		std::string _controller;
 		std::string _action;
+		std::string _mime_type;
+		std::string _encoding;
 		int _status;
 	    public:
 	        WebCall(CallMethod, std::string);
@@ -31,6 +33,10 @@ namespace Milx
 		
 		// content
 		void response_content(const std::string& c) { _content = c; }
+		void mime_type(std::string s) { _mime_type = s; }
+		std::string mime_type() { return _mime_type; }
+		void encoding(std::string s) { _encoding = s; }
+		std::string encoding() { return _encoding; }
 		void status(int s) { _status = s; }
 		int status() { return _status; }
 		// void response_content(Milx::View);

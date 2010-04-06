@@ -18,8 +18,10 @@
 #ifndef MILX_ROUTING_H
 #define MILX_ROUTING_H
 
+#include <string>
 #include <vector>
-#include <boost/regex.hpp>
+//#include <boost/regex.hpp>
+#include <regex.h>
 
 namespace Milx
 {
@@ -27,7 +29,8 @@ namespace Milx
 
 	struct RegexRoute
 	{
-		boost::regex regex;
+		// boost::regex regex;
+		regex_t regex;
 		std::string controller;
 		std::string action;
 	};

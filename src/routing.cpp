@@ -15,33 +15,37 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include <iostream>
+#include <regex.h>
 #include "routing.hpp"
 #include "web_call.hpp"
 
 void Milx::Routing::route(std::string regex, std::string controller, std::string action)
 {
 	Milx::RegexRoute route;
-	route.regex = boost::regex(regex);
-	route.controller = controller;
-	route.action = action;
-	this->routes.push_back(route);
+	if (regcomp(&route.regex, regex.c_str(), REG_EXTENDED|REG_NOSUB) == 0) {
+		route.controller = controller;
+		route.action = action;
+		this->routes.push_back(route);
+	} else {
+		// report error
+	}
 }
 
 bool Milx::Routing::translateCall(Milx::WebCall& call)
 {
 	std::vector<Milx::RegexRoute>::iterator iroutes;
-	boost::match_results<std::string::const_iterator> what;
-	std::string::const_iterator begin = call.path().begin(), end = call.path().end();
+	const char *path = call.path().c_str();
+	bool result = false;
 
-	for (iroutes = this->routes.begin(); iroutes != routes.end(); ++iroutes)
-		if (regex_search(begin, end, what, iroutes->regex)) {
+	for (iroutes = this->routes.begin(); iroutes != routes.end() && !result; ++iroutes) {
+		if (regexec(&iroutes->regex, path, (size_t) 0, NULL, 0)  == 0) {
 			call.controller(iroutes->controller);
 			call.action(iroutes->action);
             
-			return true;
+			result = true;
 		}
+	}
 
-	return false;
+	return result;
 }
 

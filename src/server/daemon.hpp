@@ -39,6 +39,7 @@ namespace Milx
 		{
 			Milx::Application &_app;
 			int _port;
+			bool _running;
 			struct MHD_Daemon *_mhdaemon;
 
 			static int _connection_dispatcher(void *, struct MHD_Connection *,
@@ -52,6 +53,7 @@ namespace Milx
 			Daemon(Milx::Application&, int);
 			void start();
 			void stop();
+			bool running() { return _running; }
 		};
 	}
 }

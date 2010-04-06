@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
-project (MILX)
+project (milx)
 
-set(APPLICATION_NAME ${PROJECT_NAME})
-set(APPLICATION_VERSION "0.5")
+set(MILX_VERSION "0.5")
 
 include(DefineInstallationPaths.cmake)
 

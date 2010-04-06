@@ -11,7 +11,7 @@ doc
 nbproject
 src/libmilx.*
 src/milx
-src/milx-0.1
+src/milx-*
 *~
 src/*~
 src/manipulators/*~

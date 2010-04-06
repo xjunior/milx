@@ -1,11 +1,11 @@
 #include "../logger.hpp"
 #include "../web_call.hpp"
 #include "daemon.hpp"
-#include <sstream>
 
 Milx::Server::Daemon::Daemon(Milx::Application &app, int port) :
 	_app(app),
-	_port(port)
+	_port(port),
+	_running(false)
 {
 }
 
@@ -14,6 +14,7 @@ int Milx::Server::Daemon::_queue_response(struct MHD_Connection *conn, Milx::Web
 	struct MHD_Response *response;
 	response = MHD_create_response_from_data(call.response_content().size(),
 				(void *)call.response_content().c_str(), MHD_NO, MHD_NO);
+	// MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, (call.mime_type() + "; charset=" + call.encoding()).c_str());
 	int ret = MHD_queue_response(conn, 200, response);
 	MHD_destroy_response(response);
 
@@ -64,14 +65,14 @@ void Milx::Server::Daemon::start()
 	_mhdaemon = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION, _port, NULL, NULL,
 			&Milx::Server::Daemon::_connection_dispatcher,
 			&_app, MHD_OPTION_END);
-	std::stringstream ss;
-	ss << "Server started listening on " << _port;
-	_app.logger()->info(ss.str());
+	_running = true;
+	_app.logger()->info("Server started listening on ") << _port << std::endl;
 }
 
 void Milx::Server::Daemon::stop()
 {
 	MHD_stop_daemon(_mhdaemon);
+	_running = false;
 	_app.logger()->info("Server stopped") << std::endl;
 }
 
