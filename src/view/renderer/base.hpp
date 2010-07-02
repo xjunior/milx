@@ -19,22 +19,22 @@
 #define MILX_VIEW_RENDERER_BASE_H
 
 #include <string>
-#include <boost/filesystem/path.hpp>
+#include "../../path.hpp"
 
 namespace Milx
 {
-    namespace View
-    {
+	namespace View
+	{
 		namespace Renderer
 		{
-	        class Base
-	        {
-	        public:
-	            virtual std::string render_file(boost::filesystem::path)=0;
-	            virtual std::string render_inline(std::string)=0;
-	        };
+			class Base
+			{
+			public:
+				virtual std::string render_file(const Milx::Path&)=0;
+				virtual std::string render_inline(std::string)=0;
+			};
 		}
-    }
+	}
 }
 
 #endif

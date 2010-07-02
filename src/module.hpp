@@ -19,42 +19,45 @@
 #define MILX_MODULE_H
 
 #include <string>
-#include <boost/filesystem/path.hpp>
 #include "controller.hpp"
 #include "routing.hpp"
+#include "path.hpp"
 
 namespace Milx
 {
-    class Module
-    {
-        std::string _name;
-        Routing _routes;
-        /**
-         * The controllers held by the application.
-         */
-        std::map<std::string, Controller*> _controllers;
-        boost::filesystem::path _views_path;
+	class Application;
+	class Module
+	{
+		std::string _name;
+		Routing _routes;
+		Application& _app;
+		/**
+		 * The controllers held by the application.
+		 */
+		std::map<std::string, Controller*> _controllers;
+		Milx::Path _views_path;
 
-    public:
-        Module(std::string="");
-        std::string name();
-        void name(std::string);
-        Routing& routes();
-        boost::filesystem::path viewsPath();
-        void viewsPath(const boost::filesystem::path);
+	public:
+		Module(Application&, std::string="");
+		std::string name();
+		void name(std::string);
+		Routing& routes();
+		Milx::Path viewsPath();
+		void viewsPath(const Milx::Path&);
+		Application& application() const { return _app; }
 
-        /**
-         * Register the controller on the application.
-         * \param the controller Instance
-         * \param the controller name
-         */
-        void controller(Controller*, std::string);
-        /**
-         * Retrieve a registered controller instance.
-         * \param the controller name
-         */
-        Controller* controller(std::string);
-    };
+		/**
+		 * Register the controller on the application.
+		 * \param the controller Instance
+		 * \param the controller name
+		 */
+		void controller(Controller*, std::string);
+		/**
+		 * Retrieve a registered controller instance.
+		 * \param the controller name
+		 */
+		Controller* controller(std::string);
+	};
 }
 
 #endif

@@ -19,7 +19,6 @@
 #define MILX_VIEW_RENDERER_PLAIN_H
 
 #include <string>
-#include <boost/filesystem/path.hpp>
 #include "base.hpp"
 
 namespace Milx
@@ -31,7 +30,7 @@ namespace Milx
 			class Plain : public Base
 			{
 			public:
-				std::string render_file(boost::filesystem::path);
+				std::string render_file(const Milx::Path&);
 				std::string render_inline(std::string);
 			};
 		}

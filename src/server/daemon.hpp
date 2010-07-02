@@ -29,6 +29,8 @@
 #include <string>
 #include "../application.hpp"
 
+#define MILX_SERVER_NAME "Milx Server v1.0"
+
 namespace Milx
 {
 	class WebCall;
@@ -41,18 +43,27 @@ namespace Milx
 			int _port;
 			bool _running;
 			struct MHD_Daemon *_mhdaemon;
+                        const Milx::Path *_public;
 
 			static int _connection_dispatcher(void *, struct MHD_Connection *,
 							const char *, const char *,
 							const char *, const char *,
 							size_t *, void **);
 
-			static int _copy_values(void *cls, enum MHD_ValueKind, const char *, const char *);
+			static int _copy_values(void *, enum MHD_ValueKind,
+                            const char *, const char *);
+                        static int _post_values(void *, enum MHD_ValueKind,
+                            const char *, const char *, const char *,
+                            const char *, const char *, uint64_t, size_t);
 			static int _queue_response(struct MHD_Connection *, Milx::WebCall &);
 		public:
 			Daemon(Milx::Application&, int);
+                        ~Daemon();
 			void start();
 			void stop();
+                        void public_dir(const Milx::Path* pub) { _public = pub; }
+                        const Milx::Path* public_dir() { return _public; }
+                        Milx::Application& application() { return _app; }
 			bool running() { return _running; }
 		};
 	}

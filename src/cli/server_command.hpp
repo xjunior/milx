@@ -1,7 +1,5 @@
 #include "command.hpp"
-#include <boost/filesystem/path.hpp>
-
-namespace fs = boost::filesystem;
+#include "../path.hpp"
 
 namespace Milx
 {
@@ -11,7 +9,7 @@ namespace Milx
 	{
 		class ServerCommand : public Command
 		{
-			fs::path _path;
+			Milx::Path _path;
 			virtual ReturnValue main(int, char**);
 			ReturnValue start_server(int);
 			ReturnValue stop_server();

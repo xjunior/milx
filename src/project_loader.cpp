@@ -1,27 +1,29 @@
+#include <cstdlib>
+#include <iostream>
+#include <vector>
 #include "project_loader.hpp"
+#include "path.hpp"
 
-void Milx::ProjectLoader::validate_existence(const fs::path& path)
+void Milx::ProjectLoader::validate_existence(const Milx::Path& path)
 {
-	if (!fs::exists(path)) {
-		std::cerr << path << " does not exist." << std::endl;
+	if (!path.exists()) {
+		std::cerr << path.path() << " does not exist." << std::endl;
 		exit(1);
 	}
 }
 
-void Milx::ProjectLoader::load_modules(Milx::Application& app, const fs::path& path, bool recursive)
+// TODO: recursive
+void Milx::ProjectLoader::load_modules(Milx::Application& app, const Milx::Path& path)
 {
 	validate_existence(path);
 
-	fs::directory_iterator end_iter;
+	Milx::Path::List solist = Milx::Path::ls((path / "*.so").path().c_str());
+	Milx::Path::List::iterator it;
 
-	for (fs::directory_iterator dir_itr(path); dir_itr != end_iter; ++dir_itr) {
+	for (it = solist.begin(); it != solist.end(); it++) {
 		try {
-			if (fs::is_regular_file(dir_itr->status()) &&
-				dir_itr->path().extension().compare(".so") == 0)
-				app.loadModule(dir_itr->path());
-			else if (recursive && fs::is_directory(*dir_itr))
-				load_modules(app, dir_itr->path());
-		} catch (const std::exception & ex) { }
+			app.loadModule(*it);
+		} catch (const std::exception &ex) { }
 	}
 }
 

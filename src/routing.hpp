@@ -20,7 +20,6 @@
 
 #include <string>
 #include <vector>
-//#include <boost/regex.hpp>
 #include <regex.h>
 
 namespace Milx
@@ -29,7 +28,6 @@ namespace Milx
 
 	struct RegexRoute
 	{
-		// boost::regex regex;
 		regex_t regex;
 		std::string controller;
 		std::string action;

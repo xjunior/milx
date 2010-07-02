@@ -4,10 +4,10 @@ set (MILX_HOME_BIN ${MILX_HOME}/bin)
 # Library
 set (LIB_SOURCES application.cpp controller.cpp cookie.cpp routing.cpp logger.cpp project_loader.cpp
 module.cpp shared_module.cpp view/renderer.cpp view/renderer/plain.cpp web_call.cpp server/daemon.cpp
-cli/command.cpp)
+cli/command.cpp path.cpp)
 set (LIB_HEADERS application.hpp controller.hpp cookie.hpp web_call.hpp project_loader.hpp
 routing.hpp logger.hpp module.hpp shared_module.hpp view/context.hpp view/renderer.hpp view/renderer/base.hpp
-view/renderer/plain.hpp server/daemon.hpp cli/command.hpp)
+view/renderer/plain.hpp server/daemon.hpp cli/command.hpp action_callback.hpp path.hpp)
 # set (LIB_DEPENDENCIES dl boost_regex-mt xml2 magic microhttpd)
 set (LIB_DEPENDENCIES dl xml2 magic microhttpd)
 
@@ -58,5 +58,5 @@ set_target_properties (
         VERSION
             ${MILX_VERSION}
 )
-TARGET_LINK_LIBRARIES (${PROJECT_NAME}-cli ${PROJECT_NAME}-lib boost_filesystem-mt)
+TARGET_LINK_LIBRARIES (${PROJECT_NAME}-cli ${PROJECT_NAME}-lib)
 INSTALL ( TARGETS ${PROJECT_NAME}-cli DESTINATION ${BIN_INSTALL_DIR} )

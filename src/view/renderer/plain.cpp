@@ -15,17 +15,18 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include <boost/filesystem/fstream.hpp>
+#include <fstream>
 #include <sstream>
 #include "plain.hpp"
 
-std::string Milx::View::Renderer::Plain::render_file(boost::filesystem::path filepath)
+std::string Milx::View::Renderer::Plain::render_file(const Milx::Path &filepath)
 {
 	std::string plain_content;
-	boost::filesystem::ifstream file;
-	file.open(filepath.file_string().c_str(), std::ios::in); // Keep compatibility with std::ifstream, but why?
+	std::ifstream file;
+	file.open(filepath.path().c_str(), std::ios::in); // Keep compatibility with std::ifstream, but why?
 	std::stringstream ss;
 	ss << file.rdbuf();
+	file.close();
 
 	return ss.str();
 }

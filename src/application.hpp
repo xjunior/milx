@@ -21,12 +21,12 @@
 #include <vector>
 #include <string>
 #include <map>
-#include <boost/filesystem/path.hpp>
 #include "module.hpp"
 #include "logger.hpp"
 
 namespace Milx
 {
+	class Path;
 	/**
 	 * The Milx::Application class handle the currently running application.
 	 *
@@ -62,7 +62,8 @@ namespace Milx
 		 */
 		void dispatch(Milx::WebCall& call);
 
-		void loadModule(const boost::filesystem::path);
+		void loadModule(const Milx::Path&);
+		void add_module(Milx::Module*);
 		/**
 		 * Get the application logger
 		 * \return the default logger

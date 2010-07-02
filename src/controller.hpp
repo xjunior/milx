@@ -20,13 +20,19 @@
 
 #include <string>
 #include <map>
-#include <boost/function.hpp>
+#include "action_callback.hpp"
+#include "web_call.hpp"
+
+#define register_action(c)\
+	{ std::string a = #c;\
+	int b = a.rfind(':');\
+	if (b == -1) b = 0;\
+	a = a.substr(b + 1, a.size() - b);\
+	action(Milx::ActionCallback::make_callback(this, &c), a); }
 
 namespace Milx
 {
-	class WebCall;
 	class Module;
-	typedef boost::function<void (Milx::WebCall&)> Actiont;
 
 	/**
 	 * Milx::Controller is the base class for any Controller in your application.
@@ -37,17 +43,14 @@ namespace Milx
 		/**
 		 * The actions of your controller
 		 */
-		std::map<std::string, Actiont> actionsCallbacks;
+		std::map<std::string, Milx::ActionCallback::CallbackBase*> _actions;
 	public:
 		/**
 		 * Register an action in your controller. Mostly of developers use this
 		 * in the class constructor.
 		 */
-		void registerAction(Milx::Actiont, std::string);
-		/**
-		 * Dispatch an action given by Milx::Request#action() method.
-		 */
-		Milx::Actiont action(std::string name);
+		void action(Milx::ActionCallback::CallbackBase*, std::string);
+		Milx::ActionCallback::CallbackBase* action(std::string name);
 
 		void module(Milx::Module*);
 		Milx::Module& module();

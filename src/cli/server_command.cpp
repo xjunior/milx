@@ -1,5 +1,6 @@
 #include <cstring>
 #include <iostream>
+#include <fstream>
 #include <csignal>
 #include "../server/daemon.hpp"
 #include "../application.hpp"
@@ -8,11 +9,14 @@
 
 Milx::Server::Daemon *Milx::CLI::ServerCommand::_daemon;
 
+#define SERVER_LOG_FILE (_path / "milx-server.log")
+#define SERVER_PID_FILE (_path / "milx-server.pid")
+
 Milx::CLI::ReturnValue Milx::CLI::ServerCommand::main(int argc, char* argv[])
 {
 	if (argc >= 2) {
 		if (argc == 3) _path = argv[2];
-		else _path = fs::current_path();
+		else _path = Milx::Path::cwd();
 
 		if (strcmp(argv[1], "start") == 0) {
 			return start_server(8888);
@@ -29,6 +33,11 @@ Milx::CLI::ReturnValue Milx::CLI::ServerCommand::main(int argc, char* argv[])
 
 void Milx::CLI::ServerCommand::show_help()
 {
+	std::cout << "milx server [action]" << std::endl;
+	std::cout << "possible actions might be:" << std::endl;
+	std::cout << "\tstart\t: start the server" << std::endl;
+	std::cout << "\tstop\t: stop the server" << std::endl;
+	std::cout << "\trestart\t: restart the server" << std::endl;
 }
 
 const char* Milx::CLI::ServerCommand::description()
@@ -38,31 +47,33 @@ const char* Milx::CLI::ServerCommand::description()
 
 Milx::CLI::ReturnValue Milx::CLI::ServerCommand::start_server(int port)
 {
-	std::cout << "Starting!" << std::endl;
-	// TODO test if the pid file already exist and so not start
-	// a --force flag would be nice to force a restart
-	// in this case, restart action would be deprecated
+	if (SERVER_PID_FILE.exists()) {
+		std::cout << "A server is already started!" << std::endl;
+		return CLI_FAIL;
+	} else {
+		std::cout << "Starting!" << std::endl;
 
-	if (!fork()) {
-		setsid(); // detach
+		if (fork()) return CLI_SUCCESS; // finish parent
+		else setsid(); // detach
 
 		Milx::Application app;
 		Milx::ProjectLoader::load(app, _path);
 		_daemon = new Milx::Server::Daemon(app, port);
+		_daemon->public_dir(new Milx::Path(_path / "public"));
 		_daemon->start();
 
-		std::ofstream log((_path / "milx-server.log").string().c_str(), std::ios_base::app);
+		std::ofstream log(SERVER_LOG_FILE.path().c_str(), std::ios_base::app);
 		app.logger(new Milx::Logger(log));
 
 		struct sigaction action;
 		action.sa_handler = &Milx::CLI::ServerCommand::_stop_server;
 		sigaction(SIGALRM, &action, NULL);
 
-		std::ofstream fstream((_path / "milx-server.pid").string().c_str());
-		fstream << getpid();
-		fstream.close();
+		std::ofstream pid(SERVER_PID_FILE.path().c_str());
+		pid << getpid();
+		pid.close();
 
-		while(_daemon->running());
+		while(_daemon->running()); //  if !SIGALRM received
 
 		log.close();
 	}
@@ -73,12 +84,12 @@ Milx::CLI::ReturnValue Milx::CLI::ServerCommand::start_server(int port)
 Milx::CLI::ReturnValue Milx::CLI::ServerCommand::stop_server()
 {
 	std::cout << "Stoping!" << std::endl;
-	std::ifstream fstream((_path / "milx-server.pid").string().c_str());
+	std::ifstream fstream(SERVER_PID_FILE.path().c_str());
 	std::string pid;
 	fstream >> pid;
 	fstream.close();
 	kill(atoi(pid.c_str()), SIGALRM);
-//	remove_pid_file();
+	unlink(SERVER_PID_FILE.path().c_str());
 
 	return CLI_SUCCESS;
 }

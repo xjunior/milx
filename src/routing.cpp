@@ -27,7 +27,7 @@ void Milx::Routing::route(std::string regex, std::string controller, std::string
 		route.action = action;
 		this->routes.push_back(route);
 	} else {
-		// report error
+		// TODO report error on route
 	}
 }
 
@@ -38,7 +38,7 @@ bool Milx::Routing::translateCall(Milx::WebCall& call)
 	bool result = false;
 
 	for (iroutes = this->routes.begin(); iroutes != routes.end() && !result; ++iroutes) {
-		if (regexec(&iroutes->regex, path, (size_t) 0, NULL, 0)  == 0) {
+		if (regexec(&iroutes->regex, path, (size_t) 0, NULL, 0) == 0) {
 			call.controller(iroutes->controller);
 			call.action(iroutes->action);
             

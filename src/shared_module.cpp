@@ -17,32 +17,28 @@
 
 #include <dlfcn.h>
 #include "shared_module.hpp"
+#include "path.hpp"
 
-Milx::SharedModule::SharedModule(Application& app, const boost::filesystem::path file) :
-    _app(app),
-    Milx::Module(file.stem())
+Milx::SharedModule::SharedModule(Application& app, const Milx::Path &file) :
+	Milx::Module(app, file.stem())
 {
-    _shared = dlopen(file.file_string().c_str(), RTLD_LAZY);
-    if (_shared) {
-        typedef void(*on_load_f)(Milx::Module&);
-        on_load_f on_load = (on_load_f) dlsym(_shared, MILX_MODULE_LOAD);
+	_shared = dlopen(file.path().c_str(), RTLD_LAZY);
+	if (_shared) {
+		typedef void(*on_load_f)(Milx::Module&);
+		on_load_f on_load = (on_load_f) dlsym(_shared, MILX_MODULE_LOAD);
 
-        if (on_load) {
-            viewsPath(file.parent_path() / "views");
-            on_load(*this);
-        } else
-            app.logger()->error(std::string(MILX_MODULE_LOAD) + " method not found in " + file.file_string());
-    } else
-        app.logger()->error("The module could not be loaded: " + file.file_string());
-}
-
-Milx::Application& Milx::SharedModule::application() const
-{
-    return _app;
+		if (on_load) {
+			viewsPath(file / ".." / "views");
+			on_load(*this);
+			app.logger()->info("Load Successfull!");
+		} else
+			app.logger()->error(std::string(MILX_MODULE_LOAD) + " method not found in " + file.path());
+	} else
+		app.logger()->error("The module could not be loaded: " + file.path());
 }
 
 Milx::SharedModule::~SharedModule()
 {
-    dlclose(_shared);
+	dlclose(_shared);
 }
 

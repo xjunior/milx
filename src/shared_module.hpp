@@ -18,21 +18,20 @@
 #ifndef MILX_SHARED_MODULE_H
 #define MILX_SHARED_MODULE_H
 
-#include <boost/filesystem/path.hpp>
 #include "module.hpp"
 #include "application.hpp"
 
 namespace Milx
 {
-    class SharedModule : public Module
-    {
-        void* _shared;
-        Application& _app;
-    public:
-        SharedModule(Application&, boost::filesystem::path);
-        Application& application() const;
-        ~SharedModule();
-    };
+	class Path;
+	class SharedModule : public Module
+	{
+		void* _shared;
+
+	public:
+		SharedModule(Application&, const Milx::Path&);
+		~SharedModule();
+	};
 }
 
 #define MILX_MODULE_LOAD "milx_module_load"

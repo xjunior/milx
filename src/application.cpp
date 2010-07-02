@@ -20,16 +20,18 @@
 #include "web_call.hpp"
 #include "controller.hpp"
 #include "shared_module.hpp"
+#include "action_callback.hpp"
+#include "path.hpp"
 
 Milx::Application::Application()
-	: Milx::Module()
+	: Milx::Module(*this)
 {
 	this->logger(new Milx::Logger(std::cout));
 }
 
-void Milx::Application::loadModule(const boost::filesystem::path file)
+void Milx::Application::loadModule(const Milx::Path &file)
 {
-	this->logger()->info("Loading module " + file.file_string());
+	this->logger()->info("Loading module " + file.path());
 	_modules.push_back(new Milx::SharedModule(*this, file));
 }
 
@@ -58,12 +60,12 @@ void Milx::Application::dispatch(Milx::WebCall& call)
 		call.status(500);
 	} else {
 		this->logger()->info("Routed to ") << call.controller() << "/" << call.action();
-		Milx::Actiont actobj = ctrlobj->action(call.action());
+		Milx::ActionCallback::CallbackBase* actobj = ctrlobj->action(call.action());
 		if (actobj == NULL) {
 			this->logger()->warn("Route error: Bad action name: ") << call.action();
 			call.status(500);
 		} else {
-			actobj(call);
+			actobj->call(call);
 		}
 	}
 }
@@ -79,5 +81,10 @@ void Milx::Application::logger(Milx::Logger* logger)
 {
 	if (logger != NULL)
 		_logger = logger;
+}
+
+void Milx::Application::add_module(Milx::Module *mod)
+{
+	_modules.push_back(mod);
 }
 

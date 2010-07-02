@@ -17,44 +17,45 @@
 
 #include "module.hpp"
 #include "routing.hpp"
+#include "application.hpp"
 
-Milx::Module::Module(std::string name)
- : _name(name)
+Milx::Module::Module(Milx::Application& app, std::string name)
+	: _app(app), _name(name)
 { }
 
 std::string Milx::Module::name()
 {
-    return _name;
+	return _name;
 }
 
 void Milx::Module::name(std::string name)
 {
-    _name = name;
+	_name = name;
 }
 
-boost::filesystem::path Milx::Module::viewsPath()
+Milx::Path Milx::Module::viewsPath()
 {
-    return _views_path;
+	return _views_path;
 }
 
-void Milx::Module::viewsPath(boost::filesystem::path vp)
+void Milx::Module::viewsPath(const Milx::Path &vp)
 {
-    _views_path = vp;
+	_views_path = vp;
 }
 
 void Milx::Module::controller(Milx::Controller* c, std::string name)
 {
 	c->module(this);
-    this->_controllers[name] = c;
+	this->_controllers[name] = c;
 }
 
 Milx::Controller* Milx::Module::controller(std::string name)
 {
-    return this->_controllers[name];
+	return this->_controllers[name];
 }
 
 Milx::Routing& Milx::Module::routes()
 {
-    return _routes;
+	return _routes;
 }
 

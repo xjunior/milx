@@ -3,7 +3,7 @@
 
 // TODO: invert file.html.plain to file.plain.html
 // this would make the file more 'recognizeable' by users and programs
-std::string Milx::View::Renderer::render_file(boost::filesystem::path file)
+std::string Milx::View::Renderer::render_file(const Milx::Path &file)
 {
 	Milx::View::Renderer::Base* renderer;
 	renderer = Milx::View::Renderer::instances[file.extension()];
