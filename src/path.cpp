@@ -1,10 +1,18 @@
 #include "path.hpp"
+#include <string.h>
 #include <unistd.h>
 #include <cstdlib>
 #include <cstdarg>
 #include <sstream>
-#include <magic.h>
 #include <glob.h>
+
+// Mime types parsing
+#include <fstream>
+#include <iterator>
+#include <algorithm>
+
+magic_t Milx::Path:: _magic;
+std::vector<Milx::Path::__type_map> Milx::Path::_type_maps;
 
 std::string Milx::Path::join(const char *a, ...)
 {
@@ -50,7 +58,7 @@ Milx::Path::Path() : _path("")
 {
 }
 
-Milx::Path::Path(std::string path)
+Milx::Path::Path(const std::string& path)
 {
 	const char * cpath = canonicalize_file_name(path.c_str());
 	_path = (cpath == NULL) ? path : cpath;
@@ -134,15 +142,14 @@ Milx::Path& Milx::Path::operator=(const std::string& p)
 // TODO css and js are being badly detected, I must find a better way for this
 std::string Milx::Path::type() const
 {
-	magic_t cookie;
-	std::string type;
-	cookie = magic_open(MAGIC_MIME);
-	if (cookie != NULL) {
-		magic_load(cookie, NULL);
-		type = magic_file(cookie, _path.c_str());
+	for (std::vector<__type_map>::iterator it = _type_maps.begin(); it != _type_maps.end(); it++) {
+		if (std::find(it->extensions.begin(), it->extensions.end(), extension().substr(1)) != it->extensions.end())
+			return it->mime;
 	}
-	magic_close(cookie);
-	return type;
+	// if nothing was found
+	if (_magic != NULL) // magic was initialized
+		return magic_file(_magic, _path.c_str());
+	return "text/plain";
 }
 
 const Milx::Path::Stat& Milx::Path::stat() const
@@ -152,7 +159,7 @@ const Milx::Path::Stat& Milx::Path::stat() const
 
 Milx::Path::Stat::Stat(Milx::Path &path)
 {
-	::stat(path.path().c_str(), &_stat);
+	::stat(path.str().c_str(), &_stat);
 }
 
 bool Milx::Path::Stat::is_dir() const
@@ -184,3 +191,41 @@ int Milx::Path::Stat::gid() const
 {
 	return _stat.st_gid;
 }
+
+void Milx::Path::initialize_mime_map(const Milx::Path& map)
+{
+	std::ifstream fstream(map.str().c_str());
+	std::istream_iterator<std::string> it_end;
+	std::string line;
+
+	while (getline(fstream, line)) {
+		__type_map map;
+		// ignore comment lines
+		if (line.size() == 0 || line.at(line.find_first_not_of(" \t")) == '#') continue;
+
+		std::istringstream exts(line);
+		std::istream_iterator<std::string> it(exts);
+		for (bool state = true; it != it_end; ++it) {
+			if (state) { // first is the mime
+				map.mime = *it;
+				state = false;
+			} else // others are extensions
+				map.extensions.push_back(*it);
+		}
+		if (map.extensions.size() > 0) _type_maps.push_back(map);
+	}
+}
+
+void Milx::Path::initialize_mime_magic(const Milx::Path& path)
+{
+	if (_magic) {
+		magic_close(_magic);
+		initialize_mime_magic(path);
+	} else {
+		_magic = magic_open(MAGIC_MIME);
+		if (_magic)
+		if (magic_load(_magic, path.str().size() == 0 ? NULL : path.str().c_str()) != 0)
+			magic_close(_magic);
+	}
+}
+

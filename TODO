@@ -1,6 +1,5 @@
 == Core
  * Handle file parameters
- * Add file response
  * Add path parameters (ex.: /news/([0-9]{4})/([0-9]{2})/ => /news/2005/06/)
    * Allow bind action on path parameter
  * Create a observer base class for the controllers to beforeFilter, afterFilter and maybe aroundFilter

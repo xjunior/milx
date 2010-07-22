@@ -7,7 +7,7 @@
 void Milx::ProjectLoader::validate_existence(const Milx::Path& path)
 {
 	if (!path.exists()) {
-		std::cerr << path.path() << " does not exist." << std::endl;
+		std::cerr << path.str() << " does not exist." << std::endl;
 		exit(1);
 	}
 }
@@ -17,7 +17,7 @@ void Milx::ProjectLoader::load_modules(Milx::Application& app, const Milx::Path&
 {
 	validate_existence(path);
 
-	Milx::Path::List solist = Milx::Path::ls((path / "*.so").path().c_str());
+	Milx::Path::List solist = Milx::Path::ls((path / "*.so").str().c_str());
 	Milx::Path::List::iterator it;
 
 	for (it = solist.begin(); it != solist.end(); it++) {

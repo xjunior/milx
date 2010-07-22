@@ -1,11 +1,8 @@
 #ifndef MILX_CLI_COMMAND_HPP
 #define MILX_CLI_COMMAND_HPP
 
-#include <map>
+#include <vector>
 #include <string>
-
-#define MILX_COMMAND_SUCCESS 0
-#define MILX_COMMAND_ERROR 1
 
 namespace Milx
 {
@@ -20,14 +17,20 @@ namespace Milx
 
 		class Command
 		{
+			std::vector<Command*> installed;
 			virtual ReturnValue main(int, char**)=0;
 		public:
-			virtual void show_help()=0;
+			void show_help();
+			virtual const char* help()=0;
 			virtual const char* description()=0;
 			ReturnValue run(int, char**);
-
-			static std::map<std::string, Command*> installed;
+			virtual const char* command()=0;
+		protected:
+			void install(Command*);
+			const Command* const command(std::string) const;
 		};
+
+		class CommandNotFound : public std::exception { };
 	}
 }
 

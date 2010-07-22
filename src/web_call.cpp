@@ -19,7 +19,7 @@ Milx::WebCall::WebCall(Milx::CallMethod method, std::string path) :
 void Milx::WebCall::content(const Milx::Path& path)
 {
 	if (path.exists() && path.stat().is_file()) {
-		std::ifstream infile(path.path().c_str(), std::ios::in);
+		std::ifstream infile(path.str().c_str(), std::ios::in);
 		if (infile.is_open()) {
 			content_type(path.type());
 

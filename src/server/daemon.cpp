@@ -10,6 +10,7 @@ Milx::Server::Daemon::Daemon(Milx::Application &app, int port) :
 	_running(false)
 {
 	_public = new Milx::Path(Milx::Path::cwd());
+	index.push_back("index.*");
 }
 
 int Milx::Server::Daemon::_queue_response(struct MHD_Connection *conn, Milx::WebCall &call)
@@ -80,12 +81,26 @@ int Milx::Server::Daemon::_connection_dispatcher(void *cls, struct MHD_Connectio
 	else if (strcmp(method, "DELETE") == 0) mtd = METHOD_DELETE;
 
 	Milx::WebCall call(mtd, path);
+	bool dynamic = true;
 
 	// FIXME make it better, please
-	Milx::Path tmp = (*server->public_dir()) / path;
-	if (server->public_dir() != NULL && tmp.exists() && tmp.stat().is_file()) {
-		call.content(tmp);
-	} else {
+	if (server->public_dir() != NULL) {
+		Milx::Path tmp = (*server->public_dir()) / path;
+		if (tmp.exists())
+			if (tmp.stat().is_file()) {
+				call.content(tmp);
+				dynamic = false;
+			} else if (tmp.stat().is_dir())
+				for (register int i = 0; i < server->index.size(); i++) {
+						Milx::Path::List indexes = Milx::Path::ls((tmp / server->index[i]).str());
+						if (indexes.size()) {
+							call.content(indexes.front());
+							dynamic = false;
+						}
+				}
+	}
+
+	if (dynamic) {
 		MHD_get_connection_values(conn, MHD_HEADER_KIND, &Milx::Server::Daemon::_copy_values, &call);
 		MHD_get_connection_values(conn, MHD_GET_ARGUMENT_KIND, &Milx::Server::Daemon::_copy_values, &call);
 		MHD_get_connection_values(conn, MHD_POSTDATA_KIND, &Milx::Server::Daemon::_copy_values, &call);

@@ -23,7 +23,7 @@ std::string Milx::View::Renderer::Plain::render_file(const Milx::Path &filepath)
 {
 	std::string plain_content;
 	std::ifstream file;
-	file.open(filepath.path().c_str(), std::ios::in); // Keep compatibility with std::ifstream, but why?
+	file.open(filepath.str().c_str(), std::ios::in); // Keep compatibility with std::ifstream, but why?
 	std::stringstream ss;
 	ss << file.rdbuf();
 	file.close();

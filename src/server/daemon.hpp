@@ -21,7 +21,7 @@
 // MicroHTTPD dependency and tree
 #include <cstdlib>
 #include <cstring>
-#include <boost/cstdint.hpp>
+#include <stdint.h>
 #include <cstdarg>
 #include <sys/socket.h>
 #include <microhttpd.h>
@@ -57,6 +57,7 @@ namespace Milx
                             const char *, const char *, uint64_t, size_t);
 			static int _queue_response(struct MHD_Connection *, Milx::WebCall &);
 		public:
+			std::vector<std::string> index;
 			Daemon(Milx::Application&, int);
                         ~Daemon();
 			void start();

@@ -1,26 +1,29 @@
 #include <iostream>
-#include <sstream>
-#include <string.h>
 #include "command.hpp"
 #include "server_command.hpp"
+#include "create_command.hpp"
 
-inline void install_commands()
+class MainCommand : public Milx::CLI::Command
 {
-	Milx::CLI::Command::installed["server"] = new Milx::CLI::ServerCommand;
-}
+	Milx::CLI::ReturnValue main(int argc, char** argv) {
+		if (argc >= 1) {
+			try {
+				//return command(std::string(argv[0]))->run(argc, argv);
+			} catch (Milx::CLI::CommandNotFound) { }
+		}
+		return Milx::CLI::CLI_SHOW_HELP;
+	}
+public:
+	MainCommand() {
+		install(new Milx::CLI::ServerCommand);
+		install(new Milx::CLI::CreateCommand);
+	}
+	const char* description() { return "milx utility is your main entry for the Milx world"; }
+	const char* command() { return ""; }
+	const char* help() { return "milx [command]"; }
+};
 
 int main(int argc, char* argv[])
 {
-	install_commands();
-
-	if (argc >= 2) {
-		Milx::CLI::Command *cmd = Milx::CLI::Command::installed[argv[1]];
-		if (cmd) return cmd->run(argc, argv);
-		else {
-			std::cout << "Command not found: " << argv[1] << std::endl;
-		}
-	} else {
-		std::cout << "Provide some command, please." << std::endl;
-	}
+	return MainCommand().run(argc, argv);
 }
-

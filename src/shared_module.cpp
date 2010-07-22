@@ -22,7 +22,7 @@
 Milx::SharedModule::SharedModule(Application& app, const Milx::Path &file) :
 	Milx::Module(app, file.stem())
 {
-	_shared = dlopen(file.path().c_str(), RTLD_LAZY);
+	_shared = dlopen(file.str().c_str(), RTLD_LAZY);
 	if (_shared) {
 		typedef void(*on_load_f)(Milx::Module&);
 		on_load_f on_load = (on_load_f) dlsym(_shared, MILX_MODULE_LOAD);
@@ -32,9 +32,9 @@ Milx::SharedModule::SharedModule(Application& app, const Milx::Path &file) :
 			on_load(*this);
 			app.logger()->info("Load Successfull!");
 		} else
-			app.logger()->error(std::string(MILX_MODULE_LOAD) + " method not found in " + file.path());
+			app.logger()->error(std::string(MILX_MODULE_LOAD) + " method not found in " + file.str());
 	} else
-		app.logger()->error("The module could not be loaded: " + file.path());
+		app.logger()->error("The module could not be loaded: " + file.str());
 }
 
 Milx::SharedModule::~SharedModule()

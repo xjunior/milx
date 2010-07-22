@@ -31,7 +31,7 @@ Milx::Application::Application()
 
 void Milx::Application::loadModule(const Milx::Path &file)
 {
-	this->logger()->info("Loading module " + file.path());
+	this->logger()->info("Loading module " + file.str());
 	_modules.push_back(new Milx::SharedModule(*this, file));
 }
 
