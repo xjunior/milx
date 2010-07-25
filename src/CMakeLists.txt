@@ -59,8 +59,6 @@ set_target_properties (
 INSTALL ( TARGETS ${PROJECT_NAME}-static DESTINATION ${LIB_INSTALL_DIR} )
 
 # Executable
-
-#set (BIN_SOURCES milx.cpp manipulators/base.cpp manipulators/project_manipulator.cpp manipulators/module_manipulator.cpp)
 set (BIN_SOURCES cli/main.cpp cli/command.cpp cli/create_command.cpp cli/server_command.cpp)
 
 add_executable (${PROJECT_NAME}-cli ${BIN_SOURCES})
