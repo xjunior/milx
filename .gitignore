@@ -16,3 +16,8 @@ src/milx-*
 src/*~
 src/manipulators/*~
 src/views/*~
+.cproject
+.dep.inc
+.project
+.settings
+Makefile-milx.mk

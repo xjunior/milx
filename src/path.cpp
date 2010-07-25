@@ -1,3 +1,20 @@
+/*
+ * This file is part of Milx.
+ *
+ * Milx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Milx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
+ */
+
 #include "path.hpp"
 #include <string.h>
 #include <unistd.h>
@@ -12,8 +29,9 @@
 #include <algorithm>
 
 magic_t Milx::Path:: _magic;
-std::vector<Milx::Path::__type_map> Milx::Path::_type_maps;
+std::list<Milx::Path::__type_map> Milx::Path::_type_maps;
 
+// FIXME segfaulting
 std::string Milx::Path::join(const char *a, ...)
 {
 	std::stringstream result;
@@ -52,10 +70,6 @@ Milx::Path::List Milx::Path::ls(const std::string& gl)
 	}
 
 	return list;
-}
-
-Milx::Path::Path() : _path("")
-{
 }
 
 Milx::Path::Path(const std::string& path)
@@ -142,7 +156,7 @@ Milx::Path& Milx::Path::operator=(const std::string& p)
 // TODO css and js are being badly detected, I must find a better way for this
 std::string Milx::Path::type() const
 {
-	for (std::vector<__type_map>::iterator it = _type_maps.begin(); it != _type_maps.end(); it++) {
+	for (std::list<__type_map>::iterator it = _type_maps.begin(); it != _type_maps.end(); it++) {
 		if (std::find(it->extensions.begin(), it->extensions.end(), extension().substr(1)) != it->extensions.end())
 			return it->mime;
 	}
@@ -216,7 +230,7 @@ void Milx::Path::initialize_mime_map(const Milx::Path& map)
 	}
 }
 
-void Milx::Path::initialize_mime_magic(const Milx::Path& path)
+void Milx::Path::initialize_mime_magic(const Milx::Path * const path)
 {
 	if (_magic) {
 		magic_close(_magic);
@@ -224,7 +238,7 @@ void Milx::Path::initialize_mime_magic(const Milx::Path& path)
 	} else {
 		_magic = magic_open(MAGIC_MIME);
 		if (_magic)
-		if (magic_load(_magic, path.str().size() == 0 ? NULL : path.str().c_str()) != 0)
+		if (magic_load(_magic, path == NULL ? NULL : path->str().c_str()) != 0)
 			magic_close(_magic);
 	}
 }

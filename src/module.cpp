@@ -20,7 +20,7 @@
 #include "application.hpp"
 
 Milx::Module::Module(Milx::Application& app, std::string name)
-	: _app(app), _name(name)
+	: _app(app), _name(name), _views_path(Milx::Path::cwd())
 { }
 
 std::string Milx::Module::name()
