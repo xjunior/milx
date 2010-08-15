@@ -31,7 +31,7 @@ void Milx::Routing::route(std::string regex, std::string controller, std::string
 	}
 }
 
-bool Milx::Routing::translateCall(Milx::WebCall& call)
+void Milx::Routing::translateCall(Milx::WebCall& call)
 {
 	std::vector<Milx::RegexRoute>::iterator iroutes;
 	const char *path = call.path().c_str();
@@ -46,6 +46,5 @@ bool Milx::Routing::translateCall(Milx::WebCall& call)
 		}
 	}
 
-	return result;
+	if (!result) throw Milx::NoRouteFound();
 }
-

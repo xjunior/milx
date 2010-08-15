@@ -60,7 +60,7 @@ namespace Milx
 		 * \param req is the request to be dispatched
 		 * \return a http response
 		 */
-		void dispatch(Milx::WebCall& call);
+		void dispatch(Milx::WebCall&);
 
 		void loadModule(const Milx::Path&);
 		void add_module(Milx::Module*);

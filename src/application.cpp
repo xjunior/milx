@@ -39,35 +39,28 @@ void Milx::Application::dispatch(Milx::WebCall& call)
 {
 	this->logger()->info("Request to " + call.path());
 
-	Milx::Controller* ctrlobj;
-	bool found;
+	try {
+		for (std::vector<Module*>::const_iterator it = _modules.begin(); it != _modules.end(); it++)
+			try {
+				(*it)->dispatch(call);
+			} catch (Milx::NoRouteFound) { continue; }
 
-	if (found = this->routes().translateCall(call))
-		ctrlobj = this->controller(call.controller());
-	else 
-		// it found a route, but if controller STILL NULL, so we try another one
-		for (int i = 0; i < _modules.size(); i++)
-			if (found = _modules[i]->routes().translateCall(call)) {
-				ctrlobj = _modules[i]->controller(call.controller());
-				break;
-			}
-
-	if (!found) {
-		this->logger()->warn("No route found, returning 404");
-		call.status(404);
-	} else if (ctrlobj == NULL) {
-		this->logger()->warn("Route error: Bad controller name: ") << call.controller();
+		Milx::Module::dispatch(call);
+	} catch (Milx::NoRouteFound e) {
+		call.status(400);
+		this->logger()->error("Milx::NoRouteFound caught");
+	} catch (Milx::UnimplementedRoute e) {
 		call.status(500);
-	} else {
-		this->logger()->info("Routed to ") << call.controller() << "/" << call.action();
-		Milx::ActionCallback::CallbackBase* actobj = ctrlobj->action(call.action());
-		if (actobj == NULL) {
-			this->logger()->warn("Route error: Bad action name: ") << call.action();
-			call.status(500);
-		} else {
-			actobj->call(call);
-		}
+		this->logger()->error("Milx::UnimplementedRoute caught");
+	} catch (std::exception e) {
+		call.status(500);
+		this->logger()->error("Exception caught: ") << e.what() << std::endl;
+	} catch (...) {
+		call.status(500);
+		this->logger()->error("Unknown exception caught") << std::endl;
 	}
+
+	this->logger()->info() << call;
 }
 
 Milx::Application::~Application()

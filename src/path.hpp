@@ -41,7 +41,7 @@ namespace Milx
             bool is_dir() const;
             bool is_file() const;
             bool is_symlimk() const;
-            int size() const;
+            off_t size() const;
             int uid() const;
             int gid() const;
         };
@@ -74,7 +74,7 @@ namespace Milx
 		std::string basename() const;
 		std::string dirname() const;
 		std::string type() const;
-		std::string str() const { return _path; }
+		const std::string& str() const { return _path; }
 		Milx::Path operator/(const std::string&) const;
 		Milx::Path& operator/=(const std::string&);
 		Milx::Path& operator=(const std::string&);

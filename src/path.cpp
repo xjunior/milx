@@ -76,11 +76,9 @@ Milx::Path::Path(const std::string& path)
 {
 	const char * cpath = canonicalize_file_name(path.c_str());
 	_path = (cpath == NULL) ? path : cpath;
-	// TODO checkout realpath
+	// XXX checkout realpath
 
 	_stat = new Milx::Path::Stat(*this);
-
-	delete cpath;
 }
 
 bool Milx::Path::exists() const
@@ -191,7 +189,7 @@ bool Milx::Path::Stat::is_symlimk() const
 	return S_ISLNK(_stat.st_mode);
 }
 
-int Milx::Path::Stat::size() const
+off_t Milx::Path::Stat::size() const
 {
 	return is_file() ? _stat.st_size : 0;
 }

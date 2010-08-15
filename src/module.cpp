@@ -59,3 +59,20 @@ Milx::Routing& Milx::Module::routes()
 	return _routes;
 }
 
+void Milx::Module::dispatch(Milx::WebCall& call)
+{
+	this->routes().translateCall(call);
+
+	Milx::Controller* ctrlobj = this->controller(call.controller());
+
+	if (ctrlobj != NULL) {
+		Milx::ActionCallback::CallbackBase* actobj = ctrlobj->action(call.action());
+		if (actobj != NULL) {
+			actobj->call(call);
+			return;
+		}
+	}
+
+	throw Milx::UnimplementedRoute();
+}
+

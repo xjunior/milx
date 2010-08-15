@@ -57,6 +57,7 @@ namespace Milx
 		 * \param the controller name
 		 */
 		Controller* controller(std::string);
+		virtual void dispatch(Milx::WebCall&);
 	};
 }
 

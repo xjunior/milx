@@ -44,7 +44,7 @@ namespace Milx
 		 * \param request
 		 * \return a reference to the controller
 		 */
-		 bool translateCall(WebCall&);
+		void translateCall(WebCall&);
 	};
 }
 

@@ -30,34 +30,40 @@ namespace Milx
 
 	class WebCall
 	{
-	        CallMethod _method;
+		CallMethod _method;
 		std::string _path;
 		std::stringstream _content;
 		std::string _controller;
 		std::string _action;
 		std::string _content_type;
 		int _status;
-	    public:
-	        WebCall(CallMethod, std::string);
+		Path* _file_content;
+	public:
+		WebCall(CallMethod, std::string);
 
-		CallMethod method() { return _method; }
-		const std::string& path() { return _path; }
-		const std::string& controller() { return _controller; }
+		const CallMethod& method() const { return _method; }
+		const std::string& path() const { return _path; }
+		const std::string& controller() const { return _controller; }
+		const std::string& action() const { return _action; }
 		void controller(std::string c) { _controller = c; }
-		const std::string& action() { return _action; }
 		void action(std::string a) { _action = a; }
 
 		std::map<std::string, std::string> params;
 		
 		// content
 		void content_type(std::string s) { _content_type = s; }
-		std::string content_type() { return _content_type; }
+		std::string content_type() const { return _content_type; }
 		void status(int s) { _status = s; }
-		int status() { return _status; }
+		int status() const { return _status; }
 		std::stringstream& content() { return _content; }
 		void content(const Milx::Path&);
+		const Path * const file_content() const;
 		// void content(Milx::View);
 	};
+
+	class NoRouteFound {};
+	class UnimplementedRoute {};
 }
+std::ostream& operator<<(std::ostream&, const Milx::WebCall&);
 
 #endif
