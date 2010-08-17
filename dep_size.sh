@@ -16,7 +16,8 @@
 # along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
 #
 
-REGEX="^/usr/\(.*/\)\?lib/"
+FILE=`readlink -f $1`
+REGEX="^\(/usr/\(.*/\)\?lib/\|`dirname $FILE`\)"
 [[ $2 = "--deep" ]] && REGEX="/"
 
 get_dep_tree() {
@@ -38,8 +39,7 @@ get_total_size() {
 	echo "Total:" $(( total / 1024 ))  "KB"
 }
 
-deps=`get_dep_tree "$1" | sort -u`
-deps="$deps $1"
+deps="`get_dep_tree "$FILE" | sort -u` $FILE"
 
 get_total_size $deps
 
