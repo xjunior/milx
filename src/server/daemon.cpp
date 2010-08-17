@@ -37,7 +37,7 @@ int Milx::Server::Daemon::_queue_response(struct MHD_Connection *conn, Milx::Web
 	struct MHD_Response *response;
 
 	if (call.file_content() != NULL) {
-		#if MHD_VERSION >= 0x00090000 && 0
+		#if MHD_VERSION >= 0x00090000
 			// FIXME SEGFAULT when connection becomes idle
 			int file;
 			file = open(call.file_content()->str().c_str(), O_RDONLY);
