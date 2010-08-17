@@ -151,7 +151,6 @@ Milx::Path& Milx::Path::operator=(const std::string& p)
 	return *this;
 }
 
-// TODO css and js are being badly detected, I must find a better way for this
 std::string Milx::Path::type() const
 {
 	for (std::list<__type_map>::iterator it = _type_maps.begin(); it != _type_maps.end(); it++) {

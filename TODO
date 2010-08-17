@@ -1,17 +1,23 @@
 == Core
- * Handle file parameters (upload)
- * Add path parameters (ex.: /news/([0-9]{4})/([0-9]{2})/ => /news/2005/06/)
-   * Allow bind action on path parameter
- * Create an observer base class for the controllers to beforeFilter, afterFilter and maybe aroundFilter
- * Prevent app crash from module failure
+	* Handle file parameters (upload)
+	* Add path parameters (/news/([0-9]{4})/([0-9]{2})/ => /news/2005/06/)
+		* Allow bind action on path parameter
+	* Create an observer base class for the controllers to beforeFilter,
+	  afterFilter and maybe aroundFilter
+	* Prevent app crash from module failure
+	* Create a unified place for Milx version (currently we have it set on
+	  server/daemon.cpp and CMakeLists.txt and need to have a command line
+	  way to get it)
 
 == Apache
- * Create the apache 2.x module
+	* Create the apache 2.x module
 
 == HTTP dev server
- * HTTP Basic and Digest Authentication (RFC 2617)
- * Add cookie support
+	* HTTP Basic and Digest Authentication (RFC 2617)
+	* Add cookie support
 
 == Generator
- * Add default CMakeLists.txt
- * Make a full working application template
+	* Add default CMakeLists.txt
+	* Make a full working application template
+
+Run tasks.sh on a bash terminal to see detailed tasks in source files

@@ -18,6 +18,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
+
 #include "project_loader.hpp"
 #include "path.hpp"
 
@@ -29,7 +30,6 @@ void Milx::ProjectLoader::validate_existence(const Milx::Path& path)
 	}
 }
 
-// TODO: recursive
 void Milx::ProjectLoader::load_modules(Milx::Application& app, const Milx::Path& path)
 {
 	validate_existence(path);
@@ -39,7 +39,10 @@ void Milx::ProjectLoader::load_modules(Milx::Application& app, const Milx::Path&
 
 	for (it = solist.begin(); it != solist.end(); it++) {
 		try {
-			app.loadModule(*it);
+			if ((*it).stat().is_dir())
+				load_modules(app, *it);
+			else if ((*it).stat().is_file())
+				app.loadModule(*it);
 		} catch (const std::exception &ex) { }
 	}
 }

@@ -91,7 +91,8 @@ Milx::CLI::ReturnValue Milx::CLI::ServerCommand::start_server()
 
 		Milx::ProjectLoader::load(app, _path);
 		Milx::Path::initialize_mime_magic();
-		Milx::Path::initialize_mime_map(Milx::Path("/etc/mime.types")); // TODO make it changeable somehow
+		// TODO make it changeable somehow
+		Milx::Path::initialize_mime_map(Milx::Path("/etc/mime.types"));
 		_daemon = new Milx::Server::Daemon(app, port);
 		_daemon->public_dir(new Milx::Path(_path / "public"));
 		_daemon->start();

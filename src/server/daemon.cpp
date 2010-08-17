@@ -15,13 +15,13 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "../logger.hpp"
-#include "../web_call.hpp"
-#include "daemon.hpp"
-
 #include <iterator>
 #include <fstream>
 #include <fcntl.h>
+
+#include "../logger.hpp"
+#include "../web_call.hpp"
+#include "daemon.hpp"
 
 Milx::Server::Daemon::Daemon(Milx::Application &app, int port) :
 	_app(app),
@@ -37,9 +37,10 @@ int Milx::Server::Daemon::_queue_response(struct MHD_Connection *conn, Milx::Web
 	struct MHD_Response *response;
 
 	if (call.file_content() != NULL) {
-		#if MHD_VERSION >= 0x00090000
+		#if MHD_VERSION >= 0x00090000 && 0
+			// FIXME SEGFAULT when connection becomes idle
 			int file;
-			file = open(call.file_content()->str().c_str(), O_RDONLY); // FIXME SEGFAULT when connection becomes idle
+			file = open(call.file_content()->str().c_str(), O_RDONLY);
 			response = MHD_create_response_from_fd(call.file_content()->stat().size(), file);
 		#else
 			std::ifstream infile(call.file_content()->str().c_str(), std::ios::in);
@@ -51,8 +52,8 @@ int Milx::Server::Daemon::_queue_response(struct MHD_Connection *conn, Milx::Web
 				const std::istreambuf_iterator<char> file_end;
 				while (!file_begin.equal(file_end)) call.content() << *file_begin++;
 				infile.close();
-			} else
-				; // TODO become an error 500 or throw exception
+			} else;
+				// TODO become an error 500 or throw exception
 		#endif
 	}
 

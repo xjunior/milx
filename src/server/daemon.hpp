@@ -25,8 +25,8 @@
 #include <cstdarg>
 #include <sys/socket.h>
 #include <microhttpd.h>
-
 #include <string>
+
 #include "../application.hpp"
 
 #define MILX_SERVER_NAME "Milx Server v1.0"
@@ -37,6 +37,12 @@ namespace Milx
 
 	namespace Server
 	{
+		struct ConnectionInfo {
+			Milx::WebCall *call;
+			int file; // File descriptor
+			struct MHD_PostProcessor *pp;
+		};
+
 		class Daemon
 		{
 			Milx::Application &_app;
