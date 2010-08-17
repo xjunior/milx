@@ -16,14 +16,18 @@
 # along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
 #
 
+REGEX="^/usr/\(.*/\)\?lib/"
+[[ $2 = "--deep" ]] && REGEX="/"
+
 get_dep_tree() {
-	for dep in `ldd $1 | awk '{ print $3 }' | grep "^/usr/lib"`
+	for dep in `ldd $1 | awk '{ print $3 }' | grep $REGEX`
 	do
-		[ -h $dep ] && dep=`dirname "$dep"`/`readlink "$dep"`
+		dep=`readlink -f "$dep"`
 		echo "$dep"
 		get_dep_tree $dep
 	done
 }
+
 get_total_size() {
 	total=0
 	for dep in $*; do
@@ -38,3 +42,4 @@ deps=`get_dep_tree "$1" | sort -u`
 deps="$deps $1"
 
 get_total_size $deps
+
