@@ -40,6 +40,7 @@ namespace Milx
 		Path* _file_content;
 	public:
 		WebCall(CallMethod, std::string);
+		~WebCall();
 
 		const CallMethod& method() const { return _method; }
 		const std::string& path() const { return _path; }

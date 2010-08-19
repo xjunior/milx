@@ -68,6 +68,7 @@ namespace Milx
 		static bool exists(std::string);*/
 
 		Path(const std::string&);
+		~Path();
 		bool exists() const;
 		std::string extension() const;
 		std::string stem() const;

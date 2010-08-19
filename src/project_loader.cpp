@@ -43,7 +43,9 @@ void Milx::ProjectLoader::load_modules(Milx::Application& app, const Milx::Path&
 				load_modules(app, *it);
 			else if ((*it).stat().is_file())
 				app.loadModule(*it);
-		} catch (const std::exception &ex) { }
+		} catch (const std::exception &ex) {
+			app.logger()->error(ex.what());
+		}
 	}
 }
 

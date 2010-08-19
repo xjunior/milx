@@ -18,6 +18,7 @@
 #include "path.hpp"
 #include <string.h>
 #include <unistd.h>
+#include <climits>
 #include <cstdlib>
 #include <cstdarg>
 #include <sstream>
@@ -74,9 +75,12 @@ Milx::Path::List Milx::Path::ls(const std::string& gl)
 
 Milx::Path::Path(const std::string& path)
 {
-	const char * cpath = canonicalize_file_name(path.c_str());
-	_path = (cpath == NULL) ? path : cpath;
-	// XXX checkout realpath
+	char *cpath = new char[PATH_MAX + 1];
+	if (realpath(path.c_str(), cpath) != NULL)
+		_path = cpath;
+	else _path = path;
+
+	delete[] cpath;
 
 	_stat = new Milx::Path::Stat(*this);
 }
@@ -166,6 +170,11 @@ std::string Milx::Path::type() const
 const Milx::Path::Stat& Milx::Path::stat() const
 {
 	return *_stat;
+}
+
+Milx::Path::~Path()
+{
+	delete _stat;
 }
 
 Milx::Path::Stat::Stat(Milx::Path &path)

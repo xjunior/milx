@@ -68,6 +68,8 @@ Milx::Application::~Application()
 	if (_modules.size() > 0)
 		for (register int i = 0; i < _modules.size(); i++)
 			delete _modules[i];
+
+	delete _logger;
 }
 
 void Milx::Application::logger(Milx::Logger* logger)

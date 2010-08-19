@@ -30,6 +30,11 @@ Milx::WebCall::WebCall(Milx::CallMethod method, std::string path) :
 	_content.clear();
 }
 
+Milx::WebCall::~WebCall()
+{
+	delete _file_content;
+}
+
 void Milx::WebCall::content(const Milx::Path& path)
 {
 	if (path.exists() && path.stat().is_file()) {
