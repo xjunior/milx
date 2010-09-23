@@ -24,11 +24,8 @@ routing.h logger.hpp module.hpp shared_module.hpp server/daemon.hpp action_callb
 view.h view/renderer.hpp view/xslt_renderer.hpp view/plain_renderer.hpp serialization.hpp
 milx.h http.hpp)
 
-FIND_PACKAGE (LibXml2 REQUIRED)
-ADD_DEFINITIONS ("${LIBXML2_DEFINITIONS}")
-
-INCLUDE_DIRECTORIES (SYSTEM "${LIBXML2_INCLUDE_DIR}")
-SET (LIB_DEPENDENCIES dl magic microhttpd xml2 "${LIBXML2_LIBRARIES}")
+INCLUDE_DIRECTORIES (SYSTEM "${LIBXML2_INCLUDE_DIR}" "${MHD_INCLUDE_DIRS}")
+SET (LIB_DEPENDENCIES dl magic "${MHD_LIBRARIES}" "${LIBXML2_LIBRARIES}")
 
 ADD_LIBRARY (${PROJECT_NAME}-lib SHARED ${LIB_SOURCES})
 ADD_LIBRARY (${PROJECT_NAME}-static STATIC ${LIB_SOURCES})
