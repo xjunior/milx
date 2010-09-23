@@ -22,3 +22,5 @@ src/views/*~
 .settings
 Makefile-milx.mk
 MILX-*-*.*
+CPackDefinitions.cmake
+CPackSourceConfig.cmake
