@@ -8,6 +8,9 @@
 	* Create a unified place for Milx version (currently we have it set on
 	  server/daemon.cpp and CMakeLists.txt and need to have a command line
 	  way to get it)
+	* use google code style
+		* replace every container of pointers to use shared_ptr
+		* name all parameters in definitions
 
 == Apache
 	* Create the apache 2.x module

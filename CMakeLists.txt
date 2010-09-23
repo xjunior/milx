@@ -15,11 +15,21 @@
 # along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
 #
 
-cmake_minimum_required(VERSION 2.8)
-project (milx)
+CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+PROJECT (milx)
 
-set(MILX_VERSION "0.5")
+SET (PROJECT_VERSION_MAJOR "0")
+SET (PROJECT_VERSION_MINOR "5")
+SET (PROJECT_VERSION_PATCH "0")
+SET (PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
-include(DefineInstallationPaths.cmake)
+SET (PROJECT_HOME share/${PROJECT_NAME})
 
-add_subdirectory (src)
+ADD_DEFINITIONS ("-DMILX_VERSION=\"${PROJECT_VERSION}\"")
+ADD_SUBDIRECTORY (src build)
+
+# Install skeleton and plugins
+#INSTALL (CODE "FILE (MAKE_DIRECTORY ${PROJECT_HOME})")
+#INSTALL ( CODE "FILE (COPY \"./skeleton\" DESTINATION ${PROJECT_HOME})" )
+
+INCLUDE (CPackDefinitions.cmake)

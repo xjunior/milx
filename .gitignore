@@ -21,3 +21,4 @@ src/views/*~
 .project
 .settings
 Makefile-milx.mk
+MILX-*-*.*
