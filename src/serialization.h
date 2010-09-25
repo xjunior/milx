@@ -25,6 +25,7 @@
 #include <sstream>
 #include <string>
 #include <stack>
+#include <tr1/memory>
 
 #ifndef MILX_SERIALIZATION_H
 #define MILX_SERIALIZATION_H
@@ -32,8 +33,9 @@
 namespace milx {
   namespace Serialization {
     class Node;
+    typedef std::tr1::shared_ptr<Node> NodePtr;
     class Serializer {
-      virtual void begin(const std::string&, const std::string&)=0;
+      virtual void begin(const std::string&, const std::string&) = 0;
       virtual void end()=0;
      public:
       void serialize(const Node&);
@@ -50,7 +52,7 @@ namespace milx {
       std::string _name;
       std::string _value;
 
-      std::set<Node*> _children;
+      std::set<NodePtr> _children;
       Node(const Node& n) { }
      public:
       explicit Node(const std::string&);

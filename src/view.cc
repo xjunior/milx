@@ -20,12 +20,14 @@
 #include <sstream>
 #include <string>
 #include <map>
+#include <memory>
 
 #include "view.h"
 #include "view/renderer.h"
 
-std::map<std::string, milx::view::FactoryBase*> milx::view::instances;
+std::map<std::string, std::tr1::shared_ptr<milx::view::FactoryBase> > milx::view::instances;
 
 milx::view::Renderer* milx::view::create_view(const milx::Path& p) {
   return instances[p.extension()]->create_view(p);
 }
+

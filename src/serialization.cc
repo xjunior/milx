@@ -30,10 +30,10 @@ namespace milx {
     }
 
     Node& Node::push(const std::string& name) {
-      Node *n = new Node(name);
+      NodePtr n = NodePtr(new Node(name));
       _children.insert(n);
 
-      return *n;
+      return *n.get();
     }
 
     Node& Node::operator<<(Serializable* t) {
@@ -64,7 +64,7 @@ namespace milx {
 
     void Serializer::serialize(const Node& n) {
       begin(n._name, n._value);
-      std::set<Node*>::const_iterator it;
+      std::set<NodePtr>::const_iterator it;
       for (it = n._children.begin(); it != n._children.end(); it++)
         serialize(**it);
       end();

@@ -22,6 +22,8 @@
 
 #include <string>
 #include <map>
+#include <tr1/memory>
+
 #include "action_callback.h"
 #include "http/call.h"
 #include "view.h"
@@ -44,19 +46,21 @@ namespace milx {
     /**
      * The actions of your controller
      */
-    std::map<std::string, milx::ActionCallback::CallbackBase*> _actions;
+    std::map<std::string, milx::ActionCallback::CallbackBasePtr > _actions;
    public:
     /**
      * Register an action in your controller. Mostly of developers use this
      * in the class constructor.
      */
-    void action(milx::ActionCallback::CallbackBase*, const std::string&);
-    milx::ActionCallback::CallbackBase* action(const std::string& name);
+    void action(milx::ActionCallback::CallbackBasePtr, const std::string&);
+    milx::ActionCallback::CallbackBasePtr action(const std::string& name);
 
     void module(milx::Module*);
     milx::Module& module();
     milx::view::Renderer* get_view(const std::string&);
   };
+
+  typedef std::tr1::shared_ptr<Controller> ControllerPtr;
 }
 
 #endif  // MILX_CONTROLLER_H

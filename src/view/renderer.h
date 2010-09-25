@@ -30,7 +30,7 @@ namespace milx {
   namespace view {
     class Renderer {
       milx::Path _path;
-      milx::Serialization::Node _context;
+      milx::Serialization::Node _context;  // TODO eliminate!
      public:
       Renderer(const milx::Path& p, const std::string& cname="c")
         : _path(p), _context(cname) { }

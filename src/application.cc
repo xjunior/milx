@@ -21,36 +21,36 @@
 
 #include "application.h"
 #include "http/call.h"
+#include "module.h"
 #include "controller.h"
 #include "shared_module.h"
 #include "action_callback.h"
 #include "path.h"
 
 milx::Application::Application()
-  : _logger(new Logger()), milx::Module(*this) {
+  : _logger(new Logger()) {
 }
 
 void milx::Application::load_module(const milx::Path &file) {
   this->logger().info() << "Loading module " << file.str().c_str();
-  _modules.push_back(new milx::SharedModule(*this, file));
+  add_module(milx::ModulePtr(new milx::SharedModule(*this, file)));
 }
 
 void milx::Application::dispatch(milx::http::Call& call) {
   this->logger().info() << "Request to " << call.path();
 
   try {
-    for (std::vector<Module*>::const_iterator it = _modules.begin();
+    for (std::vector<ModulePtr>::const_iterator it = _modules.begin();
           it != _modules.end(); it++)
       try {
         (*it)->dispatch(call);
       } catch(milx::NoRouteFound) { continue; }
-
-    milx::Module::dispatch(call);
+    throw milx::NoRouteFound();
   } catch(milx::NoRouteFound e) {
-    call.status(400);
+    call.status(404);
     this->logger().error() << "Milx::NoRouteFound caught";
   } catch(milx::UnimplementedRoute e) {
-    call.status(500);
+    call.status(501);
     this->logger().error() << "Milx::UnimplementedRoute caught";
   } catch(std::exception e) {
     call.status(500);
@@ -64,12 +64,9 @@ void milx::Application::dispatch(milx::http::Call& call) {
 }
 
 milx::Application::~Application() {
-  if (_modules.size() > 0)
-    for (register int i = 0; i < _modules.size(); i++)
-      delete _modules[i];
 }
 
-void milx::Application::add_module(milx::Module *mod) {
+void milx::Application::add_module(milx::ModulePtr mod) {
   _modules.push_back(mod);
 }
 

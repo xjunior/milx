@@ -22,6 +22,7 @@
 
 #include <string>
 #include <map>
+#include <tr1/memory>
 
 #include "controller.h"
 #include "routing.h"
@@ -30,6 +31,8 @@
 
 namespace milx {
   class Application;
+  /*class Controller;
+  class ControllerPtr;*/
   class Module {
     std::string _name;
     Routing _routes;
@@ -37,7 +40,7 @@ namespace milx {
     /**
      * The controllers held by the application.
      */
-    std::map<std::string, Controller*> _controllers;
+    std::map<std::string, milx::ControllerPtr> _controllers;
     milx::Path _views_path;
 
    public:
@@ -54,15 +57,17 @@ namespace milx {
      * \param the controller Instance
      * \param the controller name
      */
-    void controller(Controller*, std::string);
+    void controller(ControllerPtr, std::string);
     /**
      * Retrieve a registered controller instance.
      * \param the controller name
      */
-    Controller* controller(std::string);
+    ControllerPtr controller(std::string);
     virtual void dispatch(milx::http::Call&);
     std::string controller_name(Controller* obj);
   };
+
+  typedef std::tr1::shared_ptr<Module> ModulePtr;
 }
 
 #endif  // MILX_MODULE_H

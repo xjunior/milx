@@ -26,17 +26,17 @@
 #include "module.h"
 #include "action_callback.h"
 
-milx::ActionCallback::CallbackBase* milx::Controller::action(
+milx::ActionCallback::CallbackBasePtr milx::Controller::action(
   const std::string& name) {
-  std::map<std::string, milx::ActionCallback::CallbackBase*>::iterator iter =
+  std::map<std::string, milx::ActionCallback::CallbackBasePtr >::iterator iter =
     _actions.find(name);
   if (iter != _actions.end())
     return iter->second;
   else
-    return NULL;
+    ; // TODO(xjunior) throw an error
 }
 
-void milx::Controller::action(milx::ActionCallback::CallbackBase* mptr,
+void milx::Controller::action(milx::ActionCallback::CallbackBasePtr mptr,
   const std::string& name) {
   _actions.insert(make_pair(name, mptr));
 }

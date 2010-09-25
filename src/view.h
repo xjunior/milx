@@ -22,6 +22,7 @@
 
 #include <map>
 #include <string>
+#include <tr1/memory>  // FIXME windows uses only memory
 
 #include "path.h"
 #include "serialization.h"
@@ -42,9 +43,9 @@ namespace milx {
       }
     };
 
-    extern std::map<std::string, FactoryBase*> instances;
+    extern std::map<std::string, std::tr1::shared_ptr<FactoryBase> > instances;
 
-    template <typename T> void register_randler(const std::string& n) {
+    template <typename T> void register_handler(const std::string& n) {
       instances[n] = new Factory<T>();
     }
     milx::view::Renderer* create_view(const milx::Path&);

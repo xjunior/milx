@@ -16,9 +16,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
+// XXX review this crapy stuff
 
 #ifndef MILX_ACTION_CALLBACK_HPP
 #define MILX_ACTION_CALLBACK_HPP
+
+#include <tr1/memory>  // FIXME windows uses only memory
 
 #define MILX_CALLBACK_FUNCTION(a) void (T::*a)(milx::http::Call&)
 
@@ -29,6 +32,7 @@ namespace milx {
     public:
       virtual void call(milx::http::Call&)=0;
     };
+    typedef std::tr1::shared_ptr<milx::ActionCallback::CallbackBase> CallbackBasePtr;
 
     template <class T> class Callback : public CallbackBase {
     public:

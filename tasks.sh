@@ -1,3 +1,3 @@
 #!/bin/bash
 
-grep --color=auto -nR "// \(TODO\|XXX\|FIXME\)" src/*
+grep --color=auto -nR "\(//\|\*\) \(TODO\|XXX\|FIXME\)" src/*

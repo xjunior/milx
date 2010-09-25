@@ -23,6 +23,7 @@
 #include <vector>
 #include <string>
 #include <map>
+
 #include "module.h"
 #include "logger.h"
 #include "http/call.h"
@@ -38,11 +39,11 @@ namespace milx {
    * The application rendering and response are made by the handlers (CGI,
    * FCGI, Apache, etc).
    */
-  class Application : public Module {
+  class Application {
     /**
      * Enabled Modules
      */
-    std::vector<Module*> _modules;
+    std::vector<ModulePtr> _modules;
     /**
      * The common application Logger
      */
@@ -64,7 +65,7 @@ namespace milx {
     void dispatch(milx::http::Call&);
 
     void load_module(const milx::Path&);
-    void add_module(milx::Module*);
+    void add_module(milx::ModulePtr);
     /**
      * Get the application logger
      * \return the default logger

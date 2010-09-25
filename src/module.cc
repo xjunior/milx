@@ -45,12 +45,12 @@ void milx::Module::views_path(const milx::Path &vp) {
   _views_path = vp;
 }
 
-void milx::Module::controller(milx::Controller* c, std::string name) {
+void milx::Module::controller(milx::ControllerPtr c, std::string name) {
   c->module(this);
   this->_controllers[name] = c;
 }
 
-milx::Controller* milx::Module::controller(std::string name) {
+milx::ControllerPtr milx::Module::controller(std::string name) {
   return this->_controllers[name];
 }
 
@@ -58,13 +58,14 @@ milx::Routing& milx::Module::routes() {
   return _routes;
 }
 
+// FIXME modules should not dispatch, low cohesion
 void milx::Module::dispatch(milx::http::Call& call) {
   this->routes().translateCall(call);
 
-  milx::Controller* ctrlobj = this->controller(call.controller());
+  milx::ControllerPtr ctrlobj = this->controller(call.controller());
 
   if (ctrlobj != NULL) {
-    milx::ActionCallback::CallbackBase* actobj = ctrlobj->action(call.action());
+    milx::ActionCallback::CallbackBasePtr actobj = ctrlobj->action(call.action());
     if (actobj != NULL) {
       actobj->call(call);
       return;
@@ -75,9 +76,9 @@ void milx::Module::dispatch(milx::http::Call& call) {
 }
 
 std::string milx::Module::controller_name(Controller* c) {
-  std::map<std::string, Controller*>::const_iterator it;
+  std::map<std::string, milx::ControllerPtr>::const_iterator it;
   for (it = _controllers.begin(); it != _controllers.end(); it++)
-    if (it->second == c)
+    if (it->second.get() == c)
       return it->first;
 
   // TODO(xjunior) throw exception
