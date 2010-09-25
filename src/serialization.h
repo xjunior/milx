@@ -30,6 +30,9 @@
 #ifndef MILX_SERIALIZATION_H
 #define MILX_SERIALIZATION_H
 
+//Model& operator<<(Node& n, Model& m) {
+//}
+
 namespace milx {
   namespace Serialization {
     class Node;
@@ -41,12 +44,6 @@ namespace milx {
       void serialize(const Node&);
     };
 
-    class Serializable {
-     public:
-      virtual void serialize(Node&) const = 0;
-    };
-    typedef std::set<Serializable*> List;
-
     class Node {
       friend class Serializer;
       std::string _name;
@@ -55,13 +52,19 @@ namespace milx {
       std::set<NodePtr> _children;
       Node(const Node& n) { }
      public:
-      explicit Node(const std::string&);
+      explicit Node(const std::string& name);
 
-      Node& push(const std::string&);
+      Node& push(const std::string& name);
+      template <typename Iterator>
+      Node& push(const std::string& name, Iterator begin, Iterator end) {
+        NodePtr node(new Node(name));
+        for (; begin != end; begin++) {
+          node << *begin;
+        }
+        return *node;
+      }
       Node& operator<<(const std::string& str);
       Node& operator<<(const int& num);
-      Node& operator<<(Serializable* ser);
-      Node& operator<<(const List& list);
     };
 
     class YAMLSerializer : public Serializer {

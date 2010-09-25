@@ -26,19 +26,14 @@
 
 namespace milx {
   namespace Serialization {
-    Node::Node(const std::string& n) : _name(n) {
+    Node::Node(const std::string &n) : _name(n) {
     }
 
     Node& Node::push(const std::string& name) {
-      NodePtr n = NodePtr(new Node(name));
+      NodePtr n(new Node(name));
       _children.insert(n);
 
-      return *n.get();
-    }
-
-    Node& Node::operator<<(Serializable* t) {
-      t->serialize(*this);
-      return *this;
+      return *n;
     }
 
     Node& Node::operator<<(const std::string& t) {
@@ -51,15 +46,6 @@ namespace milx {
       sprintf(buff, "%d", t);
       _value.append(buff);
       return *this;
-    }
-
-    Node& Node::operator<<(const List& list) {
-      List::const_iterator it;
-      for (it = list.begin(); it != list.end(); it++)
-        push(_name) << *it;
-
-      if (_name.at(_name.size()-1) != 'S')
-        _name.append("S");
     }
 
     void Serializer::serialize(const Node& n) {
