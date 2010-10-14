@@ -17,26 +17,16 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include <cstdlib>
+#ifndef MILX_H
+#define MILX_H
 
 #include <string>
+#include <milx/path.h>
 
-#include <milx/milx.h>
-
-#ifndef MILX_VERSION
-#define MILX_VERSION "undefined"
-#endif
-
-#ifndef MILX_HOME
-#define MILX_HOME "/"
-#endif
-
-std::string milx::version() {
-  return MILX_VERSION;
+namespace milx {
+  std::string version();
+  milx::Path home();
 }
 
-milx::Path milx::home() {
-  char *home = getenv("MILX_HOME");
-  return milx::Path(home != NULL ? home : MILX_HOME);
-}
 
+#endif  // MILX_H

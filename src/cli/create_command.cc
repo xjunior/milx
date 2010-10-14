@@ -18,7 +18,6 @@
  */
 
 #include <fstream>
-#include <csignal>
 #include "create_command.h"
 
 milx::cli::ReturnValue milx::cli::CreateCommand::main(int argc, char* argv[]) {

@@ -24,10 +24,14 @@
 #include <string>
 #include <list>
 
-#include "../milx.h"
+#include <milx/milx.h>
 
 milx::cli::ReturnValue milx::cli::Command::run(int argc, char* argv[]) {
   try {
+    if (argc == 1) {
+      show_help();
+      return CLI_FAIL;
+    }
     return command(argv[1])->run(argc, argv);
   } catch(milx::cli::CommandNotFound) {
     if (strcmp(argv[argc-1], "help") == 0 || strcmp(argv[argc-1], "?") == 0) {
@@ -47,7 +51,8 @@ milx::cli::ReturnValue milx::cli::Command::run(int argc, char* argv[]) {
 }
 
 void milx::cli::Command::show_help() {
-  std::cout << "Milx v" << milx::version() << std::endl;
+  std::cout << "Milx v" << milx::version()
+              <<  " Home (MILX_HOME): " << milx::home().str() << std::endl;
   if (strlen(description()) > 0) std::cout << description() << std::endl;
   if (strlen(help()) > 0) std::cout << help() << std::endl;
   if (installed.size() > 0) {

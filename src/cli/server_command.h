@@ -21,12 +21,10 @@
 #define MILX_CLI_SERVER_COMMAND_H
 
 #include "command.h"
-#include "../path.h"
 
-#define SERVER_LOG_FILE "milx-server.log"
-#define SERVER_PID_FILE "milx-server.pid"
+#include <milx/path.h>
+
 // TODO(xjunior) cross os compatibility, maybe a shipped version
-#define SERVER_DEFAULT_MIME "/etc/mime.types"
 
 namespace milx {
   namespace server { class Daemon; }
@@ -44,12 +42,7 @@ namespace milx {
       ReturnValue stop_server();
       static void _stop_server(int signal);
      public:
-      ServerCommand()
-        : Command(), wait(0), port(8888),
-        _path(milx::Path::cwd()),
-        _output(_path / SERVER_LOG_FILE),
-        _pid(_path / SERVER_PID_FILE),
-        _mime(SERVER_DEFAULT_MIME) { }
+      ServerCommand();
       const char* help();
       const char* description();
       const char* command();

@@ -17,7 +17,7 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "daemon.h"
+#include <milx/server/daemon.h>
 
 #include <fcntl.h>
 
@@ -25,9 +25,11 @@
 #include <fstream>
 #include <string>
 
-#include "../milx.h"
-#include "../logger.h"
-#include "../http.h"
+#include <milx/milx.h>
+#include <milx/logger.h>
+#include <milx/http.h>
+
+#define MILX_SERVER_NAME "Milx Server v"
 
 struct ConnectionInfo {
   milx::http::Call *call;
@@ -182,21 +184,28 @@ milx::server::Daemon::Daemon(milx::Application &app, int port)
   index.push_back("index.*");
 }
 
-void milx::server::Daemon::start() {
+bool milx::server::Daemon::start() {
   _mhdaemon = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION, _port, NULL, NULL,
-    &_connection_dispatcher, this, MHD_OPTION_NOTIFY_COMPLETED, MHD_OPTION_END);
+    &_connection_dispatcher, this, MHD_OPTION_END);
   // TODO(xjunior) enable MHD_OPTION_EXTERNAL_LOGGER
   // TODO(xjunior) enable MHD_OPTION_URI_LOG_CALLBACK
-  if (_running = (_mhdaemon != NULL))
-    _app.logger().info() << "Server started listening on" << _port;
+  if (_running = (_mhdaemon != NULL)) {
+    _app.logger().info() << "Server started listening on port" << _port;
+    return true;
+  } else {
+    _app.logger().error() << "Server failed to start on port" << _port;
+    return false;
+  }
 }
 
-void milx::server::Daemon::stop() {
+bool milx::server::Daemon::stop() {
   if (_running) {
     MHD_stop_daemon(_mhdaemon);
     _running = false;
     _app.logger().info() << "Server stopped";
+    return true;
   }
+  return false;
 }
 
 milx::server::Daemon::~Daemon() {

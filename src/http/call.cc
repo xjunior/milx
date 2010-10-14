@@ -17,14 +17,16 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "call.h"
+#include <milx/http/call.h>
 
 #include <string>
 #include <sstream>
 #include <map>
 
-#include "../path.h"
-#include "../routing.h"
+#include <milx/path.h>
+#include <milx/routing.h>
+#include <milx/views.h>
+#include <milx/logger.h>
 
 milx::http::Call::Call(milx::http::Method method, std::string path)
   : _method(method), _path(path), _content_type("text/html; charset=utf-8"),
@@ -47,19 +49,35 @@ void milx::http::Call::content(const milx::Path& path) {
   }
 }
 
+void milx::http::Call::content(milx::view::Base * const view) {
+  view->render(_content);
+  content_type(view->mime_output());
+}
+
 const milx::Path * const milx::http::Call::file_content() const {
   return _file_content;
 }
 
-/*Milx::Logger::Log& operator<<(Milx::Logger::Log& os, const Milx::Http::Call& call)
-{
-  os.stream() << call.path() << std::endl;
-  os.stream() << "\tController: " << call.controller() << std::endl;
-  os.stream() << "\tAction: " << call.action() << std::endl;
-  os.stream() << "\tParams: " << call.params.size() << std::endl;
-  os.stream() << "\tStatus" << call.status() << std::endl;
-  os.stream() << "\tContent Type: " << call.content_type();
+milx::Logger::Log& operator<<(milx::Logger::Log& os, const milx::http::Call& call) {
+  std::stringstream sstream;
+  sstream << call.method() << " " << call.path() << std::endl;
+  sstream << "\tController: " << call.controller() << std::endl;
+  sstream << "\tAction: " << call.action() << std::endl;
+  sstream << "\tParams: " << call.params.size() << std::endl;
+  sstream << "\tStatus" << call.status() << std::endl;
+  sstream << "\tContent Type: " << call.content_type();
+  os << sstream.str();
 
   return os;
+}
+
+/*milx::view::BoundValue& operator<<(milx::view::BoundValue& bnd, const milx::http::Call& call) {
+  bnd.push("method") << call.method();
+  bnd.push("path") << call.path();
+  bnd.push("controller") << call.controller();
+  bnd.push("action") << call.action();
+  bnd.push(call.params, "params");
+
+  return bnd;
 }*/
 

@@ -15,23 +15,16 @@
 # along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
 #
 
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
-PROJECT (milx CXX)
+MESSAGE ("Building XML view plugin")
 
-INCLUDE (MilxDefinitions.cmake)
+FIND_PACKAGE (LibXml2 REQUIRED)
+FIND_PACKAGE (LibXslt REQUIRED)
 
-SET (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}")
-FIND_PACKAGE (LibMicroHTTPD REQUIRED)
+INCLUDE_DIRECTORIES (SYSTEM "${PROJECT_PUBLIC_INCLUDE_DIR}"
+  "${LIBXML2_INCLUDE_DIR}"
+  "${LIBXSLT_INCLUDE_DIR}")
 
-ADD_DEFINITIONS ("-DMILX_VERSION=\"${PROJECT_VERSION}\"" "-DMILX_HOME=\"${PROJECT_HOME}\""
-  "${MHD_DEFINITIONS}"
-  "${LIBXML2_DEFINITIONS}")
+ADD_LIBRARY (milx-xmlview SHARED xslt_renderer.cc xml_renderer.cc xml_serialization.cc loader.cc)
+TARGET_LINK_LIBRARIES (milx-xmlview "${LIBXML2_LIBRARIES}" "${LIBXSLT_LIBRARIES}")
 
-# Install skeleton and mime.types
-INSTALL (DIRECTORY skeleton DESTINATION "${PROJECT_HOME}")
-INSTALL (FILES "mime.types" DESTINATION "${PROJECT_HOME}")
-
-INCLUDE (CPackDefinitions.cmake)
-
-ADD_SUBDIRECTORY (src build-main)
-ADD_SUBDIRECTORY (plugins build-plugins)
+INSTALL (TARGETS "milx-xmlview" DESTINATION "${PROJECT_HOME}/plugins")

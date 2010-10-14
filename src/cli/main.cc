@@ -18,6 +18,7 @@
  */
 
 #include <iostream>
+
 #include "command.h"
 #include "server_command.h"
 #include "create_command.h"

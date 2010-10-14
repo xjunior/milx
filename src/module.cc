@@ -20,10 +20,10 @@
 #include <string>
 #include <map>
 
-#include "http/call.h"
-#include "module.h"
-#include "routing.h"
-#include "application.h"
+#include <milx/http/call.h>
+#include <milx/module.h>
+#include <milx/routing.h>
+#include <milx/application.h>
 
 milx::Module::Module(milx::Application& app, std::string name)
   : _app(app), _name(name), _views_path(milx::Path::cwd()) {

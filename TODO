@@ -4,9 +4,13 @@
     * Allow bind action on path parameter
   * Create an observer base class for the controllers to beforeFilter,
     afterFilter and maybe aroundFilter
-  * Prevent app crash from module failure
+  * Prevent app crash from plugin failure
   * rebuild dispatching lifecycle
   * rebuild the ActionCallback stuff
+  * add build options for:
+    * server (because of libhttpd dependency)
+    * apache module
+    * milx binary utility
 
 == HTTP dev server
   * HTTP Basic and Digest Authentication (RFC 2617)

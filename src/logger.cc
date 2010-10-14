@@ -17,7 +17,7 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "logger.h"
+#include <milx/logger.h>
 
 milx::Logger::Logger(std::ostream &st)
   : _ostream(st)

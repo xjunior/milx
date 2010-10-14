@@ -21,14 +21,14 @@
 #include <string>
 #include <vector>
 
-#include "routing.h"
-#include "http/call.h"
+#include <milx/routing.h>
+#include <milx/http/call.h>
 
-void milx::Routing::route(std::string regex, std::string controller,
-                          std::string action) {
+void milx::Routing::route(const std::string& regex, const std::string& cont,
+                          const std::string& action) {
   milx::RegexRoute route;
   if (regcomp(&route.regex, regex.c_str(), REG_EXTENDED|REG_NOSUB) == 0) {
-    route.controller = controller;
+    route.controller = cont;
     route.action = action;
     this->routes.push_back(route);
   } else {
@@ -37,19 +37,18 @@ void milx::Routing::route(std::string regex, std::string controller,
 }
 
 void milx::Routing::translateCall(milx::http::Call& call) {
-  std::vector<milx::RegexRoute>::iterator iroutes;
+  std::vector<milx::RegexRoute>::iterator route;
   const char *path = call.path().c_str();
-  bool result = false;
 
-  for (iroutes = this->routes.begin();
-        iroutes != routes.end() && !result; ++iroutes) {
-    if (regexec(&iroutes->regex, path, (size_t) 0, NULL, 0) == 0) {
-      call.controller(iroutes->controller);
-      call.action(iroutes->action);
+  for (route = routes.begin(); route != routes.end(); ++route) {
+    if (regexec(&route->regex, path, (size_t) 0, NULL, 0) == 0) {
+      call.controller(route->controller);
+      call.action(route->action);
 
-      result = true;
+      return;
     }
   }
 
-  if (!result) throw milx::NoRouteFound();
+  throw milx::NoRouteFound();
 }
+

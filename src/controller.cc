@@ -17,14 +17,12 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include <iostream>
 #include <map>
 #include <string>
 
-#include "controller.h"
-#include "view.h"
-#include "module.h"
-#include "action_callback.h"
+#include <milx/controller.h>
+#include <milx/views.h>
+#include <milx/action_callback.h>
 
 milx::ActionCallback::CallbackBasePtr milx::Controller::action(
   const std::string& name) {
@@ -39,22 +37,5 @@ milx::ActionCallback::CallbackBasePtr milx::Controller::action(
 void milx::Controller::action(milx::ActionCallback::CallbackBasePtr mptr,
   const std::string& name) {
   _actions.insert(make_pair(name, mptr));
-}
-
-void milx::Controller::module(milx::Module* mod) {
-  this->_module = mod;
-}
-
-milx::Module& milx::Controller::module() {
-  return *this->_module;
-}
-
-milx::view::Renderer* milx::Controller::get_view(const std::string& name) {
-  milx::Path path = module().views_path() /
-                      module().controller_name(this) / name;
-
-  if (!path.exists()) return NULL;
-
-  return milx::view::create_view(path);
 }
 

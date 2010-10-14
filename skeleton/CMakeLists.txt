@@ -1,6 +1,4 @@
 #
-# This file is part of Milx.
-#
 # Milx is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -16,22 +14,18 @@
 #
 
 CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
-PROJECT (milx CXX)
+PROJECT (my-project CXX)
+SET (PROJECT_VERSION 1)
 
-INCLUDE (MilxDefinitions.cmake)
+ADD_DEFINITIONS ("-DPROJECT_NAME=\"${PROJECT_NAME}\"" "-DPROJECT_VERSION=${PROJECT_VERSION}")
 
-SET (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}")
-FIND_PACKAGE (LibMicroHTTPD REQUIRED)
+SET (SOURCES boot.cc src/controller.cc)
 
-ADD_DEFINITIONS ("-DMILX_VERSION=\"${PROJECT_VERSION}\"" "-DMILX_HOME=\"${PROJECT_HOME}\""
-  "${MHD_DEFINITIONS}"
-  "${LIBXML2_DEFINITIONS}")
+ADD_LIBRARY (${PROJECT_NAME}-lib SHARED ${SOURCES})
+SET_TARGET_PROPERTIES (${PROJECT_NAME}-lib
+  PROPERTIES
+    CLEAN_DIRECT_OUTPUT ON
+    OUTPUT_NAME ${PROJECT_NAME}
+    VERSION ${PROJECT_VERSION}
+)
 
-# Install skeleton and mime.types
-INSTALL (DIRECTORY skeleton DESTINATION "${PROJECT_HOME}")
-INSTALL (FILES "mime.types" DESTINATION "${PROJECT_HOME}")
-
-INCLUDE (CPackDefinitions.cmake)
-
-ADD_SUBDIRECTORY (src build-main)
-ADD_SUBDIRECTORY (plugins build-plugins)

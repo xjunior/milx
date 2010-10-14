@@ -16,16 +16,12 @@
 #
  
 # Library
-SET (LIB_SOURCES application.cc controller.cc routing.cc logger.cc project_loader.cc
-module.cc shared_module.cc http/call.cc server/daemon.cc path.cc view.cc view/renderer.cc
-view/xslt_renderer.cc view/plain_renderer.cc serialization.cc milx.cc)
-SET (LIB_HEADERS application.h controller.hpp http/call.hpp project_loader.hpp
-routing.h logger.hpp module.hpp shared_module.hpp server/daemon.hpp action_callback.hpp path.hpp
-view.h view/renderer.hpp view/xslt_renderer.hpp view/plain_renderer.hpp serialization.hpp
-milx.h http.hpp)
+SET (LIB_SOURCES application.cc controller.cc routing.cc logger.cc http/call.cc
+server/daemon.cc plugin_manager.cc path.cc views.cc milx.cc)
 
-INCLUDE_DIRECTORIES (SYSTEM "${LIBXML2_INCLUDE_DIR}" "${MHD_INCLUDE_DIRS}")
-SET (LIB_DEPENDENCIES dl magic "${MHD_LIBRARIES}" "${LIBXML2_LIBRARIES}")
+INCLUDE_DIRECTORIES (SYSTEM "${PROJECT_PUBLIC_INCLUDE_DIR}"
+  "${MHD_INCLUDE_DIRS}")
+SET (LIB_DEPENDENCIES dl magic "${MHD_LIBRARIES}")
 
 ADD_LIBRARY (${PROJECT_NAME}-lib SHARED ${LIB_SOURCES})
 ADD_LIBRARY (${PROJECT_NAME}-static STATIC ${LIB_SOURCES})
@@ -51,4 +47,4 @@ SET_TARGET_PROPERTIES (${PROJECT_NAME}-lib ${PROJECT_NAME}-static ${PROJECT_NAME
 INSTALL (TARGETS ${PROJECT_NAME}-lib DESTINATION lib)
 INSTALL (TARGETS ${PROJECT_NAME}-static DESTINATION lib)
 INSTALL (TARGETS ${PROJECT_NAME}-cli DESTINATION bin)
-INSTALL (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ DESTINATION include/${PROJECT_NAME} FILES_MATCHING PATTERN "*.h" PATTERN "cli" EXCLUDE)
+INSTALL (DIRECTORY "${PROJECT_PUBLIC_INCLUDE_DIR}/${PROJECT_NAME}" DESTINATION include/)

@@ -25,11 +25,24 @@
 #include <string>
 #include <cstring>
 
-#include "../server/daemon.h"
-#include "../application.h"
-#include "../project_loader.h"
+#include <milx/server/daemon.h>
+#include <milx/application.h>
+#include <milx/project_loader.h>
+#include <milx/milx.h>
+
+#define SERVER_DEFAULT_MIME "mime.types"
+#define SERVER_LOG_FILE "milx-server.log"
+#define SERVER_PID_FILE "milx-server.pid"
 
 milx::server::Daemon *milx::cli::ServerCommand::_daemon;
+
+milx::cli::ServerCommand::ServerCommand() 
+  : Command(), wait(0), port(8888),
+    _path(milx::Path::cwd()),
+    _output(_path / SERVER_LOG_FILE),
+    _pid(_path / SERVER_PID_FILE),
+    _mime(milx::home() / SERVER_DEFAULT_MIME) {
+}
 
 milx::cli::ReturnValue milx::cli::ServerCommand::main(int argc, char* argv[]) {
   if (argc >= 2) {
@@ -41,7 +54,7 @@ milx::cli::ReturnValue milx::cli::ServerCommand::main(int argc, char* argv[]) {
       case 'p': port = atoi(optarg); break;
       case 'd':
         _path = optarg;
-        _pid = _path / _pid.basename();
+        _pid = _path / SERVER_PID_FILE;
         // FIXME _output and _mime might become invalid if using default
         break;
       case 'o': _output = optarg; break;
@@ -96,28 +109,34 @@ milx::cli::ReturnValue milx::cli::ServerCommand::start_server() {
     milx::Logger log(logstream);
     app.logger(&log);
 
-    milx::ProjectLoader::load(app, _path);
+    app._plugins_path.push_back(milx::home() / "plugins");
+    app._plugins_path.push_back(_path);
+    app.load_plugins();
+
     milx::Path::initialize_mime_magic();
-    // TODO(xjunior) make it changeable somehow
     milx::Path::initialize_mime_map(_mime);
 
     _daemon = new milx::server::Daemon(app, port);
     _daemon->public_dir(milx::Path(_path / "public"));
-    _daemon->start();
+    if (_daemon->start()) {
+      if (wait) {  // doesn't detach
+        getchar();
+        _daemon->stop();
+      } else {
+        struct sigaction action;
+        action.sa_handler = &milx::cli::ServerCommand::_stop_server;
+        sigaction(SIGTERM, &action, NULL);
 
-    if (wait) {  // doesn't detach
-      getchar();
-      _daemon->stop();
+        std::ofstream pid(_pid.str().c_str());
+        pid << getpid();
+        pid.close();
+
+        while (_daemon->running());  // if !SIGTERM received
+
+        unlink(_pid.str().c_str());
+      }
     } else {
-      struct sigaction action;
-      action.sa_handler = &milx::cli::ServerCommand::_stop_server;
-      sigaction(SIGTERM, &action, NULL);
-
-      std::ofstream pid(_pid.str().c_str());
-      pid << getpid();
-      pid.close();
-
-      while (_daemon->running());  // if !SIGTERM received
+      std::cerr << "Failed to start server" << std::endl;
     }
 
     logstream.close();
@@ -133,7 +152,6 @@ milx::cli::ReturnValue milx::cli::ServerCommand::stop_server() {
     fstream >> pid;
     fstream.close();
     kill(atoi(pid.c_str()), SIGTERM);
-    unlink(_pid.str().c_str());
   }
 
   return CLI_SUCCESS;

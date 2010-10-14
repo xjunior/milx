@@ -17,7 +17,7 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include "path.h"
+#include <milx/path.h>
 
 #include <string.h>
 #include <unistd.h>
@@ -119,7 +119,8 @@ std::string milx::Path::extension() const {
 
 std::string milx::Path::stem() const {
   std::string bn = basename();
-  return bn.substr(0, bn.rfind('.'));
+  int dot = bn.rfind('.');
+  return dot == -1 ? "" : bn.substr(0, dot);
 }
 
 std::string milx::Path::dirname() const {
