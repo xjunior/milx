@@ -16,30 +16,34 @@
 # along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
 #
 
-FILE=`readlink -f $1`
-REGEX="^\(/usr/\(.*/\)\?lib/\|`dirname $FILE`\)"
-[[ $2 = "--deep" ]] && REGEX="/"
-
 get_dep_tree() {
-	for dep in `ldd $1 | awk '{ print $3 }' | grep $REGEX`
-	do
-		dep=`readlink -f "$dep"`
-		echo "$dep"
-		get_dep_tree $dep
-	done
+  REGEX="^\(/usr/\(.*/\)\?lib/\|`dirname $1`\)"
+  [[ $2 = "--deep" ]] && REGEX="/"
+  for dep in `ldd $1 | awk '{ print $3 }' | grep $REGEX`
+  do
+    dep=`readlink -f "$dep"`
+    echo "$dep"
+    get_dep_tree $dep
+  done
 }
 
-get_total_size() {
-	total=0
-	for dep in $*; do
-		size=`stat -c%s "$dep"`
-		echo -e $(($size / 1024)) "KB\t$dep"
-		total=$((total + size))
-	done
-	echo "Total:" $(( total / 1024 ))  "KB"
+join_all() {
+  for a in $@; do
+    FILE=`readlink -f $a`
+    echo $FILE
+    get_dep_tree "$FILE"
+  done
 }
 
-deps="`get_dep_tree "$FILE" | sort -u` $FILE"
-
-get_total_size $deps
+# MAIN
+{
+  list=`join_all $* | sort -u`
+  total=0
+  for dep in $list; do
+    size=`stat -c%s "$dep"`
+    echo -e $(($size / 1024)) "KB\t$dep"
+    total=$((total + size))
+  done
+  echo "Total:" $(( total / 1024 ))  "KB"
+}
 
