@@ -1,7 +1,5 @@
 #include <milx/plugin_manager.h>
 #include <milx/plugins.h>
-#include <milx/module.h>
-#include <milx/shared_module.h>
 
 #include <dlfcn.h>
 

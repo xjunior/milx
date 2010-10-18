@@ -24,7 +24,6 @@
 #include <milx/application.h>
 #include <milx/http/call.h>
 #include <milx/controller.h>
-#include <milx/shared_module.h>
 #include <milx/action_callback.h>
 #include <milx/path.h>
 #include <milx/plugins.h>

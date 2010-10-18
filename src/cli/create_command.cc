@@ -18,10 +18,27 @@
  */
 
 #include <fstream>
+
+#include <string.h>
+#include <cstdlib>
+
 #include "create_command.h"
 
+#include <milx/milx.h>
+
 milx::cli::ReturnValue milx::cli::CreateCommand::main(int argc, char* argv[]) {
-  return CLI_SHOW_HELP;
+  if (argc == 3 && strcmp(argv[1], "project") == 0)
+    return create_project(argv[2]);
+  else
+    return CLI_SHOW_HELP;
+}
+
+milx::cli::ReturnValue milx::cli::CreateCommand::create_project(
+  const std::string& name) {
+  if (!system(std::string("cp -R \"" + (milx::home() / "skeleton").str() + "\" " + name).c_str()))
+    return CLI_SUCCESS;
+  else
+    return CLI_FAIL;
 }
 
 const char* milx::cli::CreateCommand::description() {
@@ -33,6 +50,6 @@ const char* milx::cli::CreateCommand::command() {
 }
 
 const char* milx::cli::CreateCommand::help() {
-  return "create [command] [options]";
+  return "create <project|standalone> <name>";
 }
 

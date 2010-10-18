@@ -27,7 +27,6 @@
 
 #include <milx/server/daemon.h>
 #include <milx/application.h>
-#include <milx/project_loader.h>
 #include <milx/milx.h>
 
 #define SERVER_DEFAULT_MIME "mime.types"

@@ -20,12 +20,15 @@
 #ifndef MILX_CLI_CREATE_COMMAND_H
 #define MILX_CLI_CREATE_COMMAND_H
 
+#include <string>
+
 #include "command.h"
 
 namespace milx {
   namespace cli {
     class CreateCommand : public Command {
       ReturnValue main(int, char**);
+      ReturnValue create_project(const std::string& name);
      public:
       const char* help();
       const char* description();
