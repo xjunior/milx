@@ -41,26 +41,18 @@ namespace milx {
       Log(const Log& l);
       ~Log();
 
-      template <typename T> inline Log& operator<<(T& t) {
-        _sstream << " " << t;
-        return *this;
-      }
-      template <typename T> inline Log& operator<<(const T& t) {
-        _sstream << " " << t;
-        return *this;
-      }
-      Log& operator<<(bool&);
-      Log& operator<<(const char*);
+      Log& operator<<(const std::string&);
+      Log& operator<<(const int&);
 
       inline std::stringstream& stream() { return _sstream; }
     };
 
     Logger(std::ostream& = std::cout);
-    Log warn() const { return Log(_ostream, WARN); }
-    Log info() const { return Log(_ostream, INFO); }
-    Log error() const { return Log(_ostream, ERROR); }
+    inline Log warn() const { return Log(_ostream, WARN); }
+    inline Log info() const { return Log(_ostream, INFO); }
+    inline Log error() const { return Log(_ostream, ERROR); }
 
-    std::ostream& stream() const { return _ostream; }
+    inline std::ostream& stream() const { return _ostream; }
   };
 }
 

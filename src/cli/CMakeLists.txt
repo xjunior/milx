@@ -14,22 +14,20 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
 #
+ 
+# Executable
+SET (BIN_SOURCES main.cc command.cc create_command.cc server_command.cc)
+ADD_EXECUTABLE (${PROJECT_NAME}-cli ${BIN_SOURCES})
+ADD_DEPENDENCIES (${PROJECT_NAME}-cli ${PROJECT_NAME}-lib)
+TARGET_LINK_LIBRARIES (${PROJECT_NAME}-cli ${PROJECT_NAME}-lib)
 
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
-PROJECT (milx CXX)
+# General
+SET_TARGET_PROPERTIES (${PROJECT_NAME}-cli
+	PROPERTIES
+		CLEAN_DIRECT_OUTPUT	1
+	        OUTPUT_NAME		${PROJECT_NAME}
+		VERSION			${PROJECT_VERSION}
+)
 
-INCLUDE (MilxDefinitions.cmake)
-
-SET (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}")
-FIND_PACKAGE (LibMicroHTTPD REQUIRED)
-
-ADD_DEFINITIONS ("-DMILX_VERSION=\"${PROJECT_VERSION}\"" "-DMILX_HOME=\"${PROJECT_HOME}\""
-  "${MHD_DEFINITIONS}")
-
-# Install skeleton and mime.types
-INSTALL (DIRECTORY skeleton DESTINATION "${PROJECT_HOME}")
-INSTALL (FILES "mime.types" DESTINATION "${PROJECT_HOME}")
-
-INCLUDE (CPackDefinitions.cmake)
-
-ADD_SUBDIRECTORY (src build)
+# Install
+INSTALL (TARGETS ${PROJECT_NAME}-cli DESTINATION bin)

@@ -49,7 +49,7 @@ void milx::http::Call::content(const milx::Path& path) {
   }
 }
 
-void milx::http::Call::content(milx::view::Base * const view) {
+void milx::http::Call::content(milx::view::Template * const view) {
   view->render(_content);
   content_type(view->mime_output());
 }
@@ -71,7 +71,7 @@ milx::Logger::Log& operator<<(milx::Logger::Log& os, const milx::http::Call& cal
   return os;
 }
 
-/*milx::view::BoundValue& operator<<(milx::view::BoundValue& bnd, const milx::http::Call& call) {
+milx::view::BoundValue& operator<<(milx::view::BoundValue& bnd, const milx::http::Call& call) {
   bnd.push("method") << call.method();
   bnd.push("path") << call.path();
   bnd.push("controller") << call.controller();
@@ -79,5 +79,5 @@ milx::Logger::Log& operator<<(milx::Logger::Log& os, const milx::http::Call& cal
   bnd.push(call.params, "params");
 
   return bnd;
-}*/
+}
 

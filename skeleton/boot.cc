@@ -4,10 +4,7 @@
 #include "classes.milx.h"
 
 #define ADD_CONTROLLER(klass)\
-  { std::string a = #klass;\
-  int b = a.rfind(':');\
-  a = a.substr(b + 1, a.size() - b);\
-  app.controller(new klass, a); }
+  app.controller(new klass, GET_CLASS_NAME(klass));
 #define ADD_ROUTE(regex, controller, action)\
   app.routes().route(#regex, #controller, #action);
 

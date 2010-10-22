@@ -20,6 +20,7 @@
 #include <milx/server/daemon.h>
 
 #include <fcntl.h>
+#include <iostream>
 
 #include <iterator>
 #include <fstream>

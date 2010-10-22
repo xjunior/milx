@@ -43,7 +43,7 @@ void milx::Application::dispatch(milx::http::Call& call) {
     if (ctrlobj != NULL) {
       milx::ActionCallback::CallbackBasePtr actobj = ctrlobj->action(call.action());
       if (actobj != NULL) {
-        std::cout << "call.action() " << call.action();
+	actobj->call(call);
         return;
       }
     }
@@ -63,7 +63,7 @@ void milx::Application::dispatch(milx::http::Call& call) {
     this->logger().error() << "Unknown exception caught";
   }
 
-  // TODO(xjunior) this->logger().info() << call;
+  // FIXME(xjunior) this->logger().info() << call;
 }
 
 void milx::Application::controller(milx::Controller *controller, std::string name) {

@@ -30,7 +30,7 @@
 namespace milx {
   class Path;
   namespace view {
-    class Base;
+    class Template;
     class BoundValue;
   }
 
@@ -63,7 +63,7 @@ namespace milx {
       std::string content_type() const { return _content_type; }
       std::stringstream& content() { return _content; }
       void content(const milx::Path& file);
-      void content(milx::view::Base * const view);
+      void content(milx::view::Template* const view);
 
       void status(int s) { _status = s; }
       int status() const { return _status; }
@@ -73,6 +73,6 @@ namespace milx {
 }
 
 milx::Logger::Log& operator<<(milx::Logger::Log& os, const milx::http::Call& call);
-//milx::view::BoundValue& operator<<(milx::view::BoundValue& bnd, const milx::http::Call& call);
+milx::view::BoundValue& operator<<(milx::view::BoundValue& bnd, const milx::http::Call& call);
 
 #endif

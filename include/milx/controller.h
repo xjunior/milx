@@ -27,12 +27,11 @@
 #include <milx/action_callback.h>
 #include <milx/http/call.h>
 
+#define GET_CLASS_NAME(c)\
+  std::string(#c).substr(std::string(#c).rfind(':') + 1)
+
 #define register_action(c)\
-  { std::string a = #c;\
-  int b = a.rfind(':');\
-  if (b == -1) b = 0;\
-  a = a.substr(b + 1, a.size() - b);\
-  action(milx::ActionCallback::make_callback(this, &c), a); }
+  action(milx::ActionCallback::make_callback(this, &c), GET_CLASS_NAME(c));
 
 namespace milx {
   /**

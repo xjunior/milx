@@ -17,10 +17,11 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#include <sstream>
+#include <fstream>
 #include <string>
-#include <map>
 #include <tr1/memory>
+#include <iostream>
+
 #include <cstdio>
 
 #include <milx/views.h>
@@ -46,14 +47,29 @@ milx::view::BoundValue& milx::view::BoundValue::operator<<(const int& t) {
   return *this;
 }
 
-std::string milx::view::File::mime_output() {
-  return milx::Path(_path.stem()).type();
+milx::view::Template::Template(const std::string& o_t, const std::string& i_t)
+  : _bound("context"), _output_type(o_t), _input_type(i_t) {
 }
 
-void milx::view::File::render(std::ostream &out) {
+milx::view::Template::Template(const milx::Path& p)
+  : _bound("context") {
+  load_file(p);
+}
+
+void milx::view::Template::load_file(const milx::Path& p) {
+  _input_type = p.type();
+  _output_type = milx::Path(p.stem()).type();
+
+  std::ifstream in(p.str().c_str(), std::ios::in);
+  while (!in.eof())
+    _template.push_back(in.get());
+
+  in.close();
+}
+
+void milx::view::Template::render(std::ostream &out) {
   std::tr1::shared_ptr<milx::view::Renderer> renderer =
-    milx::view::renderers.get(_path.type());
-  renderer->render(_path, bound(), out);
+    milx::view::renderers.get(_input_type);
+  renderer->render(_template, bound(), out);
   // TODO(xjunior) catch renderers.get thrown exception
 }
-

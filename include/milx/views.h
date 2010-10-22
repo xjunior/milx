@@ -24,6 +24,7 @@
 #include <string>
 #include <tr1/memory>
 #include <map>
+#include <iosfwd>
 
 #include <milx/path.h>
 
@@ -55,10 +56,10 @@ namespace milx {
         return *node;
       }
 
-      /*template <typename ValueType>
+      template <typename ValueType>
       BoundValue& push(const std::map<std::string, ValueType> &map,
               std::string col_name) {
-        std::map<std::string, ValueType>::const_iterator itr;
+        typename std::map<std::string, ValueType>::const_iterator itr;
 
         BoundValue *node = new BoundValue(col_name);
         for (itr = map.begin(); itr != map.end(); ++itr) {
@@ -67,7 +68,7 @@ namespace milx {
         _children.push_back(node);
 
         return *node;
-      }*/
+      }
 
       BoundValue& push(const std::string& name);
       BoundValue& operator<<(const std::string& str);
@@ -77,10 +78,8 @@ namespace milx {
     class Renderer {
      public:
       virtual bool accept(const std::string& mime) = 0;
-      virtual void render(milx::Path &path, BoundValue &bnd,
+      virtual void render(const std::string& templat, BoundValue &bnd,
                                   std::ostream &out) = 0;
-      /*virtual std::string render(const std::string &str, BoundValue &bnd,
-                                  std::stream &out) = 0;*/
     };
 
     extern struct _renderers {
@@ -100,24 +99,22 @@ namespace milx {
       }
     } renderers;
 
-    class Base {
+    class Template {
       view::BoundValue _bound;
+      std::string _output_type;
+      std::string _input_type;
+      std::string _template;
      public:
-      Base() : _bound("context") { }
+      Template(const std::string& out_t, const std::string& in_t);
+      Template(const milx::Path& p);
 
-      BoundValue& bound() { return _bound; }
-      void bound(const view::BoundValue& bound) { _bound = bound; }
+      inline BoundValue& bound() { return _bound; }
+      inline void bound(const view::BoundValue& bound) { _bound = bound; }
+      virtual inline std::string mime_output() const { return _output_type; }
 
-      virtual std::string mime_output() = 0;
-      virtual void render(std::ostream &out) = 0;
-    };
+      void load_file(const milx::Path& p);
+      inline void load_text(const std::string& str) { _template = str; }
 
-    class File : public Base {
-      milx::Path _path;
-     public:
-      File(const milx::Path& p) : _path(p), Base() { }
-
-      virtual std::string mime_output();
       virtual void render(std::ostream &out);
     };
   }

@@ -35,23 +35,22 @@ milx::Logger::Log::Log(std::ostream& o, Severity sev)
 milx::Logger::Log::Log(const milx::Logger::Log& l)
   : _ostream(l._ostream), _severity(l._severity), _copies(l._copies+1) {
   _sstream.str(l._sstream.str());
-//  std::cout << _copies << _sstream.str() << std::endl;
 }
 
 milx::Logger::Log::~Log() {
-//  if (!--_copies) {
+  if (!--_copies) {
     _sstream << std::endl;
     _ostream << _sstream.str();
     _ostream.flush();
-//  }
+  }
 }
 
-milx::Logger::Log& milx::Logger::Log::operator<<(bool& t) {
-  _sstream << " " << (t?"True":"False");
+milx::Logger::Log& milx::Logger::Log::operator<<(const int& t) {
+  _sstream << " " << t;
   return *this;
 }
 
-milx::Logger::Log& milx::Logger::Log::operator<<(const char* t) {
+milx::Logger::Log& milx::Logger::Log::operator<<(const std::string& t) {
   _sstream << " " << t;
 
   return *this;
