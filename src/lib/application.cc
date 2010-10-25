@@ -24,7 +24,6 @@
 #include <milx/application.h>
 #include <milx/http/call.h>
 #include <milx/controller.h>
-#include <milx/action_callback.h>
 #include <milx/path.h>
 #include <milx/plugins.h>
 
@@ -40,24 +39,17 @@ void milx::Application::dispatch(milx::http::Call& call) {
 
     milx::ControllerPtr ctrlobj = this->_controllers[call.controller()];
 
-    if (ctrlobj != NULL) {
-      milx::ActionCallback::CallbackBasePtr actobj = ctrlobj->action(call.action());
-      if (actobj != NULL) {
-	actobj->call(call);
-        return;
-      }
-    }
-
-    throw milx::UnimplementedRoute();
-  } catch(milx::NoRouteFound e) {
+    if (ctrlobj.get())
+      return ctrlobj->actions.fire(call.action(), call);
+  } catch(milx::NoRouteFound &e) {
     call.status(404);
     this->logger().error() << "Milx::NoRouteFound caught";
-  } catch(milx::UnimplementedRoute e) {
+  } catch(milx::callback::InvalidCallback &i) {
     call.status(501);
     this->logger().error() << "Milx::UnimplementedRoute caught";
-  } catch(std::exception e) {
+  } catch(std::exception* const e) {
     call.status(500);
-    this->logger().error() << "Exception caught: " << e.what();
+    this->logger().error() << "Exception caught: " << e->what();
   } catch(...) {
     call.status(500);
     this->logger().error() << "Unknown exception caught";

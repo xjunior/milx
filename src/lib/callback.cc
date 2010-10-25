@@ -17,32 +17,26 @@
  * along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
  */
 
-#ifndef MILX_CONTROLLER_H
-#define MILX_CONTROLLER_H
-
-#include <string>
-#include <tr1/memory>
-
 #include <milx/callback.h>
-#include <milx/http/call.h>
-
-#define GET_CLASS_NAME(c)\
-  std::string(#c).substr(std::string(#c).rfind(':') + 1)
 
 namespace milx {
-  /**
-   * Milx::Controller is the base class for any Controller in your application.
-   */
-  class Controller {
-   public:
-    milx::callback::List actions;
-    template <typename T>
-    register_action(const std::string& str, void (T::*func)(http::Call&)) {
-      actions.add(str, (T*)this, func);
+  namespace callback {
+    void List::fire(const std::string& name, milx::http::Call& call) {
+      if (_callbacks.count(name))
+        return (*_callbacks[name])(call);
+      throw new InvalidCallback;
     }
-  };
-
-  typedef std::tr1::shared_ptr<Controller> ControllerPtr;
+    void List::fire_all(milx::http::Call& call) {
+      std::map<std::string, Base*>::iterator it;
+      for (it = _callbacks.begin(); it != _callbacks.end(); ++it)
+	(*it->second)(call);
+    }
+    void List::remove(const std::string& n) {
+      if (_callbacks.count(n)) {
+	delete _callbacks[n];
+	_callbacks.erase(n);
+      }
+    }
+  }
 }
 
-#endif  // MILX_CONTROLLER_H

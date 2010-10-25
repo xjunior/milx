@@ -1,9 +1,7 @@
-#include <iostream>
-
 #include "controller.h"
 
 MyController::MyController() : milx::Controller() {
-  register_action(MyController::index);
+  register_action("index", &MyController::index);
 }
 
 void MyController::index(milx::http::Call& call) {

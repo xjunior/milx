@@ -16,8 +16,8 @@
 #
  
 # Library
-SET (LIB_SOURCES application.cc controller.cc routing.cc logger.cc http/call.cc
-server/daemon.cc plugin_manager.cc path.cc views.cc milx.cc)
+SET (LIB_SOURCES application.cc routing.cc logger.cc http/call.cc server/daemon.cc
+plugin_manager.cc path.cc views.cc milx.cc callback.cc)
 
 INCLUDE_DIRECTORIES (SYSTEM "${PROJECT_PUBLIC_INCLUDE_DIR}"
   "${MHD_INCLUDE_DIRS}")

@@ -5,8 +5,6 @@
   * Create an observer base class for the controllers to beforeFilter,
     afterFilter and maybe aroundFilter
   * Prevent app crash from plugin failure
-  * rebuild dispatching lifecycle
-  * rebuild the ActionCallback stuff
   * add build options for:
     * server (because of libhttpd dependency)
     * apache module
@@ -18,7 +16,11 @@
   * Handle POST requests
 
 == Apache
-  * Create the apache 2.x module
+  * Create the apache 2.x module (mod_milx)
+
+== CGI
+  * libcgicc5
+  * it's also possible to write the Apache module based on CGI (mod_milxcgi)
 
 == Generator
   * Make a full working application template
