@@ -3,7 +3,6 @@
 
 #include <dlfcn.h>
 
-#include <memory>
 #include <vector>
 #include <exception>
 

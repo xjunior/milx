@@ -3,7 +3,6 @@
 
 #include <milx/module.h>
 #include <vector>
-#include <memory>
 
 namespace milx {
   struct Plugin;
