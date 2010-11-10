@@ -27,12 +27,14 @@
 #include <iosfwd>
 
 #include <milx/path.h>
+#include <cstdio>
 
 namespace milx {
   namespace view {
     class BoundValue {
       std::string _name;
       std::string _value;
+      std::map<std::string, std::string> _attrs;
 
       std::list<BoundValue*> _children;
      public:
@@ -48,9 +50,14 @@ namespace milx {
           sig_name = col_name;
           col_name = sig_name + "S";
         }
-
+	int iter = 0;
         BoundValue *node = new BoundValue(col_name);
-        for (; begin != end; ++begin) node->push(sig_name) << **begin;
+        for (; begin != end; ++begin) {
+	  char *ptr = new char[11];
+	  sprintf(ptr, "%d", iter);
+	  node->push(sig_name).attr("iter", ptr) << **begin;
+	  ++iter;
+	}
         _children.push_back(node);
 
         return *node;
@@ -68,6 +75,19 @@ namespace milx {
         _children.push_back(node);
 
         return *node;
+      }
+
+      BoundValue& attr(const std::string &key, const std::string &value) {
+	_attrs[key] = value;
+	return *this;
+      }
+
+      std::string attr(const std::string &key) {
+	return _attrs[key];
+      }
+
+      const std::map<std::string, std::string>& attrs() {
+	return _attrs;
       }
 
       BoundValue& push(const std::string& name);

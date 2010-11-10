@@ -1,6 +1,7 @@
 #include "xslt_renderer.h"
 #include "xml_serialization.h"
 
+#include <cstring>
 #include <libxml/tree.h>
 #include <libxslt/xslt.h>
 #include <libxslt/xsltInternals.h>
@@ -18,12 +19,15 @@ bool XSLTRenderer::accept(const std::string& mime) {
 
 void XSLTRenderer::render(const std::string& tpl, milx::view::BoundValue &bnd,
                           std::ostream &out) {
-/*  xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");
+  xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");
+  char *tpl_content = new char[tpl.size() + 2];
+  strncpy(tpl_content, tpl.c_str(), tpl.size() + 2);
+  xmlDocPtr xsl_doc = xmlReadMemory(tpl_content, tpl.size(), NULL, NULL, 0);
   xml_serialize(doc, NULL, bnd);
 
   xmlSubstituteEntitiesDefault(1);
   xmlLoadExtDtdDefaultValue = 1;
-  xsltStylesheetPtr xslt = xsltParseStylesheetFile((const xmlChar *) path.str().c_str());
+  xsltStylesheetPtr xslt = xsltParseStylesheetDoc(xsl_doc);
   xmlDocPtr result = xsltApplyStylesheet(xslt, doc, NULL);
 
   xmlChar *str_result;
@@ -34,6 +38,7 @@ void XSLTRenderer::render(const std::string& tpl, milx::view::BoundValue &bnd,
   xsltFreeStylesheet(xslt);
   xmlFreeDoc(result);
   xmlFreeDoc(doc);
+  //xmlFreeDoc(xsl_doc);
   
   xsltCleanupGlobals();
   xmlCleanupParser();
@@ -41,6 +46,6 @@ void XSLTRenderer::render(const std::string& tpl, milx::view::BoundValue &bnd,
   // finish
   out << str_result;
 
-  delete[] str_result;*/
+  delete[] str_result;
 }
 

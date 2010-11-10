@@ -61,9 +61,9 @@ void milx::view::Template::load_file(const milx::Path& p) {
   _output_type = milx::Path(p.stem()).type();
 
   std::ifstream in(p.str().c_str(), std::ios::in);
-  while (!in.eof())
-    _template.push_back(in.get());
-
+  std::istreambuf_iterator<char> file_begin(in.rdbuf());
+  const std::istreambuf_iterator<char> file_end;
+  while (!file_begin.equal(file_end)) _template.push_back(*file_begin++);
   in.close();
 }
 
