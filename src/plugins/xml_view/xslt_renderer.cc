@@ -46,6 +46,6 @@ void XSLTRenderer::render(const std::string& tpl, milx::view::BoundValue &bnd,
   // finish
   out << str_result;
 
-  delete[] str_result;
+  xmlFree(str_result);
 }
 

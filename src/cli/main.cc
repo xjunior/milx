@@ -25,10 +25,6 @@
 
 class MainCommand : public milx::cli::Command {
  public:
-  MainCommand() {
-    install(new milx::cli::ServerCommand);
-    install(new milx::cli::CreateCommand);
-  }
   const char* description() {
     return "milx utility is your main entry for the Milx world";
   }
@@ -37,6 +33,9 @@ class MainCommand : public milx::cli::Command {
 };
 
 int main(int argc, char* argv[]) {
-  return MainCommand().run(argc, argv);
+  MainCommand m;
+  m.install(new milx::cli::ServerCommand);
+  m.install(new milx::cli::CreateCommand);
+  return m.run(argc, argv);
 }
 

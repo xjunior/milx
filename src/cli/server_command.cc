@@ -95,15 +95,14 @@ milx::cli::ReturnValue milx::cli::ServerCommand::start_server() {
     std::cerr << "A server is already started!" << std::endl;
     return CLI_FAIL;
   } else {
-    if (!wait) {
-      if (fork())
-        return CLI_SUCCESS;  // finish parent proc
-      else
-        setsid();  // detach
-    }
+    if (!wait)
+      if (fork()) return CLI_SUCCESS;  // finish parent proc
+      else setsid(); // detach
+
+    create_pid();
+    bind_stop();
 
     milx::Application app;
-
     std::ofstream logstream(_output.str().c_str(), std::ios_base::app);
     milx::Logger log(logstream);
     app.logger(&log);
@@ -117,31 +116,21 @@ milx::cli::ReturnValue milx::cli::ServerCommand::start_server() {
 
     _daemon = new milx::server::Daemon(app, port);
     _daemon->public_dir(milx::Path(_path / "public"));
-    if (_daemon->start()) {
-      if (wait) {  // doesn't detach
-        getchar();
-        _daemon->stop();
-      } else {
-        struct sigaction action;
-        action.sa_handler = &milx::cli::ServerCommand::_stop_server;
-        sigaction(SIGTERM, &action, NULL);
 
-        std::ofstream pid(_pid.str().c_str());
-        pid << getpid();
-        pid.close();
-
+    if (_daemon->start())
+      if (wait) {
+	std::cin.get();
+	_daemon->stop();
+      } else
         while (_daemon->running());  // if !SIGTERM received
-
-        unlink(_pid.str().c_str());
-      }
-    } else {
+    else
       std::cerr << "Failed to start server" << std::endl;
-    }
 
+    unlink(_pid.str().c_str());
     logstream.close();
-  }
 
-  return CLI_SUCCESS;
+    return CLI_SUCCESS;
+  }
 }
 
 milx::cli::ReturnValue milx::cli::ServerCommand::stop_server() {
@@ -150,6 +139,7 @@ milx::cli::ReturnValue milx::cli::ServerCommand::stop_server() {
     std::string pid;
     fstream >> pid;
     fstream.close();
+    std::cout << "Terminating server on pid " << pid << std::endl;
     kill(atoi(pid.c_str()), SIGTERM);
   }
 
@@ -159,5 +149,17 @@ milx::cli::ReturnValue milx::cli::ServerCommand::stop_server() {
 void milx::cli::ServerCommand::_stop_server(int /* signal */) {
   _daemon->stop();
   return;
+}
+
+void milx::cli::ServerCommand::create_pid() {
+  std::ofstream pid(_pid.str().c_str());
+  pid << getpid();
+  pid.close();
+}
+
+void milx::cli::ServerCommand::bind_stop() {
+  struct sigaction action;
+  action.sa_handler = &milx::cli::ServerCommand::_stop_server;
+  sigaction(SIGTERM, &action, NULL);
 }
 

@@ -41,6 +41,9 @@ namespace milx {
       ReturnValue start_server();
       ReturnValue stop_server();
       static void _stop_server(int signal);
+
+      void create_pid();
+      void bind_stop();
      public:
       ServerCommand();
       const char* help();

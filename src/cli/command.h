@@ -34,10 +34,9 @@ namespace milx {
     class Command {
       std::list<Command*> installed;
       virtual ReturnValue main(int, char**) { return milx::cli::CLI_SHOW_HELP; }
-     protected:
+     public:
       void install(Command* cmd);
       Command* const command(const std::string&) const;
-     public:
       virtual const char* help()=0;
       virtual const char* description()=0;
       virtual const char* command()=0;
