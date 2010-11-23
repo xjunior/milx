@@ -36,7 +36,7 @@ void milx::Routing::route(const std::string& regex, const std::string& cont,
   }
 }
 
-void milx::Routing::translateCall(milx::http::Call& call) {
+void milx::Routing::translate_call(milx::http::Call& call) {
   std::vector<milx::RegexRoute>::iterator route;
   const char *path = call.path().c_str();
 

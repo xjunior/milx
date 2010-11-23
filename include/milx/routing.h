@@ -46,7 +46,7 @@ namespace milx {
      * \param request
      * \return a reference to the controller
      */
-    void translateCall(http::Call&);
+    void translate_call(http::Call&);
   };
 
   class NoRouteFound {};

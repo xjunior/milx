@@ -34,12 +34,13 @@ namespace milx {
    * Milx::Controller is the base class for any Controller in your application.
    */
   class Controller {
+    milx::callback::List _actions;
    public:
-    milx::callback::List actions;
     template <typename T>
     register_action(const std::string& str, void (T::*func)(http::Call&)) {
-      actions.add(str, (T*)this, func);
+      _actions.add(str, (T*)this, func);
     }
+    milx::callback::List& actions() { return _actions; }
   };
 
   typedef std::tr1::shared_ptr<Controller> ControllerPtr;

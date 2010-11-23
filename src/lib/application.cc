@@ -35,12 +35,12 @@ void milx::Application::dispatch(milx::http::Call& call) {
   this->logger().info() << "Request to" << call.path();
 
   try {
-    this->_routes.translateCall(call);
+    this->_routes.translate_call(call);
 
     milx::ControllerPtr ctrlobj = this->_controllers[call.controller()];
 
     if (ctrlobj.get())
-      return ctrlobj->actions.fire(call.action(), call);
+      return ctrlobj->actions().fire(call.action(), call);
   } catch(milx::NoRouteFound &e) {
     call.status(404);
     this->logger().error() << "Milx::NoRouteFound caught";
