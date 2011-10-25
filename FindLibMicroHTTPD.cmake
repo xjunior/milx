@@ -39,6 +39,8 @@ else (MHD_LIBRARIES AND MHD_INCLUDE_DIRS)
       /sw/lib
   )
 
+  message("Found MicroHTTPD on ${MHD_LIBRARY}")
+
   if (MHD_LIBRARY)
     set(MHD_FOUND TRUE)
   endif (MHD_LIBRARY)
