@@ -23,12 +23,12 @@
 #include <vector>
 #include <string>
 
-#include <milx/module.h>
 #include <milx/logger.h>
 #include <milx/http/call.h>
 #include <milx/plugin_manager.h>
 #include <milx/routing.h>
 #include <milx/path.h>
+#include <milx/controller.h>
 
 namespace milx {
   class Path;
@@ -47,7 +47,7 @@ namespace milx {
      */
     milx::Logger *_logger;
     milx::PluginManager _plugins;
-    Routing _routes;
+    milx::Routing _routes;
     std::map<std::string, milx::ControllerPtr> _controllers;
    public:
     milx::Path::List _plugins_path;
