@@ -39,7 +39,7 @@ void XSLTRenderer::render(const std::string& tpl, milx::view::BoundValue &bnd,
   xmlFreeDoc(result);
   xmlFreeDoc(doc);
   //xmlFreeDoc(xsl_doc);
-  
+
   xsltCleanupGlobals();
   xmlCleanupParser();
 

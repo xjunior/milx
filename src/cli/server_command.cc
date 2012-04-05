@@ -35,7 +35,7 @@
 
 milx::server::Daemon *milx::cli::ServerCommand::_daemon;
 
-milx::cli::ServerCommand::ServerCommand() 
+milx::cli::ServerCommand::ServerCommand()
   : Command(), wait(0), port(8888),
     _path(milx::Path::cwd()),
     _output(_path / SERVER_LOG_FILE),
