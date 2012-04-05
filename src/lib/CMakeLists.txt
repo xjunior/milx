@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
 #
- 
+
 # Library
 SET (LIB_SOURCES application.cc routing.cc logger.cc http/call.cc server/daemon.cc
 plugin_manager.cc path.cc views.cc milx.cc callback.cc)

@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
 #
- 
+
 # Executable
 SET (BIN_SOURCES main.cc command.cc create_command.cc server_command.cc)
 ADD_EXECUTABLE (${PROJECT_NAME}-cli ${BIN_SOURCES})

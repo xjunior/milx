@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Milx.  If not, see <http://www.gnu.org/licenses/lgpl-3.0.txt>.
 #
- 
+
 ADD_SUBDIRECTORY (cli)
 ADD_SUBDIRECTORY (lib)
 ADD_SUBDIRECTORY (plugins)
